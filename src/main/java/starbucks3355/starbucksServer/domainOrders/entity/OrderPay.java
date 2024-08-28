@@ -22,7 +22,7 @@ public class OrderPay {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)
-	private Long paymentId;
+	private Long id;
 	@OneToOne
 	@JoinColumn(name = "order_id", nullable = false)
 	private Order orderId;

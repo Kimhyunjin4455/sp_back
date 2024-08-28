@@ -20,12 +20,11 @@ import lombok.ToString;
 public class ProductPromotion {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "promotion_id")
-	private Long promotionId;
-	@Column(name = "promotion_name", nullable = false, length = 255)
+	private Long id;
+	@Column(nullable = false, length = 255)
 	private String promotionName;
-	@Column(name = "promotion_state", nullable = false)
+	@Column(nullable = false)
 	private boolean promotionState;
-	@Column(name = "promotion_info_content", columnDefinition = "TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String promotionInfoContent;
 }

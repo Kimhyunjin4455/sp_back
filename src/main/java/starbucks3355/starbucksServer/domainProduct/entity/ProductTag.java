@@ -20,10 +20,8 @@ import lombok.ToString;
 public class ProductTag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "tag_id")
-	private Long tagId;
-	@Column(length = 255, name = "tag_name")
+	private Long id;
+	@Column(length = 255)
 	private String tagName;
-	@Column(name = "product_code")
 	private Long productCode;
 }

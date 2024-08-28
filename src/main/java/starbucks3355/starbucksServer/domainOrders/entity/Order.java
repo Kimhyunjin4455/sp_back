@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -34,5 +35,16 @@ public class Order {
 	private String userPhoneNumber;
 	@Column(nullable = false, length = 30)
 	private String userAddress;
+
+	@Builder
+	public Order(Long id, LocalDateTime orderDate, Integer totalAmount, UUID uuId, String userName, String userPhoneNumber, String userAddress) {
+		this.id = id;
+		this.orderDate = orderDate;
+		this.totalAmount = totalAmount;
+		this.uuId = uuId;
+		this.userName = userName;
+		this.userPhoneNumber = userPhoneNumber;
+		this.userAddress = userAddress;
+	}
 
 }

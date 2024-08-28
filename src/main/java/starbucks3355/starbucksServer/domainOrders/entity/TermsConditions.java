@@ -29,6 +29,6 @@ public class TermsConditions {
 	@Column(nullable = false, length = 10)
 	private Boolean isAgree;
 	@ManyToOne
-	@JoinColumn(name = "termsDetail_Id", nullable = false)
+	@JoinColumn(name = "termsDetailId", nullable = false)
 	private TermsConditions termsDetailId;
 }

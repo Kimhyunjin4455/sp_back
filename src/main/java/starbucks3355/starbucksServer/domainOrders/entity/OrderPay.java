@@ -1,38 +1,38 @@
 package starbucks3355.starbucksServer.domainOrders.entity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 @ToString
-public class Orders {
+public class OrderPay {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)
-	private Long orderId;
+	private Long id;
+	@OneToOne
+	@JoinColumn(name = "order_id", nullable = false)
+	private Order orderId;
 	@Column(nullable = false, length = 30)
-	private LocalDateTime orderDate;
-	@Column(nullable = false, length = 40)
-	private Integer totalAmount;
-	@Column(nullable = false, length = 100)
-	private UUID uuId;
-	@Column(nullable = false, length = 30)
-	private String userName;
-	@Column(nullable = false, length = 30)
-	private String userPhoneNumber;
-	@Column(nullable = false, length = 30)
-	private String userAddress;
+	private LocalDateTime paymentDate;
+	@Column(nullable = false, length = 20)
+	private Integer paymentAmount;
+	@Column(nullable = false, length = 20)
+	private String paymentMethod;
+	@Column(nullable = false, length = 10)
+	private boolean isPaymentStatus;
 
 }

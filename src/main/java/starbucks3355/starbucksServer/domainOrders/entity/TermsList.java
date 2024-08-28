@@ -18,7 +18,7 @@ public class TermsList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)
-	private Long termsDetailId;
+	private Long id;
 	@Column(nullable = false, length = 400)
 	private String termsContent;
 }

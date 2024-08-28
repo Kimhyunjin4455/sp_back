@@ -19,7 +19,7 @@ public class OrderPayDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)
-	private Long payInfoId;
+	private Long id;
 	@OneToOne
 	@JoinColumn(name = "payment_id", nullable = false)
 	private OrderPay paymentId;

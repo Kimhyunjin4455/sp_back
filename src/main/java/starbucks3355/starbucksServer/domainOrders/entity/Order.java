@@ -16,12 +16,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
-public class Orders {
+public class Order {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)
-	private Long orderId;
+	private Long id;
 	@Column(nullable = false, length = 30)
 	private LocalDateTime orderDate;
 	@Column(nullable = false, length = 40)

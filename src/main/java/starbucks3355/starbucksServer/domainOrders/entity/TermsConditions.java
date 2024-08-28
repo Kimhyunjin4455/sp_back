@@ -21,7 +21,7 @@ public class TermsConditions {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)
-	private Long termsId;
+	private Long id;
 	@Column(nullable = true, length = 300)
 	private String termsName;
 	@Column(nullable = true, length = 40)

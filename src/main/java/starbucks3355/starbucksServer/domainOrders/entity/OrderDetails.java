@@ -24,8 +24,7 @@ public class OrderDetails {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Orders orders;
-
+	private Order order;
 	@Column(nullable = false, length = 30)
 	private Integer productCnt;
 	@Column(nullable = false, length = 30)

@@ -25,7 +25,7 @@ public class OrderPay {
 	private Long paymentId;
 	@OneToOne
 	@JoinColumn(name = "order_id", nullable = false)
-	private Orders orderId;
+	private Order orderId;
 	@Column(nullable = false, length = 30)
 	private LocalDateTime paymentDate;
 	@Column(nullable = false, length = 20)

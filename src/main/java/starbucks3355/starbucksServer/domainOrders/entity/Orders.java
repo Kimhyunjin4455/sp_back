@@ -17,7 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
-public class Order {
+public class Orders {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,8 @@ public class Order {
 	private String userAddress;
 
 	@Builder
-	public Order(Long id, LocalDateTime orderDate, Integer totalAmount, UUID uuId, String userName, String userPhoneNumber, String userAddress) {
+	public Orders(Long id, LocalDateTime orderDate, Integer totalAmount, UUID uuId, String userName,
+		String userPhoneNumber, String userAddress) {
 		this.id = id;
 		this.orderDate = orderDate;
 		this.totalAmount = totalAmount;

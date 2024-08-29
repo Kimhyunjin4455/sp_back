@@ -1,10 +1,14 @@
 package starbucks3355.starbucksServer.domainProduct.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,15 +20,15 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class ProductImage {
+@ToString(exclude = "productOptions")
+public class ProductStocks {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 200, unique = true)
-	private String productImgName;
-	@Column(nullable = false, length = 200)
-	private String productImgPath;
-	@Column(length = 250)
-	private String thumbnailPath;
+	@Column(nullable = false)
+	private int count;
+	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@JoinColumn(name = "option_id", nullable = false)
+	private ProductOptions productOptions;
+
 }

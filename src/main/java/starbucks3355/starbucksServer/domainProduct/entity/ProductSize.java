@@ -17,14 +17,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductImage {
+public class ProductSize {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 200, unique = true)
-	private String productImgName;
-	@Column(nullable = false, length = 200)
-	private String productImgPath;
-	@Column(length = 250)
-	private String thumbnailPath;
+	@Column(length = 30)
+	private String volume;
 }

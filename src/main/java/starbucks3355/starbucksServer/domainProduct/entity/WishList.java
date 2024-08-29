@@ -1,10 +1,16 @@
 package starbucks3355.starbucksServer.domainProduct.entity;
 
+import java.util.UUID;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,14 +23,16 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductImage {
+public class WishList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 200, unique = true)
-	private String productImgName;
-	@Column(nullable = false, length = 200)
-	private String productImgPath;
-	@Column(length = 250)
-	private String thumbnailPath;
+	@Column(nullable = false)
+	private int quantity;
+	private UUID memberUuid;
+	@Builder.Default
+	private Boolean isChecked = false;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@JoinColumn(name = "option_id", nullable = false)
+	private ProductOptions productOptions;
 }

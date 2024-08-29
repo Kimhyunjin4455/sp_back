@@ -14,17 +14,14 @@ import lombok.ToString;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class ProductImage {
+public class ProductColor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 200, unique = true)
-	private String productImgName;
-	@Column(nullable = false, length = 200)
-	private String productImgPath;
-	@Column(length = 250)
-	private String thumbnailPath;
+	@Column(unique = true, length = 30)
+	private String colorName;
+
 }

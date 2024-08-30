@@ -1,6 +1,7 @@
 package starbucks3355.starbucksServer.domainOrders.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import starbucks3355.starbucksServer.domainOrders.dto.request.OrderRequestDto;
 import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 import starbucks3355.starbucksServer.domainOrders.service.OrderService;
 import starbucks3355.starbucksServer.domainOrders.vo.request.OrderRequestVo;
+import starbucks3355.starbucksServer.domainOrders.vo.response.OrderResponseVo;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,8 +44,24 @@ public class OrderController {
 
 	//주문 목록 조회
 	@PostMapping
-	public ResponseEntity<List<Orders>> getAllOrders() {
-		List<Orders> orders = orderService.getOrders();
-		return new ResponseEntity<List<Orders>>(orders, HttpStatus.OK);
+	public ResponseEntity<List<OrderResponseVo>> getAllOrders() {
+		// 서비스에서 목록 가져오기
+		List<Orders> ordersList = orderService.getAllOrders();
+		// 주문 목록을 OrderResponseVo로 변환
+		List<OrderResponseVo> orderResponseVoList = ordersList.stream()
+			.map(order -> OrderResponseVo.builder()
+				.orderDate(order.getOrderDate())
+				.totalAmount(order.getTotalAmount())
+				.uuId(order.getUuId())
+				.userName(order.getUserName())
+				.userPhoneNumber(order.getUserPhoneNumber())
+				.userAddress(order.getUserAddress())
+				.build())
+			.collect(Collectors.toList());
+		// 변환된 목록을 반환
+		return new ResponseEntity<List<OrderResponseVo>>(
+			orderResponseVoList,
+			HttpStatus.OK);
+
 	}
 }

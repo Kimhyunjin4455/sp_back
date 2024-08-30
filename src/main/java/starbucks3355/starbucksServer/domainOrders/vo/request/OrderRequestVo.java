@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 
 @Getter
 @NoArgsConstructor
@@ -19,4 +20,5 @@ public class OrderRequestVo {
 	private String userName;
 	private String userPhoneNumber;
 	private String userAddress;
+	private OrderStatus orderStatus;
 }

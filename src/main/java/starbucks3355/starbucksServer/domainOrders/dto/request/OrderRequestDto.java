@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 
 @Getter
@@ -20,16 +21,18 @@ public class OrderRequestDto {
 	private String userName;
 	private String userPhoneNumber;
 	private String userAddress;
+	private OrderStatus orderStatus;
 
 	// Dto를 Order 엔티티로 변환 toEntity 메서드
 	public Orders toEntity(OrderRequestDto orderRequestDto) {
 		return Orders.builder()
 			.orderDate(this.orderDate)
 			.totalAmount(this.totalAmount)
-			.uuId(this.uuid)
+			.uuid(this.uuid)
 			.userAddress(this.userAddress)
 			.userName(this.userName)
 			.userPhoneNumber(this.userPhoneNumber)
+			.orderStatus(this.orderStatus)
 			.build();
 	}
 }

@@ -2,8 +2,10 @@ package starbucks3355.starbucksServer.domainOrders.entity;
 
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +30,7 @@ public class TermsConditions {
 	private UUID uuId;
 	@Column(nullable = false, length = 10)
 	private Boolean isAgree;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "terms_detail_id", nullable = false)
 	private TermsConditions termsDetailId;
 }

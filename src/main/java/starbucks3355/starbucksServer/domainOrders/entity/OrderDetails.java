@@ -23,7 +23,7 @@ public class OrderDetails {
 	@Column(nullable = false, length = 30)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Orders orders;
 	@Column(nullable = false, length = 30)
 	private Integer productCnt;

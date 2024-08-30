@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainOrders.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,5 +27,5 @@ public class DeliveryState {
 	@Column(nullable = false, length = 20)
 	private Integer stateInfo;
 	@Column(columnDefinition = "BINARY(16)")
-	private byte uuId;
+	private UUID uuId;
 }

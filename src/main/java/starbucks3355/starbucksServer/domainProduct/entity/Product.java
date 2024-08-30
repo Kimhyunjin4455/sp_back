@@ -21,6 +21,8 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(nullable = false, length = 100)
+	private String productUuid;
 	@Column(nullable = false, length = 100, unique = true) // 100글자 제한
 	private String productName;
 	@Column(length = 300)

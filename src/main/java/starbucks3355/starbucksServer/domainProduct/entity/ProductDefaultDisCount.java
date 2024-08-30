@@ -21,6 +21,8 @@ import lombok.ToString;
 @ToString(exclude = "productOptions")
 public class ProductDefaultDisCount {
 	@Id
+	@JoinColumn(name = "option_id")
+	private Long id;
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@JoinColumn(name = "option_id", nullable = false)
 	private ProductOptions productOptions;

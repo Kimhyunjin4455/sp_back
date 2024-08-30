@@ -1,6 +1,5 @@
 package starbucks3355.starbucksServer.domainProduct.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,14 +16,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductPromotion {
+public class CategoryList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 255, unique = true)
-	private String promotionName;
-	@Column(nullable = false)
-	private boolean isState;
-	@Column(columnDefinition = "TEXT")
-	private String promotionInfoContent;
+	private Integer majorCategoryId;
+	private Integer middleCategoryId;
+	private Integer bottomCategoryId;
+	private Long productCode; // 각 상품개체를 표현하는 값
 }

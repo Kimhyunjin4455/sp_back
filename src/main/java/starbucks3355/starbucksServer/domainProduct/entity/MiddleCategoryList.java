@@ -1,6 +1,5 @@
 package starbucks3355.starbucksServer.domainProduct.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,16 +20,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class WishList {
+public class MiddleCategoryList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@Column(nullable = false)
-	private int quantity;
-	private String memberUuid;
-	@Builder.Default
-	private Boolean isChecked = false;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "option_id", nullable = false)
-	private ProductOptions productOptions;
+	private Integer id;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "top_id")
+	private TopCategoryList topCategoryList;
+	@Column(length = 30, unique = true)
+	private String categoryName;
+
 }

@@ -4,8 +4,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -23,7 +21,7 @@ import lombok.ToString;
 @ToString(exclude = "productOptions")
 public class ProductStocks {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JoinColumn(name = "option_id")
 	private Long id;
 	@Column(nullable = false)
 	private int count;

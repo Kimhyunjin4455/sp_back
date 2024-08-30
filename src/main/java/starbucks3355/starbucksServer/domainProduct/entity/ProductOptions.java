@@ -20,7 +20,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"productSize, productColor"})
+@ToString(exclude = {"productSize", "productColor"})
 public class ProductOptions {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class ProductOptions {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "color_id")
 	private ProductSize productColor;
-	private boolean engraving;
+	private boolean isEngraving;
 	private String engravingMessage;
 	@Column(nullable = false)
 	private int productPrice;

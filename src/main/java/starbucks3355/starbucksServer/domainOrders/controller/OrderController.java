@@ -5,21 +5,25 @@ import java.util.stream.Collectors;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.domainOrders.dto.request.OrderRequestDto;
+import starbucks3355.starbucksServer.domainOrders.dto.request.OrderUpdateRequestDto;
 import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 import starbucks3355.starbucksServer.domainOrders.service.OrderService;
 import starbucks3355.starbucksServer.domainOrders.vo.request.OrderRequestVo;
+import starbucks3355.starbucksServer.domainOrders.vo.request.OrderUpdateRequestVo;
 import starbucks3355.starbucksServer.domainOrders.vo.response.OrderResponseVo;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/orders")
 @Tag(name = "Orders", description = "주문 API")
+@Slf4j
 public class OrderController {
 
 	private final OrderService orderService;
@@ -70,9 +74,15 @@ public class OrderController {
 	// 주문 상태 변경
 	@PutMapping("/modify/status")
 	@Operation(summary = "주문 상태 변경")
-	public ResponseEntity<String> updateOrderStatus(@RequestBody OrderRequestVo orderRequestVo) {
-		orderService.updateOrderStatus(orderRequestVo.getUuid(), orderRequestVo.getOrderStatus());
-		return new ResponseEntity<String>("주문 상태 변경 완료", HttpStatus.OK);
+	public ResponseEntity<Void> updateOrderStatus(@RequestBody OrderUpdateRequestVo orderUpdateRequestVo) {
+
+		OrderUpdateRequestDto orderUpdateRequestDto = OrderUpdateRequestDto.builder()
+				.uuid(orderUpdateRequestVo.getUuid())
+				.build();
+
+		log.info(orderUpdateRequestDto.getUuid().toString());
+		orderService.updateOrderStatus(orderUpdateRequestDto);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
 }

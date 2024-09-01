@@ -11,5 +11,5 @@ import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-	Optional<Orders> findByuuid(UUID uuid);
+	Optional<Orders> findByUuid(UUID uuid);
 }

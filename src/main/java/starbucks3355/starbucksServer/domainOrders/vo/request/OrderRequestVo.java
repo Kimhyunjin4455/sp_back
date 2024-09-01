@@ -20,5 +20,4 @@ public class OrderRequestVo {
 	private String userPhoneNumber;
 	private String userAddress;
 	private UUID uuid;
-
 }

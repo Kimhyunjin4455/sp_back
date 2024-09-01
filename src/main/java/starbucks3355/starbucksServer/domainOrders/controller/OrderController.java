@@ -29,16 +29,15 @@ public class OrderController {
 	@PostMapping
 	@Operation(summary = "주문 생성")
 	public ResponseEntity<Void> createOrders(@RequestBody OrderRequestVo orderRequestVo) {
+
 		OrderRequestDto orderRequestDto = new OrderRequestDto(
-			orderRequestVo.getOrderDate(),
 			orderRequestVo.getTotalAmount(),
 			orderRequestVo.getUuid(),
 			orderRequestVo.getUserName(),
 			orderRequestVo.getUserPhoneNumber(),
-			orderRequestVo.getUserAddress(),
-			orderRequestVo.getOrderStatus()
-
+			orderRequestVo.getUserAddress()
 		);
+
 		// dto 값을 service로 넘겨줌
 		// service를 이용해서 db에 dto 값을 저장하기 위함
 		orderService.createOrder(orderRequestDto);

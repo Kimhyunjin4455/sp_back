@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	@Transactional
-	public void createOrder(OrderRequestDto orderRequestDto) {
+	public void createOrder(UUID uuid, OrderRequestDto orderRequestDto) {
 		// TODO Auto-generated method stub
 		orderRepository.save(orderRequestDto.toEntity(orderRequestDto));
 

@@ -3,6 +3,8 @@ package starbucks3355.starbucksServer.domainOrders.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import starbucks3355.starbucksServer.domainOrders.vo.response.OrderResponseVo;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/orders")
+@Tag(name = "Orders", description = "주문 API")
 public class OrderController {
 
 	private final OrderService orderService;
@@ -24,7 +27,8 @@ public class OrderController {
 	//주문 생성 ModelMapper 미사용, 이거 다음 Controller에서  생성할 듯
 	// OrderRequestVo를 OrderRequestDto로 변환
 	@PostMapping
-	public ResponseEntity<Void> createOrders(OrderRequestVo orderRequestVo) {
+	@Operation(summary = "주문 생성")
+	public ResponseEntity<Void> createOrders(@RequestBody OrderRequestVo orderRequestVo) {
 		OrderRequestDto orderRequestDto = new OrderRequestDto(
 			orderRequestVo.getOrderDate(),
 			orderRequestVo.getTotalAmount(),
@@ -43,6 +47,7 @@ public class OrderController {
 
 	//주문 목록 조회
 	@GetMapping("/list")
+	@Operation(summary = "주문 목록 조회")
 	public ResponseEntity<List<OrderResponseVo>> getAllOrders() {
 		// 서비스에서 목록 가져오기
 		List<Orders> ordersList = orderService.getAllOrders();
@@ -63,8 +68,10 @@ public class OrderController {
 			HttpStatus.OK);
 	}
 
-	@PutMapping("/{uuid}/status")
-	public ResponseEntity<String> updateOrderStatus(OrderRequestVo orderRequestVo) {
+	// 주문 상태 변경
+	@PutMapping("/modify/status")
+	@Operation(summary = "주문 상태 변경")
+	public ResponseEntity<String> updateOrderStatus(@RequestBody OrderRequestVo orderRequestVo) {
 		orderService.updateOrderStatus(orderRequestVo.getUuid(), orderRequestVo.getOrderStatus());
 		return new ResponseEntity<String>("주문 상태 변경 완료", HttpStatus.OK);
 	}

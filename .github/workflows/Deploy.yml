@@ -1,9 +1,11 @@
 name: CICD TO EC2
 
 on: 
-  pull_request: 
-    types: [ "closed" ]
-    branches: [ "develop" ]
+  #pull_request: 
+  # types: [ "closed" ]
+  # branches: [ "dev" ]
+  push:
+    branches : ["dev"]
 
 permissions:
   contents: read

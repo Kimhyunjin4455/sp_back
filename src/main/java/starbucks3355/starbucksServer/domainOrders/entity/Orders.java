@@ -3,12 +3,7 @@ package starbucks3355.starbucksServer.domainOrders.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +23,7 @@ public class Orders {
 	private LocalDateTime orderDate;
 	@Column(nullable = false, length = 40)
 	private Integer totalAmount;
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, columnDefinition = "BINARY(16)")
 	private UUID uuid;
 	@Column(nullable = false, length = 30)
 	private String userName;
@@ -37,7 +32,7 @@ public class Orders {
 	@Column(nullable = false, length = 30)
 	private String userAddress;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 10)
 	private OrderStatus orderStatus;
 
@@ -51,10 +46,6 @@ public class Orders {
 		this.userName = userName;
 		this.userPhoneNumber = userPhoneNumber;
 		this.userAddress = userAddress;
-		this.orderStatus = orderStatus;
-	}
-
-	public void updateOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 }

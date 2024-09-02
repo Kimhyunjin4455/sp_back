@@ -14,11 +14,10 @@ import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 @AllArgsConstructor
 @Builder
 public class OrderRequestVo {
-	private LocalDateTime orderDate;
+
 	private Integer totalAmount;
-	private UUID uuid;
 	private String userName;
 	private String userPhoneNumber;
 	private String userAddress;
-	private OrderStatus orderStatus;
+	private UUID uuid;
 }

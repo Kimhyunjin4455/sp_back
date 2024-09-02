@@ -5,21 +5,30 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainOrders.dto.request.OrderRequestDto;
+import starbucks3355.starbucksServer.domainOrders.dto.request.OrderUpdateRequestDto;
 import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 import starbucks3355.starbucksServer.domainOrders.service.OrderService;
 import starbucks3355.starbucksServer.domainOrders.vo.request.OrderRequestVo;
+import starbucks3355.starbucksServer.domainOrders.vo.request.OrderUpdateRequestVo;
 import starbucks3355.starbucksServer.domainOrders.vo.response.OrderResponseVo;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/orders")
+@Tag(name = "Orders", description = "주문 API")
+@Slf4j
 public class OrderController {
 
 	private final OrderService orderService;
@@ -27,17 +36,17 @@ public class OrderController {
 	//주문 생성 ModelMapper 미사용, 이거 다음 Controller에서  생성할 듯
 	// OrderRequestVo를 OrderRequestDto로 변환
 	@PostMapping
-	public ResponseEntity<Void> createOrders(OrderRequestVo orderRequestVo) {
+	@Operation(summary = "주문 생성")
+	public ResponseEntity<Void> createOrders(@RequestBody OrderRequestVo orderRequestVo) {
+
 		OrderRequestDto orderRequestDto = new OrderRequestDto(
-			orderRequestVo.getOrderDate(),
 			orderRequestVo.getTotalAmount(),
 			orderRequestVo.getUuid(),
 			orderRequestVo.getUserName(),
 			orderRequestVo.getUserPhoneNumber(),
-			orderRequestVo.getUserAddress(),
-			orderRequestVo.getOrderStatus()
-
+			orderRequestVo.getUserAddress()
 		);
+
 		// dto 값을 service로 넘겨줌
 		// service를 이용해서 db에 dto 값을 저장하기 위함
 		orderService.createOrder(orderRequestDto);
@@ -45,7 +54,8 @@ public class OrderController {
 	}
 
 	//주문 목록 조회
-	@PostMapping("/list")
+	@GetMapping("/list")
+	@Operation(summary = "주문 목록 조회")
 	public ResponseEntity<List<OrderResponseVo>> getAllOrders() {
 		// 서비스에서 목록 가져오기
 		List<Orders> ordersList = orderService.getAllOrders();
@@ -66,10 +76,18 @@ public class OrderController {
 			HttpStatus.OK);
 	}
 
-	@PutMapping("/{uuid}/status")
-	public ResponseEntity<String> updateOrderStatus(OrderRequestVo orderRequestVo) {
-		orderService.updateOrderStatus(orderRequestVo.getUuid(), orderRequestVo.getOrderStatus());
-		return new ResponseEntity<String>("주문 상태 변경 완료", HttpStatus.OK);
+	// 주문 상태 변경
+	@PutMapping("/modify/status")
+	@Operation(summary = "주문 상태 변경")
+	public ResponseEntity<Void> updateOrderStatus(@RequestBody OrderUpdateRequestVo orderUpdateRequestVo) {
+
+		OrderUpdateRequestDto orderUpdateRequestDto = OrderUpdateRequestDto.builder()
+			.uuid(orderUpdateRequestVo.getUuid())
+			.build();
+
+		log.info(orderUpdateRequestDto.getUuid().toString());
+		orderService.updateOrderStatus(orderUpdateRequestDto);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
 }

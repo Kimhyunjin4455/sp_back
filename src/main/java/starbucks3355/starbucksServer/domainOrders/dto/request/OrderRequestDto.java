@@ -15,24 +15,22 @@ import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 @Builder
 @AllArgsConstructor
 public class OrderRequestDto {
-	private LocalDateTime orderDate;
 	private Integer totalAmount;
 	private UUID uuid;
 	private String userName;
 	private String userPhoneNumber;
 	private String userAddress;
-	private OrderStatus orderStatus;
 
 	// Dto를 Order 엔티티로 변환 toEntity 메서드
 	public Orders toEntity(OrderRequestDto orderRequestDto) {
 		return Orders.builder()
-			.orderDate(this.orderDate)
-			.totalAmount(this.totalAmount)
-			.uuid(this.uuid)
-			.userAddress(this.userAddress)
-			.userName(this.userName)
-			.userPhoneNumber(this.userPhoneNumber)
-			.orderStatus(this.orderStatus)
+			.orderDate(LocalDateTime.now())
+			.totalAmount(orderRequestDto.getTotalAmount())
+			.uuid(orderRequestDto.getUuid())
+			.userAddress(orderRequestDto.userAddress)
+			.userName(orderRequestDto.userName)
+			.userPhoneNumber(orderRequestDto.userPhoneNumber)
+			.orderStatus(OrderStatus.COMPLETE)
 			.build();
 	}
 }

@@ -7,6 +7,7 @@ import starbucks3355.starbucksServer.domainMember.entity.Member;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-	boolean existsByuserId(String userId);
+	boolean existsByUserId(String userId);
+	Member findByUserId(String userId);
 
 }

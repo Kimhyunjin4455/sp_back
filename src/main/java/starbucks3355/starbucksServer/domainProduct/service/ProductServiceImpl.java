@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainProduct.dto.requestDto.ProductRequestDto;
+import starbucks3355.starbucksServer.domainProduct.dto.responseDto.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
 
@@ -28,8 +29,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> getProducts() {
+	public List<ProductResponseDto> getProducts() {
 		return null;
+	}
+
+	@Override
+	public ProductResponseDto getProduct(String productUuid) {
+		Product product = productRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+
+		return ProductResponseDto.builder()
+			.productUuid(product.getProductUuid())
+			.productName(product.getProductName())
+			.productDescription(product.getProductDescription())
+			.productInfo(product.getProductInfo())
+			.build();
 	}
 
 	@Override

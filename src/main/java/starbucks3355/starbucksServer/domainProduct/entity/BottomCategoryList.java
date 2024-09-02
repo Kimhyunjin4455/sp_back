@@ -1,5 +1,6 @@
 package starbucks3355.starbucksServer.domainProduct.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,8 +24,8 @@ import lombok.ToString;
 public class BottomCategoryList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@ManyToOne(fetch = FetchType.LAZY)
+	private Integer id;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "middle_id")
 	private MiddleCategoryList middleCategoryList;
 	@Column(length = 30, unique = true)

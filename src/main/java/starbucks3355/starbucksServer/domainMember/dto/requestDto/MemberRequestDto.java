@@ -24,7 +24,7 @@ public class MemberRequestDto {
 	private String address;
 	private String gender;
 	private String nickname;
-	private UUID memberUuid;
+	private String memberUuid;
 	private Boolean isMember;
 	private LocalDateTime withdrawalTime;
 
@@ -33,11 +33,10 @@ public class MemberRequestDto {
 			.isMember(memberRequestDto.isMember)
 			.userId(memberRequestDto.userId)
 			.address(memberRequestDto.address)
-			.memberUuid(memberRequestDto.memberUuid)
 			.address(memberRequestDto.address)
 			.gender(memberRequestDto.gender)
 			.nickname(memberRequestDto.nickname)
-			.memberUuid(memberRequestDto.memberUuid)
+			.memberUuid(UUID.fromString(memberRequestDto.memberUuid)) // 타입 불일치 오류 해결
 			.birth(memberRequestDto.birth)
 			.phoneNumber(memberRequestDto.phoneNumber)
 			.withdrawalTime(memberRequestDto.withdrawalTime)

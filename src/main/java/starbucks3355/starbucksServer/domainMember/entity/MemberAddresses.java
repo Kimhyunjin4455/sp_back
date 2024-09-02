@@ -30,7 +30,7 @@ public class MemberAddresses {
 	private Boolean basicAddress;
 	@Column(length = 20)
 	private String nickname;
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = 30, unique = true)
 	private String receiver;
 	@Column(nullable = false, length = 30)
 	private String contact;

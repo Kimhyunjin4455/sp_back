@@ -23,7 +23,7 @@ public class MemberRequestVo {
 	private String address;
 	private String gender;
 	private String nickname;
-	private UUID memberUuid;
+	private String memberUuid;
 	private Boolean isMember;
 	private LocalDateTime withdrawalTime;
 

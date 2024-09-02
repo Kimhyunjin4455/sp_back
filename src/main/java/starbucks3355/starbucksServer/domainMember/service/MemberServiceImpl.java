@@ -3,7 +3,9 @@ package starbucks3355.starbucksServer.domainMember.service;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import starbucks3355.starbucksServer.domainMember.dto.requestDto.LoginRequestDto;
 import starbucks3355.starbucksServer.domainMember.dto.requestDto.MemberRequestDto;
+import starbucks3355.starbucksServer.domainMember.dto.reseponseDto.LoginResponseDto;
 import starbucks3355.starbucksServer.domainMember.entity.Member;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 
@@ -17,7 +19,7 @@ public class MemberServiceImpl implements MemberService {
 	public Member signUpMember(MemberRequestDto memberRequestDto) {
 
 		//중복 검사
-		if (memberRepository.existsByuserId(memberRequestDto.getUserId())) {
+		if (memberRepository.existsByUserId(memberRequestDto.getUserId())) {
 			throw new RuntimeException("이미 존재하는 아이디입니다.");
 		}
 
@@ -25,6 +27,19 @@ public class MemberServiceImpl implements MemberService {
 		Member member = memberRequestDto.toEntity(memberRequestDto);
 		return memberRepository.save(member);
 
+	}
+
+	@Override
+	public LoginResponseDto loginMember(LoginRequestDto loginRequestDto) {
+		// 사용자 ID로 회원 조회
+		Member member = memberRepository.findByUserId(loginRequestDto.getUserId());
+
+		// 비밀번호 확인
+		if (member != null || !member.getPassword().equals(loginRequestDto.getPassword())) {
+			throw new RuntimeException("로그인에 실패하였습니다.");
+		}
+
+		return new LoginResponseDto(member.getUserId());
 	}
 
 }

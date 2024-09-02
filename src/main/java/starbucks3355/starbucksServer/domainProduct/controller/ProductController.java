@@ -1,5 +1,8 @@
 package starbucks3355.starbucksServer.domainProduct.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,4 +40,22 @@ public class ProductController {
 		);
 	}
 
+	@GetMapping
+	@Operation(summary = "상품 목록 조회")
+	public CommonResponseEntity<List<ProductResponseVo>> getProducts() {
+		List<ProductResponseDto> productResponseDtos = productService.getProducts();
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			productResponseDtos.stream()
+				.map(dto -> ProductResponseVo.builder()
+					.productUuid(dto.getProductUuid())
+					.productName(dto.getProductName())
+					.productDescription(dto.getProductDescription())
+					.productInfo(dto.getProductInfo())
+					.build())
+				.collect(Collectors.toList())
+		);
+	}
 }

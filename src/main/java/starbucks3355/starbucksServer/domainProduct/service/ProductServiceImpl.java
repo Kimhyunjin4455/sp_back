@@ -2,6 +2,7 @@ package starbucks3355.starbucksServer.domainProduct.service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,15 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductResponseDto> getProducts() {
-		return null;
+		List<Product> products = productRepository.findAll();
+		return products.stream()
+			.map(product -> ProductResponseDto.builder()
+				.productUuid(product.getProductUuid())
+				.productName(product.getProductName())
+				.productDescription(product.getProductDescription())
+				.productInfo(product.getProductInfo())
+				.build())
+			.collect(Collectors.toList());
 	}
 
 	@Override

@@ -32,4 +32,12 @@ public class SwaggerConfig {
 			.build();
 	}
 
+	@Bean
+	public GroupedOpenApi ProductAPI() {
+		return GroupedOpenApi.builder()
+			.group("상품")
+			.pathsToMatch("/api/v1/product/**")
+			.build();
+	}
+
 }

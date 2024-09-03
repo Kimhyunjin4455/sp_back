@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BottomCategoryListRequestDto {
+public class BottomCategoryRequestDto {
 	private Long middleId; // 상위 중간 카테고리 ID
 	private String categoryName;
 	@NotNull(message = "MiddleCategory must not be null")
-	private MiddleCategoryListRequestDto middleCategory;
+	private MiddleCategoryRequestDto middleCategory;
 }

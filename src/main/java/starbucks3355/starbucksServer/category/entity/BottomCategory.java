@@ -1,10 +1,14 @@
 package starbucks3355.starbucksServer.category.entity;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,12 +21,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TopCategoryList {
+@Table(name = "bottom_category", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryName")})
+public class BottomCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@Column(nullable = false, length = 30, unique = true)
 	private String categoryName;
-	@Column(nullable = false, length = 255)
-	private String categoryImg;
+	private String categoryCode;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private MiddleCategory middleCategory;
+
 }

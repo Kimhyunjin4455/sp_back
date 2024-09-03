@@ -3,6 +3,8 @@ package starbucks3355.starbucksServer.domainProduct.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -27,7 +29,8 @@ public class ProductDefaultDisCount {
 	@JoinColumn(name = "option_id", nullable = false)
 	private ProductOptions productOptions;
 	@Column(nullable = false)
-	private int type;
+	@Enumerated(EnumType.STRING)
+	private DiscountType discountType;
 	@Column(nullable = false)
 	private int value;
 }

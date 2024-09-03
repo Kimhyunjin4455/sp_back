@@ -28,7 +28,7 @@ public class MiddleCategory {
 	private Integer id;
 	private String categoryName;
 	private String categoryCode;
-
+	private String categoryDescription; // 카테고리 설명
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private TopCategory topCategory;
 }

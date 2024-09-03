@@ -1,6 +1,5 @@
 package starbucks3355.starbucksServer.domainProduct.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,22 +9,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import starbucks3355.starbucksServer.common.entity.BaseEntity;
 
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class ProductImage {
+public class Review extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 200, unique = true)
-	private String productImgName;
-	@Column(nullable = false, length = 200)
-	private String s3Url; // S3에 저장된 이미지 URL
-	@Column(length = 250)
-	private String thumbnailPath;
-	
+	private String text;
+	private Double score;
+	private String memberUuid;
+	private Long productCode;
+
 }

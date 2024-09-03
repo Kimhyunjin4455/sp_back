@@ -2,8 +2,8 @@ package starbucks3355.starbucksServer.domainProduct.service;
 
 import java.util.List;
 
-import starbucks3355.starbucksServer.domainProduct.dto.requestDto.ProductRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.responseDto.ProductResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 
 public interface ProductService {
 	public void addProduct(ProductRequestDto productRequestDto);

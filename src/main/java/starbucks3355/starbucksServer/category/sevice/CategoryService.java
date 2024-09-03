@@ -1,13 +1,14 @@
 package starbucks3355.starbucksServer.category.sevice;
 
-import starbucks3355.starbucksServer.category.dto.request.BottomCategoryListRequestDto;
-import starbucks3355.starbucksServer.category.dto.request.CategoryListRequestDto;
-import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryListRequestDto;
-import starbucks3355.starbucksServer.category.dto.request.TopCategoryListRequestDto;
+import starbucks3355.starbucksServer.category.dto.request.BottomCategoryRequestDto;
+import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
+import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 
 public interface CategoryService {
-	void addCategory(CategoryListRequestDto categorytDto,
-		TopCategoryListRequestDto topCategoryDto,
-		MiddleCategoryListRequestDto middleCategoryDto,
-		BottomCategoryListRequestDto bottomCategoryDto);
+	void creatTopCategory(TopCategoryRequestDto topCategoryRequestDto);
+
+	void creatMiddleCategory(MiddleCategoryRequestDto middleCategoryRequestDto);
+
+	void creatBottomCategory(BottomCategoryRequestDto bottomCategoryRequestDto);
+
 }

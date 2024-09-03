@@ -7,4 +7,7 @@ import starbucks3355.starbucksServer.category.entity.BottomCategory;
 
 @Repository
 public interface BottomCategoryRepository extends JpaRepository<BottomCategory, Integer> {
+	boolean existsByCategoryCode(String categoryCode);
+
+	boolean existsByCategoryName(String categoryName);
 }

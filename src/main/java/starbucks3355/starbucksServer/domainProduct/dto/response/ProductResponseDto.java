@@ -24,12 +24,23 @@ public class ProductResponseDto {
 
 	@Builder
 	public ProductResponseDto(String productUuid, String productName, String productDescription, String productInfo,
-		Long productCode) {
+		Long productCode, Integer price, DiscountType discountType, Integer value, String productImg, Double reviewScore
+		, Integer reviewCount, Boolean isChecked, Boolean isNew, Boolean isBest
+	) {
 		this.productUuid = productUuid;
 		this.productName = productName;
 		this.productDescription = productDescription;
 		this.productInfo = productInfo;
 		this.productCode = productCode;
+		this.price = price;
+		this.discountType = discountType;
+		this.value = value;
+		this.productImg = productImg;
+		this.reviewScore = reviewScore;
+		this.reviewCount = reviewCount;
+		this.isChecked = isChecked;
+		this.isNew = isNew;
+		this.isBest = isBest;
 	}
 
 	public ProductResponseVo dtoToResponseVo() {
@@ -39,6 +50,15 @@ public class ProductResponseDto {
 			.productDescription(productDescription)
 			.productInfo(productInfo)
 			.productCode(productCode)
+			.price(price)
+			.discountType(discountType)
+			.value(value)
+			.productImg(productImg)
+			.reviewScore(reviewScore)
+			.reviewCount(reviewCount)
+			.isChecked(isChecked)
+			.isNew(isNew)
+			.isBest(isBest)
 			.build();
 	}
 

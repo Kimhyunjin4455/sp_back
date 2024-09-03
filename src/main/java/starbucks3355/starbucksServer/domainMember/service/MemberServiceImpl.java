@@ -40,7 +40,6 @@ public class MemberServiceImpl implements MemberService {
 		if (member != null && !member.getPassword().equals(loginRequestDto.getPassword())) {
 			throw new RuntimeException("로그인에 실패하였습니다.");
 		}
-
 		return new LoginResponseDto(member.getUserId());
 	}
 

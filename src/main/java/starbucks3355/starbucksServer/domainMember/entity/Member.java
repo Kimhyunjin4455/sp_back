@@ -31,4 +31,5 @@ public class Member {
     private String nickname;
     @LastModifiedDate
     private LocalDateTime withdrawalTime;
+    private UUID memberUuid;
 }

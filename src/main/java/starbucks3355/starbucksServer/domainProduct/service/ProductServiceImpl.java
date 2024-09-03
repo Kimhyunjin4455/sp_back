@@ -11,7 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
+import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
+import starbucks3355.starbucksServer.domainProduct.repository.ImageRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
+import starbucks3355.starbucksServer.domainProduct.repository.ReviewRepository;
 
 @Service
 @Slf4j
@@ -19,6 +22,9 @@ import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
 public class ProductServiceImpl implements ProductService {
 
 	private final ProductRepository productRepository;
+	private final ImageRepository imgRepository;
+	private final ReviewRepository reviewRepository;
+	private final DiscountRepository discountRepository;
 
 	@Override
 	public void addProduct(ProductRequestDto productRequestDto) {

@@ -10,8 +10,8 @@ import starbucks3355.starbucksServer.domainProduct.entity.Review;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-	Optional<Review> findByReviewScore(String memberUuid, Long productCode);
+	Optional<Review> findByMemberUuidAndProductCode(String memberUuid, Long productCode);
 
-	Optional<Review> findByReviewCount(Long productCode);
+	// Optional<Review> findByReviewCount(Long productCode);
 
 }

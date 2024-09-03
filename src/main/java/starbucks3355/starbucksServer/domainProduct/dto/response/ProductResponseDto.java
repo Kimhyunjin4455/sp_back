@@ -18,14 +18,14 @@ public class ProductResponseDto {
 	private String productImg;
 	private Double reviewScore;
 	private Integer reviewCount;
-	private Boolean isChecked;
+	private Boolean isLiked;
 	private Boolean isNew;
 	private Boolean isBest;
 
 	@Builder
 	public ProductResponseDto(String productUuid, String productName, String productDescription, String productInfo,
 		Long productCode, Integer price, DiscountType discountType, Integer value, String productImg, Double reviewScore
-		, Integer reviewCount, Boolean isChecked, Boolean isNew, Boolean isBest
+		, Integer reviewCount, Boolean isLiked, Boolean isNew, Boolean isBest
 	) {
 		this.productUuid = productUuid;
 		this.productName = productName;
@@ -38,7 +38,7 @@ public class ProductResponseDto {
 		this.productImg = productImg;
 		this.reviewScore = reviewScore;
 		this.reviewCount = reviewCount;
-		this.isChecked = isChecked;
+		this.isLiked = isLiked;
 		this.isNew = isNew;
 		this.isBest = isBest;
 	}
@@ -56,7 +56,7 @@ public class ProductResponseDto {
 			.productImg(productImg)
 			.reviewScore(reviewScore)
 			.reviewCount(reviewCount)
-			.isChecked(isChecked)
+			.isLiked(isLiked)
 			.isNew(isNew)
 			.isBest(isBest)
 			.build();

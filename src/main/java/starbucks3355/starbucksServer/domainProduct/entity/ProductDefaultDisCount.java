@@ -27,7 +27,7 @@ public class ProductDefaultDisCount {
 	private Long id;
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@JoinColumn(name = "option_id", nullable = false)
-	private ProductOptions productOptions;
+	private ProductDetails productOptions;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private DiscountType discountType;

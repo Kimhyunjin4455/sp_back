@@ -32,5 +32,5 @@ public class WishList {
 	private Boolean isChecked = false;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "option_id", nullable = false)
-	private ProductOptions productOptions;
+	private ProductDetails productOptions;
 }

@@ -21,7 +21,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"productSize", "productColor"})
-public class ProductOptions {
+public class ProductDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long productCode; // id로 작성해도 문제 없지 않은지?

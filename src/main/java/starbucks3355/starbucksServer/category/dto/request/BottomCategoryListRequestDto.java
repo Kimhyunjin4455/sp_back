@@ -1,8 +1,4 @@
-<<<<<<<< Updated upstream:src/main/java/starbucks3355/starbucksServer/category/dto/request/BottomCategoryListRequestDto.java
 package starbucks3355.starbucksServer.category.dto.request;
-========
-package starbucks3355.starbucksServer.domainProduct.dto.request;
->>>>>>>> Stashed changes:src/main/java/starbucks3355/starbucksServer/domainProduct/dto/request/BottomCategoryListRequestDto.java
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

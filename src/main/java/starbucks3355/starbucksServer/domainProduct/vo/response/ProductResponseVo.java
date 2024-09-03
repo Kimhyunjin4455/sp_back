@@ -22,7 +22,7 @@ public class ProductResponseVo {
 	private String productImg;
 	private Double reviewScore;
 	private Integer reviewCount;
-	private Boolean isChecked;
+	private Boolean isLiked;
 	private Boolean isNew;
 	private Boolean isBest;
 }

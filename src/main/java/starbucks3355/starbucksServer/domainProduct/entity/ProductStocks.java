@@ -27,6 +27,6 @@ public class ProductStocks {
 	private int count;
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@JoinColumn(name = "option_id", nullable = false)
-	private ProductOptions productOptions;
+	private ProductDetails productOptions;
 
 }

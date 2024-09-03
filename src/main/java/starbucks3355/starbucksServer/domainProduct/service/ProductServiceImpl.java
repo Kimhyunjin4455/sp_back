@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import starbucks3355.starbucksServer.domainProduct.dto.requestDto.ProductRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.responseDto.ProductResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
 

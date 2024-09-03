@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainProduct.vo.out;
+package starbucks3355.starbucksServer.domainProduct.vo.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

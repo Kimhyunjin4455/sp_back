@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainProduct.vo.in;
+package starbucks3355.starbucksServer.domainProduct.vo.request;
 
 import lombok.Getter;
 

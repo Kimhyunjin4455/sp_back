@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainProduct.dto.requestDto;
+package starbucks3355.starbucksServer.domainProduct.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

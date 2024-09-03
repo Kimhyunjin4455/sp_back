@@ -1,8 +1,8 @@
-package starbucks3355.starbucksServer.domainProduct.dto.responseDto;
+package starbucks3355.starbucksServer.domainProduct.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import starbucks3355.starbucksServer.domainProduct.vo.out.ProductResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.ProductResponseVo;
 
 @Getter
 public class ProductResponseDto {

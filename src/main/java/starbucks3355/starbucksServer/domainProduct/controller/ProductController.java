@@ -15,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
-import starbucks3355.starbucksServer.domainProduct.dto.responseDto.ProductResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.service.ProductService;
-import starbucks3355.starbucksServer.domainProduct.vo.out.ProductResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.ProductResponseVo;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -58,4 +58,5 @@ public class ProductController {
 				.collect(Collectors.toList())
 		);
 	}
+
 }

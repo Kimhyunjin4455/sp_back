@@ -1,4 +1,8 @@
+<<<<<<<< Updated upstream:src/main/java/starbucks3355/starbucksServer/category/dto/request/MiddleCategoryListRequestDto.java
 package starbucks3355.starbucksServer.category.dto.request;
+========
+package starbucks3355.starbucksServer.domainProduct.dto.request;
+>>>>>>>> Stashed changes:src/main/java/starbucks3355/starbucksServer/domainProduct/dto/request/MiddleCategoryListRequestDto.java
 
 import java.util.ArrayList;
 import java.util.List;

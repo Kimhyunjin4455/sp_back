@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainProduct.dto.requestDto;
+package starbucks3355.starbucksServer.category.dto.request;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import starbucks3355.starbucksServer.domainProduct.entity.MiddleCategoryList;
+import starbucks3355.starbucksServer.category.entity.MiddleCategoryList;
 
 @Getter
 @NoArgsConstructor

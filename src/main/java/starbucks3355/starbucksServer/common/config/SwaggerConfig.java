@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.commonFile;
+package starbucks3355.starbucksServer.common.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +29,14 @@ public class SwaggerConfig {
 		return GroupedOpenApi.builder()
 			.group("주문")
 			.pathsToMatch("/api/v1/orders/**")
+			.build();
+	}
+
+	@Bean
+	public GroupedOpenApi ProductAPI() {
+		return GroupedOpenApi.builder()
+			.group("상품")
+			.pathsToMatch("/api/v1/product/**")
 			.build();
 	}
 

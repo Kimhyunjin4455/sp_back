@@ -1,17 +1,17 @@
-package starbucks3355.starbucksServer.domainProduct.service;
+package starbucks3355.starbucksServer.category.sevice;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import starbucks3355.starbucksServer.domainProduct.dto.requestDto.BottomCategoryListRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.requestDto.CategoryListRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.requestDto.MiddleCategoryListRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.requestDto.TopCategoryListRequestDto;
-import starbucks3355.starbucksServer.domainProduct.repository.BottomCategoryRepository;
-import starbucks3355.starbucksServer.domainProduct.repository.CategoryListRepository;
-import starbucks3355.starbucksServer.domainProduct.repository.MiddleCategoryRepository;
-import starbucks3355.starbucksServer.domainProduct.repository.TopCategoryRepository;
+import starbucks3355.starbucksServer.category.dto.request.BottomCategoryListRequestDto;
+import starbucks3355.starbucksServer.category.dto.request.CategoryListRequestDto;
+import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryListRequestDto;
+import starbucks3355.starbucksServer.category.dto.request.TopCategoryListRequestDto;
+import starbucks3355.starbucksServer.category.repository.BottomCategoryRepository;
+import starbucks3355.starbucksServer.category.repository.CategoryListRepository;
+import starbucks3355.starbucksServer.category.repository.MiddleCategoryRepository;
+import starbucks3355.starbucksServer.category.repository.TopCategoryRepository;
 
 @Service
 @Slf4j

@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainProduct.dto.requestDto;
+package starbucks3355.starbucksServer.category.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

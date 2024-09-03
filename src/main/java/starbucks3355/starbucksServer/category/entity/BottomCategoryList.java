@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainProduct.entity;
+package starbucks3355.starbucksServer.category.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

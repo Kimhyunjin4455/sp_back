@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.commonFile;
+package starbucks3355.starbucksServer.common.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;

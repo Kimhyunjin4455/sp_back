@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponseVo {
-	private String productUuid;
-	private String productName;
-	private String productDescription;
-	private String productInfo;
-
+public class ProductFlagsResponseVo {
+	private Boolean isLiked;
+	private Boolean isNew;
+	private Boolean isBest;
 }

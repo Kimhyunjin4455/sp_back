@@ -9,5 +9,5 @@ import starbucks3355.starbucksServer.domainProduct.entity.ProductFlags;
 
 @Repository
 public interface FlagsRepository extends JpaRepository<ProductFlags, Long> {
-	Optional<ProductFlags> findByProductCode(Long productCode);
+	Optional<ProductFlags> findByProductUuid(String productUuid);
 }

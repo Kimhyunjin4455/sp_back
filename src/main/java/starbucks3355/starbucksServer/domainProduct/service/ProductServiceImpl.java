@@ -82,9 +82,9 @@ public class ProductServiceImpl implements ProductService {
 
 	// Q1.5 아래와 같이 쪼개어 생성된 getXXX 메서드들 만큼 Controller에는 @GetMapping으로 따로 처리하면 되는지?
 	@Override
-	public ProductImgResponseDto getImage(Long productCode) {
+	public ProductImgResponseDto getImage(String productUuid) {
 
-		ProductImage productImage = imgRepository.findByProductCode(productCode)
+		ProductImage productImage = imgRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 이미지가 존재하지 않습니다."));
 		return ProductImgResponseDto.builder()
 			.productImgUrl(productImage.getS3Url())
@@ -104,10 +104,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductFlagsResponseDto getProductFlags(Long productCode) {
+	public ProductFlagsResponseDto getProductFlags(String productUuid) {
 		// Q2. 여기는 상품에 대해 찜하기여부, 최신상품여부, 베스트 여부
 		// 단순 Boolean 처리이니, 위 3가지 필드에 대해 짬하기 나 베스트 등의 구현에 대해 신경쓰지 말고 새로 엔티티 생성할지?
-		ProductFlags productFlags = flagsRepository.findByProductCode(productCode)
+		ProductFlags productFlags = flagsRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
 
 		return ProductFlagsResponseDto.builder()

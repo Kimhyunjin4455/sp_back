@@ -28,6 +28,6 @@ public class ProductImage {
 	@Column(length = 250)
 	private String thumbnailPath;
 	@Column(nullable = false)
-	private Long productCode;
+	private String productUuid;
 
 }

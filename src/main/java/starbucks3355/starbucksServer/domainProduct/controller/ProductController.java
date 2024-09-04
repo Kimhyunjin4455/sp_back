@@ -47,10 +47,10 @@ public class ProductController {
 	@GetMapping("/productImage/{productCode}")
 	@Operation(summary = "상품 대표 이미지 조회")
 	public CommonResponseEntity<ProductImgResponseVo> getProductImage(
-		@PathVariable Long productCode) {
+		@PathVariable String productUuid) {
 		// productCode는 상품의 PK(Product entity의 id값)를 지칭
 		// Q. 프론트 단에서 url에 상품의id값을 지정하여 요청하는 방식으로 상품에 대한 대표 이미지 추출
-		ProductImgResponseDto productImgResponseDto = productService.getImage(productCode);
+		ProductImgResponseDto productImgResponseDto = productService.getImage(productUuid);
 		// productService.getImage: 상품id값을 기준으로 상품이미지엔티티에서 를 추출하는 로직
 
 		return new CommonResponseEntity<>(

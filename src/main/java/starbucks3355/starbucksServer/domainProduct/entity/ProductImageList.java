@@ -27,7 +27,7 @@ public class ProductImageList {
 	private Long id;
 	private String thumbnailPath;
 	@Column(nullable = false)
-	private Long productCode;
+	private String productUuid;
 	@Column(nullable = false, length = 255)
 	private String productDetailImgPath;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

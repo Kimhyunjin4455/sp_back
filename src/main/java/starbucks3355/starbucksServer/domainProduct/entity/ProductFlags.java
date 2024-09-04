@@ -27,5 +27,5 @@ public class ProductFlags {
 	@Column(nullable = false)
 	private boolean isBest;
 	@Column(nullable = false)
-	private Long productCode;
+	private String productUuid;
 }

@@ -16,11 +16,11 @@ public interface ProductService {
 
 	public ProductResponseDto getProduct(String productUuid);
 
-	public ProductImgResponseDto getImage(Long productCode);
+	public ProductImgResponseDto getImage(String productUuid);
 
 	public ProductDetailsResponseDto getProductDetails(String productUuid);
 
-	public ProductFlagsResponseDto getProductFlags(Long productCode);
+	public ProductFlagsResponseDto getProductFlags(String productUuid);
 
 	public DiscountResponseDto getDiscountInfo(Long productCode);
 

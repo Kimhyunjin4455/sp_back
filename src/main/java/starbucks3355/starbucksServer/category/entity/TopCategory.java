@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name = "top_category_list", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryCode, categoryName")})
+@Table(name = "top_category", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryCode, categoryName")})
 public class TopCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

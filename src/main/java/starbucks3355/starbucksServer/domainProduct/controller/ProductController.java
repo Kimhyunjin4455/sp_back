@@ -44,7 +44,7 @@ public class ProductController {
 		);
 	}
 
-	@GetMapping("/productImage/{productCode}")
+	@GetMapping("/productImage/{productUuid}")
 	@Operation(summary = "상품 대표 이미지 조회")
 	public CommonResponseEntity<ProductImgResponseVo> getProductImage(
 		@PathVariable String productUuid) {

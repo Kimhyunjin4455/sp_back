@@ -107,6 +107,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductFlagsResponseDto getProductFlags(Long productCode) {
 		// Q2. 여기는 상품에 대해 찜하기여부, 최신상품여부, 베스트 여부
 		// 단순 Boolean 처리이니, 위 3가지 필드에 대해 짬하기 나 베스트 등의 구현에 대해 신경쓰지 말고 새로 엔티티 생성할지?
+
 		return null;
 	}
 

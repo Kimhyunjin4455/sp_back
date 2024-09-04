@@ -5,7 +5,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
+import starbucks3355.starbucksServer.category.entity.TopCategory;
 import starbucks3355.starbucksServer.category.repository.BottomCategoryRepository;
 import starbucks3355.starbucksServer.category.repository.MiddleCategoryRepository;
 import starbucks3355.starbucksServer.category.repository.TopCategoryRepository;
@@ -24,19 +26,42 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Transactional
 	@Override
-	public void creatTopCategory(TopCategoryRequestDto topCategoryRequestDto) {
+	public void createTopCategory(TopCategoryRequestDto topCategoryRequestDto) {
 		if (topCategoryRepository.existsByCategoryName(topCategoryRequestDto.getTopCategoryName())) {
 			throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
 		}
 
 		String categoryCode = generateUniqueCategoryCode("TC-");
+
+		// DTO를 엔티티 변환해서 생성된 카테고리 코드 주입
+		TopCategory topCategory = topCategoryRequestDto.toEntity(categoryCode);
+		topCategoryRepository.save(topCategory);
+		log.info("Top 카테고리 코드: " + topCategory.getCategoryCode());
 	}
 
-	// @Transactional
-	// @Override
-	// public void createMiddleCategory(MiddleCategoryRequestDto middleCategoryRequestDto) {
-	//
-	// }
+	@Transactional
+	@Override
+	public void createMiddleCategory(MiddleCategoryRequestDto middleCategoryRequestDto) {
+		if (middleCategoryRepository.existsByCategoryName(middleCategoryRequestDto.getMiddleCategoryName())) {
+			throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
+		}
+
+		try {
+			TopCategory topCategory = topCategoryRepository.findByCategoryCode(
+				middleCategoryRequestDto.getTopCategoryCode()).orElseThrow(
+				() -> new IllegalArgumentException("존재하지 않는 Top 카테고리 코드입니다.")
+			);
+			String categoryCode = generateUniqueCategoryCode("MC-");
+			middleCategoryRepository.save(middleCategoryRequestDto.toEntity(topCategory, categoryCode));
+		} catch (IllegalArgumentException e) {
+			log.error(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected error occurred", e);
+			throw new RuntimeException("카테고리 생성 중 오류가 발생했습니다.", e);
+		}
+
+	}
 	//
 	// @Transactional
 	// @Override

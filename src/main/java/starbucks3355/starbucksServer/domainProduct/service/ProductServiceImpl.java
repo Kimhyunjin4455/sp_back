@@ -17,8 +17,10 @@ import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseD
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductDefaultDisCount;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductDetails;
+import starbucks3355.starbucksServer.domainProduct.entity.ProductFlags;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductImage;
 import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
+import starbucks3355.starbucksServer.domainProduct.repository.FlagsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ImageRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductDetailsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
@@ -34,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
 	private final ReviewRepository reviewRepository;
 	private final DiscountRepository discountRepository;
 	private final ProductDetailsRepository productDetailsRepository;
+	private final FlagsRepository flagsRepository;
 
 	@Override
 	public void addProduct(ProductRequestDto productRequestDto) {
@@ -60,10 +63,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductResponseDto getProduct(String productUuid) {
 
-		// Q0. 아래의 Mock uuid에 대해 컨트롤러에서 여러 서비스에 대해 uuid, id값을 줘야되니 컨트롤러에서 생성하는게 맞는건지?
-		String memberUuid;
-		memberUuid = UUID.randomUUID().toString(); // Member entity 목데이터
-
 		Product product = productRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
@@ -84,7 +83,8 @@ public class ProductServiceImpl implements ProductService {
 	// Q1.5 아래와 같이 쪼개어 생성된 getXXX 메서드들 만큼 Controller에는 @GetMapping으로 따로 처리하면 되는지?
 	@Override
 	public ProductImgResponseDto getImage(Long productCode) {
-		ProductImage productImage = imgRepository.findById(productCode)
+
+		ProductImage productImage = imgRepository.findByProductCode(productCode)
 			.orElseThrow(() -> new IllegalArgumentException("해당 이미지가 존재하지 않습니다."));
 		return ProductImgResponseDto.builder()
 			.productImgUrl(productImage.getS3Url())
@@ -92,13 +92,13 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductDetailsResponseDto getProductDetails(Long productCode) {
+	public ProductDetailsResponseDto getProductDetails(String productUuid) {
 
-		ProductDetails productDetails = productDetailsRepository.findById(productCode)
+		ProductDetails productDetails = productDetailsRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
 
 		return ProductDetailsResponseDto.builder()
-			.productCode(productDetails.getProductCode())
+			.productUuid(productDetails.getProductUuid())
 			.price(productDetails.getProductPrice())
 			.build();
 	}
@@ -107,8 +107,14 @@ public class ProductServiceImpl implements ProductService {
 	public ProductFlagsResponseDto getProductFlags(Long productCode) {
 		// Q2. 여기는 상품에 대해 찜하기여부, 최신상품여부, 베스트 여부
 		// 단순 Boolean 처리이니, 위 3가지 필드에 대해 짬하기 나 베스트 등의 구현에 대해 신경쓰지 말고 새로 엔티티 생성할지?
+		ProductFlags productFlags = flagsRepository.findByProductCode(productCode)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
 
-		return null;
+		return ProductFlagsResponseDto.builder()
+			.isLiked(productFlags.isLiked())
+			.isNew(productFlags.isNew())
+			.isBest(productFlags.isBest())
+			.build();
 	}
 
 	@Override

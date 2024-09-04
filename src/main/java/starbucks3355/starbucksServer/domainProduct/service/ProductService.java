@@ -18,7 +18,7 @@ public interface ProductService {
 
 	public ProductImgResponseDto getImage(Long productCode);
 
-	public ProductDetailsResponseDto getProductDetails(Long productCode);
+	public ProductDetailsResponseDto getProductDetails(String productUuid);
 
 	public ProductFlagsResponseDto getProductFlags(Long productCode);
 

@@ -27,5 +27,7 @@ public class ProductImage {
 	private String s3Url; // S3에 저장된 이미지 URL
 	@Column(length = 250)
 	private String thumbnailPath;
-	
+	@Column(nullable = false)
+	private Long productCode;
+
 }

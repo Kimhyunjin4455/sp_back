@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.category.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +12,6 @@ public interface BottomCategoryRepository extends JpaRepository<BottomCategory, 
 	boolean existsByCategoryCode(String categoryCode);
 
 	boolean existsByCategoryName(String categoryName);
+
+	List<BottomCategory> findByMiddleCategoryCategoryCode(String middleCategoryCode);
 }

@@ -14,4 +14,6 @@ public interface TopCategoryRepository extends JpaRepository<TopCategory, Intege
 	boolean existsByCategoryName(String categoryName);
 
 	Optional<TopCategory> findByCategoryCode(String categoryCode);
+
+	Optional<TopCategory> findByCategoryName(String categoryName);
 }

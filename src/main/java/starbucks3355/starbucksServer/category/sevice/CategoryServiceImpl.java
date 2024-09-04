@@ -1,5 +1,8 @@
 package starbucks3355.starbucksServer.category.sevice;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,9 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.category.dto.request.BottomCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
+import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
+import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
+import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
 import starbucks3355.starbucksServer.category.entity.MiddleCategory;
 import starbucks3355.starbucksServer.category.entity.TopCategory;
 import starbucks3355.starbucksServer.category.repository.BottomCategoryRepository;
+import starbucks3355.starbucksServer.category.repository.CategoryListRepository;
 import starbucks3355.starbucksServer.category.repository.MiddleCategoryRepository;
 import starbucks3355.starbucksServer.category.repository.TopCategoryRepository;
 import starbucks3355.starbucksServer.common.utils.CategoryCodeGenerator;
@@ -25,6 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
 	private final BottomCategoryRepository bottomCategoryRepository;
 
 	private static final int MAX_CODE_TRIES = 5; // 최대 재시도 횟수
+	private final CategoryListRepository categoryListRepository;
 
 	@Transactional
 	@Override
@@ -37,11 +45,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 		// DTO를 엔티티 변환해서 생성된 카테고리 코드 주입
 		TopCategory topCategory = topCategoryRequestDto.toEntity(categoryCode);
-		topCategoryRepository.save(topCategory);
-		log.info("Top 카테고리 코드: " + topCategory.getCategoryCode());
-
 		try {
-			topCategoryRepository.save(topCategoryRequestDto.toEntity(categoryCode));
+			topCategoryRepository.save(topCategory);
+			log.info("Top 카테고리 코드: " + topCategory.getCategoryCode());
 		} catch (IllegalArgumentException e) {
 			log.error(e.getMessage());
 			throw e;
@@ -100,6 +106,79 @@ public class CategoryServiceImpl implements CategoryService {
 			throw new RuntimeException("카테고리 생성 중 오류가 발생했습니다.", e);
 		}
 
+	}
+
+	// top 카테고리 조회
+	@Override
+	// top 카테고리 조회
+	// db에 저장 돼 있는 객체를 dto로 변환 시키는 과정
+	public List<TopCategoryResponseDto> getTopCategories() {
+		return topCategoryRepository.findAll().stream().map(
+			topCategory -> TopCategoryResponseDto.builder()
+				.topCategoryName(topCategory.getCategoryName())
+				.topCategoryDescription(topCategory.getCategoryDescription())
+				.topCategoryCode(topCategory.getCategoryCode())
+				.build()
+		).toList();
+	}
+
+	// middle 카테고리 조회
+	@Override
+	@Transactional(readOnly = true)
+	public List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryCode) {
+		// 미들 카테고리는 조회할때 탑 카테고리의 코드가 있는지 확인을 해야함
+		try {
+			TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryCode)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Top 카테고리 코드입니다."));
+			log.info("topCategory : {}", topCategory);
+
+			List<MiddleCategoryResponseDto> middleCategoryResponseDtos = middleCategoryRepository
+				.findByTopCategoryCategoryCode(topCategory.getCategoryCode())
+				.stream()
+				.map(
+					middleCategory -> MiddleCategoryResponseDto.builder()
+						.middleCategoryCode(middleCategory.getCategoryCode())
+						.middleCategoryDescription(middleCategory.getCategoryDescription())
+						.middleCategoryName(middleCategory.getCategoryName())
+						.build())
+				.collect(Collectors.toList());
+			return middleCategoryResponseDtos; // db의 저장된 객체를 dto로 변환해서 반환
+		} catch (IllegalArgumentException e) {
+			log.error(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected error occurred", e);
+			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+		}
+	}
+
+	// bottom 카테고리 조회
+	@Override
+	@Transactional(readOnly = true)
+	public List<BottomCategoryResponseDto> getBottomCategories(String middleCategoryCode) {
+		try {
+			MiddleCategory middleCategory = middleCategoryRepository.findByCategoryCode(middleCategoryCode)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Middle 카테고리 코드입니다."));
+
+			List<BottomCategoryResponseDto> bottomCategoryResponseDtos = bottomCategoryRepository
+				.findByMiddleCategoryCategoryCode(middleCategory.getCategoryCode())
+				.stream()
+				.map(
+					bottomCategory -> BottomCategoryResponseDto.builder()
+						.bottomCategoryCode(bottomCategory.getCategoryCode())
+						.bottomCategoryDescription(bottomCategory.getCategoryDescription())
+						.bottomCategoryName(bottomCategory.getCategoryName())
+						.build())
+				.collect(Collectors.toList());
+			return bottomCategoryResponseDtos;
+
+		} catch (IllegalArgumentException e) {
+			log.error(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected error occurred", e);
+			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+		}
 	}
 
 	private String generateUniqueCategoryCode(String prefix) {

@@ -62,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductResponseDto getProduct(String productUuid) {
+		log.info(productUuid);
 
 		Product product = productRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));

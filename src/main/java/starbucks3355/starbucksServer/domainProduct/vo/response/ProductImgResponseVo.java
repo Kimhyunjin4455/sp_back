@@ -9,10 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponseVo {
-	private String productUuid;
-	private String productName;
-	private String productDescription;
-	private String productInfo;
-
+public class ProductImgResponseVo {
+	private String productImgUrl;
 }

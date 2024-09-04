@@ -9,13 +9,18 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductImgResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductDefaultDisCount;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductDetails;
+import starbucks3355.starbucksServer.domainProduct.entity.ProductFlags;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductImage;
-import starbucks3355.starbucksServer.domainProduct.entity.Review;
 import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
+import starbucks3355.starbucksServer.domainProduct.repository.FlagsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ImageRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductDetailsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
@@ -31,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
 	private final ReviewRepository reviewRepository;
 	private final DiscountRepository discountRepository;
 	private final ProductDetailsRepository productDetailsRepository;
+	private final FlagsRepository flagsRepository;
 
 	@Override
 	public void addProduct(ProductRequestDto productRequestDto) {
@@ -57,41 +63,67 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductResponseDto getProduct(String productUuid) {
 
-		String memberUuid;
-		memberUuid = UUID.randomUUID().toString(); // Member entity 목데이터
-
 		Product product = productRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
-		ProductDetails details = productDetailsRepository.findById(
-			product.getId()).orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
+		// Q1. 리뷰에 대해서는 따로 Service 파일을 생성할지?
+		// Review review = reviewRepository.findByMemberUuidAndProductCode(
+		// 	memberUuid, product.getId()).orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
 
-		ProductDefaultDisCount productDiscount = discountRepository.findById(
-			product.getId()).orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
-
-		ProductImage productImage = imgRepository.findById(
-			product.getId()).orElseThrow(() -> new IllegalArgumentException("해당 이미지가 존재하지 않습니다."));
-
-		Review review = reviewRepository.findByMemberUuidAndProductCode(
-			memberUuid, product.getId()).orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
-
-		int mockReviewCount = 999;
+		// int mockReviewCount = 999;
 
 		return ProductResponseDto.builder()
 			.productUuid(product.getProductUuid())
 			.productName(product.getProductName())
 			.productDescription(product.getProductDescription())
 			.productInfo(product.getProductInfo())
-			.productCode(product.getId())
-			.price(details.getProductPrice())
-			.discountType(productDiscount.getDiscountType())
-			.value(productDiscount.getValue())
-			.productImg(productImage.getS3Url())
-			.reviewScore(review.getScore())
-			.reviewCount(mockReviewCount)
-			.isLiked(true)
-			.isBest(true)
-			.isNew(true)
+			.build();
+	}
+
+	// Q1.5 아래와 같이 쪼개어 생성된 getXXX 메서드들 만큼 Controller에는 @GetMapping으로 따로 처리하면 되는지?
+	@Override
+	public ProductImgResponseDto getImage(String productUuid) {
+
+		ProductImage productImage = imgRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 이미지가 존재하지 않습니다."));
+		return ProductImgResponseDto.builder()
+			.productImgUrl(productImage.getS3Url())
+			.build();
+	}
+
+	@Override
+	public ProductDetailsResponseDto getProductDetails(String productUuid) {
+
+		ProductDetails productDetails = productDetailsRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
+
+		return ProductDetailsResponseDto.builder()
+			.productUuid(productDetails.getProductUuid())
+			.price(productDetails.getProductPrice())
+			.build();
+	}
+
+	@Override
+	public ProductFlagsResponseDto getProductFlags(String productUuid) {
+		// Q2. 여기는 상품에 대해 찜하기여부, 최신상품여부, 베스트 여부
+		// 단순 Boolean 처리이니, 위 3가지 필드에 대해 짬하기 나 베스트 등의 구현에 대해 신경쓰지 말고 새로 엔티티 생성할지?
+		ProductFlags productFlags = flagsRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
+
+		return ProductFlagsResponseDto.builder()
+			.isLiked(productFlags.isLiked())
+			.isNew(productFlags.isNew())
+			.isBest(productFlags.isBest())
+			.build();
+	}
+
+	@Override
+	public DiscountResponseDto getDiscountInfo(Long productCode) {
+		ProductDefaultDisCount productDefaultDisCount = discountRepository.findById(productCode)
+			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
+		return DiscountResponseDto.builder()
+			.discountType(productDefaultDisCount.getDiscountType()) // Q3. enum 타입인데 알아서 DB에서 가져와 입력되는지?
+			.value(productDefaultDisCount.getValue())
 			.build();
 	}
 

@@ -31,6 +31,8 @@ public class ProductDetails {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "color_id")
 	private ProductSize productColor;
+	@Column(nullable = false, length = 100)
+	private String productUuid;
 	private Boolean isEngraving;
 	private String engravingMessage;
 	@Column(nullable = false)

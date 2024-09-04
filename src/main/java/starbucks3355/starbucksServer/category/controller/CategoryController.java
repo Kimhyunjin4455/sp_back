@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import starbucks3355.starbucksServer.category.dto.request.BottomCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.sevice.CategoryService;
+import starbucks3355.starbucksServer.category.vo.request.BottomCategoryRequestVo;
 import starbucks3355.starbucksServer.category.vo.request.MiddleCategoryRequestVo;
 import starbucks3355.starbucksServer.category.vo.request.TopCategoryRequestVo;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
@@ -56,4 +58,21 @@ public class CategoryController {
 			CommonResponseMessage.SUCCESS.getMessage(),
 			null);
 	}
+
+	@PostMapping("/bottom-category")
+	@Operation(summary = "Bottom 카테고리 생성")
+	public CommonResponseEntity<Void> createBottomCategory(
+		@RequestBody BottomCategoryRequestVo bottomCategoryRequestVo) {
+		BottomCategoryRequestDto bottomCategoryRequestDto = BottomCategoryRequestDto.builder()
+			.bottomCategoryName(bottomCategoryRequestVo.getBottomCategoryName())
+			.bottomCategoryDescription(bottomCategoryRequestVo.getBottomCategoryDescription())
+			.middleCategoryCode(bottomCategoryRequestVo.getMiddleCategoryCode())
+			.build();
+		categoryService.createBottomCategory(bottomCategoryRequestDto);
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
+
 }

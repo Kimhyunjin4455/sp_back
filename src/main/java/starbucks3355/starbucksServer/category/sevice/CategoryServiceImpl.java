@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Transactional
 	@Override
-	public void creatTopCategory(TopCategoryRequestDto topCategoryRequestDto) {
+	public void createTopCategory(TopCategoryRequestDto topCategoryRequestDto) {
 		if (topCategoryRepository.existsByCategoryName(topCategoryRequestDto.getTopCategoryName())) {
 			throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
 		}
@@ -35,6 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 	// @Transactional
 	// @Override
 	// public void createMiddleCategory(MiddleCategoryRequestDto middleCategoryRequestDto) {
+	// 	if (topCategoryRepository.existsByCategoryName())
 	//
 	// }
 	//

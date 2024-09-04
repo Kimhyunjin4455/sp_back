@@ -3,6 +3,10 @@ package starbucks3355.starbucksServer.domainProduct.service;
 import java.util.List;
 
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductImgResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 
 public interface ProductService {
@@ -10,7 +14,15 @@ public interface ProductService {
 
 	public List<ProductResponseDto> getProducts();
 
-	ProductResponseDto getProduct(String productUuid);
+	public ProductResponseDto getProduct(String productUuid);
+
+	public ProductImgResponseDto getImage(Long productCode);
+
+	public ProductDetailsResponseDto getProductDetails(Long productCode);
+
+	public ProductFlagsResponseDto getProductFlags(Long productCode);
+
+	public DiscountResponseDto getDiscountInfo(Long productCode);
 
 	public void updateProduct(ProductRequestDto productRequestDto);
 

@@ -27,4 +27,6 @@ public class ProductPromotion {
 	private Boolean isState;
 	@Column(columnDefinition = "TEXT")
 	private String promotionInfoContent;
+	@Column(nullable = false)
+	private Long productCode;
 }

@@ -21,7 +21,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class WishList {
+public class WishList { //out
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

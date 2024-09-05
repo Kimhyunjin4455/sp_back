@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainProduct.entity;
+package starbucks3355.starbucksServer.domainImage.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,20 +14,24 @@ import lombok.ToString;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class ProductImage {
+public class Image {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 200, unique = true)
-	private String productImgName;
 	@Column(nullable = false, length = 200)
-	private String s3Url; // S3에 저장된 이미지 URL
+	private String s3url;
+	@Column(nullable = false, length = 200, unique = true)
+	private String imageName;
 	@Column(length = 250)
 	private String thumbnailPath;
 	@Column(nullable = false)
-	private String productUuid;
+	private String imageUuid;
+	@Column(nullable = false)
+	private boolean isMainImage; // 대표이미지 여부, 이 값 통해 상품의 대표이미지 추출, 응답 dto에 있어야될지?
+	@Column(nullable = false)
+	private String otherUuid; // 상품, 쿠폰, 리뷰 등은 각각 자신만의 이미지를 보유 -> 각종 uuid값을 통해 연결할 필드
 
 }

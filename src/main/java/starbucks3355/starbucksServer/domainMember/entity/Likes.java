@@ -1,8 +1,12 @@
-package starbucks3355.starbucksServer.domainProduct.entity;
+package starbucks3355.starbucksServer.domainMember.entity;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,17 +19,14 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class ProductFlags {
+public class Likes {
 	@Id
-	@GeneratedValue
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long Likes;
 	@Column(nullable = false)
-	private boolean isLiked; // 수정 필요, 회원의 정보가 같이 필요 -> 변화가 심함 -> noSQL
+	private Long memberUuid;
 	@Column(nullable = false)
-	private boolean isNew;
+	private Long productUuid;
 	@Column(nullable = false)
-	private boolean isBest;
-	@Column(nullable = false)
-	private String productUuid;
+	private Boolean isLikes = false;
 }

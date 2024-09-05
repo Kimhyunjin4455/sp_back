@@ -17,7 +17,7 @@ import starbucks3355.starbucksServer.common.entity.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Review extends BaseEntity {
+public class Review extends BaseEntity {//out
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

@@ -18,13 +18,6 @@ public class MemberRequestVo {
 	private String userId;
 	private String password;
 	private String email;
-	private String phoneNumber;
-	private LocalDate birth;
-	private String address;
-	private String gender;
 	private String nickname;
-	private String memberUuid;
-	private Boolean isMember;
-	private LocalDateTime withdrawalTime;
 
 }

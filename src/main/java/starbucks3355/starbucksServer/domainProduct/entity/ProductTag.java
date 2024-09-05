@@ -17,7 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductTag {
+public class ProductTag { //out -> etc등의 도메인으로
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "productOptions")
-public class ProductStocks {
+public class ProductStocks { // 일괄 처리 필요 Batch, Details 들어간다고 크게 문제 없을 것 같음
 	@Id
 	@JoinColumn(name = "option_id")
 	private Long id;

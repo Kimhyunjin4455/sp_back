@@ -6,7 +6,6 @@ import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.ProductImgResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 
 public interface ProductService {
@@ -15,8 +14,6 @@ public interface ProductService {
 	public List<ProductResponseDto> getProducts();
 
 	public ProductResponseDto getProduct(String productUuid);
-
-	public ProductImgResponseDto getImage(String productUuid);
 
 	public ProductDetailsResponseDto getProductDetails(String productUuid);
 

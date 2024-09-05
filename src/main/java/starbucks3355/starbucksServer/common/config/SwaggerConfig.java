@@ -39,29 +39,5 @@ public class SwaggerConfig {
 			.pathsToMatch("/api/v1/product/**")
 			.build();
 	}
-
-	@Bean
-	public GroupedOpenApi CategoryAPI() {
-		return GroupedOpenApi.builder()
-			.group("카테고리")
-			.pathsToMatch("/api/v1/category/**")
-			.build();
-	}
-
-	@Bean
-	public GroupedOpenApi ImageAPI() {
-		return GroupedOpenApi.builder()
-			.group("이미지")
-			.pathsToMatch("/api/v1/image/**")
-			.build();
-	}
-
-	@Bean
-	public GroupedOpenApi ReviewAPI() {
-		return GroupedOpenApi.builder()
-			.group("리뷰")
-			.pathsToMatch("/api/v1/review/**")
-			.build();
-	}
-
+	
 }

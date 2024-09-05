@@ -21,4 +21,12 @@ public abstract class BaseEntity {
 	@Column(name = "moddate")
 	private LocalDateTime modDate;
 
+	public LocalDateTime getRegDate() {
+		return regDate;
+	}
+
+	public LocalDateTime getModDate() {
+		return modDate;
+	}
+
 }

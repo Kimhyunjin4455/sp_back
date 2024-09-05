@@ -48,20 +48,4 @@ public class SwaggerConfig {
 			.build();
 	}
 
-	@Bean
-	public GroupedOpenApi ImageAPI() {
-		return GroupedOpenApi.builder()
-			.group("이미지")
-			.pathsToMatch("/api/v1/image/**")
-			.build();
-	}
-
-	@Bean
-	public GroupedOpenApi ReviewAPI() {
-		return GroupedOpenApi.builder()
-			.group("리뷰")
-			.pathsToMatch("/api/v1/review/**")
-			.build();
-	}
-
 }

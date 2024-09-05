@@ -23,17 +23,17 @@ public class MyReviewResponseDto {
 		String productUuid,
 		String memberUuid,
 		LocalDateTime regDate,
-		LocalDateTime modDate){
+		LocalDateTime modDate) {
 		this.content = content;
 		this.reviewUuid = reviewUuid;
 		this.reviewScore = reviewScore;
 		this.productUuid = productUuid;
 		this.memberUuid = memberUuid;
 		this.regDate = regDate;
-		this.modDate = modDate
+		this.modDate = modDate;
 	}
 
-	public MyReviewResponseVo dtoToResponseVo(){
+	public MyReviewResponseVo dtoToResponseVo() {
 		return MyReviewResponseVo.builder()
 			.content(content)
 			.reviewUuid(reviewUuid)

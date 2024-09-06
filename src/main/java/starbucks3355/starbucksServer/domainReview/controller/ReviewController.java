@@ -1,6 +1,7 @@
 package starbucks3355.starbucksServer.domainReview.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,6 +91,18 @@ public class ReviewController {
 			null
 		);
 
+	}
+
+	@DeleteMapping("/{id}")
+	@Operation(summary = "댓글 삭제", description = "작성했던 리뷰를 삭제합니다.")
+	public CommonResponseEntity<Void> deleteReview(@PathVariable Long id) {
+		reviewService.deleteReview(id);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null
+		);
 	}
 
 }

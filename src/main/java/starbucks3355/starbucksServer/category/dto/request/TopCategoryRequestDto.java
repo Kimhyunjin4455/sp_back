@@ -25,5 +25,4 @@ public class TopCategoryRequestDto {
 			.categoryCode(categoryCode)  // 서비스에서 생성된 코드를 주입합니다.
 			.build();
 	}
-
 }

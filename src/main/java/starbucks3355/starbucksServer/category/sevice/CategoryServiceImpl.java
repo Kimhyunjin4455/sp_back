@@ -14,6 +14,7 @@ import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
+import starbucks3355.starbucksServer.category.entity.BottomCategory;
 import starbucks3355.starbucksServer.category.entity.MiddleCategory;
 import starbucks3355.starbucksServer.category.entity.TopCategory;
 import starbucks3355.starbucksServer.category.repository.BottomCategoryRepository;
@@ -217,6 +218,26 @@ public class CategoryServiceImpl implements CategoryService {
 				.collect(Collectors.toList());
 			return bottomCategoryResponseDtos;
 
+		} catch (IllegalArgumentException e) {
+			log.error(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected error occurred", e);
+			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public BottomCategoryResponseDto getBottomCategoryByCategoryCode(String bottomCategoryCode) {
+		try {
+			BottomCategory bottomCategory = bottomCategoryRepository.findByCategoryCode(bottomCategoryCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Bottom 카테고리 코드입니다."));
+			return BottomCategoryResponseDto.builder()
+				.bottomCategoryCode(bottomCategory.getCategoryCode())
+				.bottomCategoryDescription(bottomCategory.getCategoryDescription())
+				.bottomCategoryName(bottomCategory.getCategoryName())
+				.build();
 		} catch (IllegalArgumentException e) {
 			log.error(e.getMessage());
 			throw e;

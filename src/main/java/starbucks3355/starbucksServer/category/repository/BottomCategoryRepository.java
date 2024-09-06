@@ -18,6 +18,8 @@ public interface BottomCategoryRepository extends JpaRepository<BottomCategory, 
 
 	Optional<BottomCategory> findByCategoryName(String categoryName);
 
+	Optional<BottomCategory> findByCategoryCode(String categoryCode);
+
 	// 바텀 카테고리 이름과 미들 카테고리 코드로 조회
 	Optional<BottomCategory> findByCategoryNameAndMiddleCategoryCategoryCode(String categoryName,
 		String middleCategoryCode);

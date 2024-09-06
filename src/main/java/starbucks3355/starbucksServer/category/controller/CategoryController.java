@@ -139,4 +139,24 @@ public class CategoryController {
 			CommonResponseMessage.SUCCESS.getMessage(),
 			categoryService.getTopCategoryByCategoryCode(topCategoryCode).toVo());
 	}
+
+	@GetMapping("/middle-category/{middleCategoryCode}")
+	@Operation(summary = "단일 Middle 카테고리 조회")
+	public CommonResponseEntity<MiddleCategoryResponseVo> getMiddleCategory(
+		@PathVariable String middleCategoryCode) {
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			categoryService.getMiddleCategoryByCategoryCode(middleCategoryCode).toVo());
+	}
+
+	@GetMapping("/bottom-category/{bottomCategoryCode}")
+	@Operation(summary = "단일 Bottom 카테고리 조회")
+	public CommonResponseEntity<BottomCategoryResponseVo> getBottomCategory(
+		@PathVariable String bottomCategoryCode) {
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			categoryService.getBottomCategoryByCategoryCode(bottomCategoryCode).toVo());
+	}
 }

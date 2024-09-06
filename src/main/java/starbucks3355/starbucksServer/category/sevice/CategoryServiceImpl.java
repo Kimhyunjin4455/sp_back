@@ -21,6 +21,7 @@ import starbucks3355.starbucksServer.category.repository.CategoryListRepository;
 import starbucks3355.starbucksServer.category.repository.MiddleCategoryRepository;
 import starbucks3355.starbucksServer.category.repository.TopCategoryRepository;
 import starbucks3355.starbucksServer.common.utils.CategoryCodeGenerator;
+import starbucks3355.starbucksServer.domainOrders.repository.OrderRepository;
 
 @Service
 @Slf4j
@@ -33,6 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	private static final int MAX_CODE_TRIES = 5; // 최대 재시도 횟수
 	private final CategoryListRepository categoryListRepository;
+	private final OrderRepository orderRepository;
 
 	@Transactional
 	@Override
@@ -108,7 +110,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	}
 
-	// top 카테고리 조회
+	// top 전체 카테고리 조회
 	@Override
 	// top 카테고리 조회
 	// db에 저장 돼 있는 객체를 dto로 변환 시키는 과정
@@ -122,14 +124,36 @@ public class CategoryServiceImpl implements CategoryService {
 		).toList();
 	}
 
-	// middle 카테고리 조회
 	@Override
-	@Transactional(readOnly = true)
-	public List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryCode) {
+	@Transactional
+	public TopCategoryResponseDto getTopCategoryByCategoryCode(String topCategoryCode) {
+		try {
+			TopCategory topCategory = topCategoryRepository.findByCategoryCode(topCategoryCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Top 카테고리 코드입니다."));
+			// 디비에 있는 값 객체화 시키기
+			return TopCategoryResponseDto.builder()
+				.topCategoryDescription(topCategory.getCategoryDescription())
+				.topCategoryName(topCategory.getCategoryName())
+				.topCategoryCode(topCategory.getCategoryCode())
+				.build();
+		} catch (IllegalArgumentException e) {
+			log.error(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected error occurred", e);
+			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+		}
+
+	}
+
+	// middle 전체 카테고리 조회
+	@Override
+	@Transactional(readOnly = true) // 임시로 name으로 수정 변수값
+	public List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryName) {
 		// 미들 카테고리는 조회할때 탑 카테고리의 코드가 있는지 확인을 해야함
 		try {
-			TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryCode)
-				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Top 카테고리 코드입니다."));
+			TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryName)
+				.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Top 카테고리 이름입니다."));
 			log.info("topCategory : {}", topCategory);
 
 			List<MiddleCategoryResponseDto> middleCategoryResponseDtos = middleCategoryRepository
@@ -152,9 +176,30 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 	}
 
-	// bottom 카테고리 조회
+	// 단일 middle 카테고리 조회
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
+	public MiddleCategoryResponseDto getMiddleCategoryByCategoryCode(String middleCategoryCode) {
+		try {
+			MiddleCategory middleCategory = middleCategoryRepository.findByCategoryCode(middleCategoryCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Middle 카테고리 코드입니다."));
+			return MiddleCategoryResponseDto.builder()
+				.middleCategoryCode(middleCategory.getCategoryCode())
+				.middleCategoryDescription(middleCategory.getCategoryDescription())
+				.middleCategoryName(middleCategory.getCategoryName())
+				.build();
+		} catch (IllegalArgumentException e) {
+			log.error(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected error occurred", e);
+			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+		}
+	}
+
+	// bottom 전체 카테고리 조회
+	@Override
+	@Transactional(readOnly = true) //middleCategoryCode -> middleCategoryName으로 수정 (임시 테스트)
 	public List<BottomCategoryResponseDto> getBottomCategories(String middleCategoryCode) {
 		try {
 			MiddleCategory middleCategory = middleCategoryRepository.findByCategoryCode(middleCategoryCode)
@@ -207,4 +252,5 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		throw new IllegalStateException("고유한 카테고리 코드를 생성하는 데 실패했습니다.");
 	}
+
 }

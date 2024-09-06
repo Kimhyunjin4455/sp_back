@@ -16,5 +16,10 @@ public interface MiddleCategoryRepository extends JpaRepository<MiddleCategory, 
 
 	Optional<MiddleCategory> findByCategoryCode(String categoryCode);
 
+	Optional<MiddleCategory> findByCategoryName(String categoryName);
+
+	// 미들 카테고리 이름과 탑 카테고리 코드로 조회
+	Optional<MiddleCategory> findByCategoryNameAndTopCategoryCategoryCode(String categoryName, String topCategoryCode);
+
 	List<MiddleCategory> findByTopCategoryCategoryCode(String topCategoryCode);
 }

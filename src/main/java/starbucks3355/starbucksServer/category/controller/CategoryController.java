@@ -20,6 +20,7 @@ import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
+import starbucks3355.starbucksServer.category.repository.TopCategoryRepository;
 import starbucks3355.starbucksServer.category.sevice.CategoryService;
 import starbucks3355.starbucksServer.category.vo.request.BottomCategoryRequestVo;
 import starbucks3355.starbucksServer.category.vo.request.MiddleCategoryRequestVo;
@@ -37,6 +38,7 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 public class CategoryController {
 
 	private final CategoryService categoryService;
+	private final TopCategoryRepository topCategoryRepository;
 
 	@PostMapping("/top-category")
 	@Operation(summary = "Top 카테고리 생성")
@@ -99,15 +101,15 @@ public class CategoryController {
 				.collect(Collectors.toList()));
 	}
 
-	@GetMapping("/middle-categories/{topCategoryCode}")
-	@Operation(summary = "Middle 전체 카테고리 조회")
+	@GetMapping("/middle-categories/{topCategoryName}")
+	@Operation(summary = "Middle 카테고리 조회")
 	public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategories(
-		@PathVariable String topCategoryCode) {
+		@PathVariable String topCategoryName) {
 		{
 			return new CommonResponseEntity<>(
 				HttpStatus.OK,
 				CommonResponseMessage.SUCCESS.getMessage(),
-				categoryService.getMiddleCategories(topCategoryCode)
+				categoryService.getMiddleCategories(topCategoryName)
 					.stream()
 					.map(MiddleCategoryResponseDto::toVo)
 					.collect(Collectors.toList()));
@@ -115,7 +117,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("/bottom-categories/{middleCategoryCode}")
-	@Operation(summary = "Bottom 전체 카테고리 조회")
+	@Operation(summary = "Bottom 카테고리 조회")
 	public CommonResponseEntity<List<BottomCategoryResponseVo>> getBottomCategories(
 		@PathVariable String middleCategoryCode) {
 
@@ -126,6 +128,15 @@ public class CategoryController {
 				.stream()
 				.map(BottomCategoryResponseDto::toVo)
 				.collect(Collectors.toList()));
+	}
 
+	@GetMapping("/top-category/{topCategoryCode}")
+	@Operation(summary = "단일 Top 카테고리 조회")
+	public CommonResponseEntity<TopCategoryResponseVo> getTopCategory(
+		@PathVariable String topCategoryCode) {
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			categoryService.getTopCategoryByCategoryCode(topCategoryCode).toVo());
 	}
 }

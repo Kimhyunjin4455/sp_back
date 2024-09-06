@@ -16,9 +16,28 @@ public interface CategoryService {
 
 	void createBottomCategory(BottomCategoryRequestDto bottomCategoryRequestDto);
 
+	// 대 카테고리 조회
 	List<TopCategoryResponseDto> getTopCategories();
 
+	// 중 카테고리 조회
 	List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryCode);
 
+	// 소 카테고리 조회
 	List<BottomCategoryResponseDto> getBottomCategories(String middleCategoryCode);
+
+	// 단일 카테고리 조회
+	TopCategoryResponseDto getTopCategoryByCategoryCode(String topCategoryCode);
+
+	MiddleCategoryResponseDto getMiddleCategoryByCategoryCode(String middleCategoryCode);
+
+	BottomCategoryResponseDto getBottomCategoryByCategoryCode(String bottomCategoryCode);
+
+	// 탑 카테고리 업데이트
+	//void updateTopCategory(TopCategoryRequestDto topCategoryRequestDto, String topCategoryName);
+
+	//void updateMiddleCategory(MiddleCategoryRequestDto middleCategoryRequestDto, String middleCategoryName);
+
+	//void updateBottomCategory(BottomCategoryRequestDto bottomCategoryRequestDto, String bottomCategoryName,
+	//String middleCategoryCode);
+
 }

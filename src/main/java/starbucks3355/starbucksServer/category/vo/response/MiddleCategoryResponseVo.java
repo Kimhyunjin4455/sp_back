@@ -12,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MiddleCategoryResponseVo {
-	private String middleCategoryCode;
+	//private String middleCategoryCode;
 	private String middleCategoryName;
-	private String middleCategoryDescription;
+	//private String middleCategoryDescription;
 }

@@ -9,11 +9,11 @@ import starbucks3355.starbucksServer.category.entity.TopCategory;
 
 @Repository
 public interface TopCategoryRepository extends JpaRepository<TopCategory, Integer> {
-	boolean existsByCategoryCode(String categoryCode);
+	//boolean existsByCategoryCode(String categoryCode);
 
 	boolean existsByCategoryName(String categoryName);
 
-	Optional<TopCategory> findByCategoryCode(String categoryCode);
+	//Optional<TopCategory> findByCategoryCode(String categoryCode);
 
 	Optional<TopCategory> findByCategoryName(String categoryName);
 }

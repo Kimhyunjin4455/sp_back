@@ -7,5 +7,5 @@ import lombok.ToString;
 @Getter
 public class TopCategoryRequestVo {
 	private String topCategoryName;
-	private String topCategoryDescription;
+	//private String topCategoryDescription;
 }

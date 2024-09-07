@@ -23,5 +23,5 @@ public class CategoryList {
 	private Integer majorCategoryId;
 	private Integer middleCategoryId;
 	private Integer bottomCategoryId;
-	private Long productCode; // 각 상품개체를 표현하는 값
+	private String productCode; // 각 상품개체를 표현하는 값
 }

@@ -21,7 +21,6 @@ import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository
 import starbucks3355.starbucksServer.domainProduct.repository.FlagsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductDetailsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
-import starbucks3355.starbucksServer.domainProduct.repository.ReviewRepository;
 
 @Service
 @Slf4j
@@ -29,7 +28,6 @@ import starbucks3355.starbucksServer.domainProduct.repository.ReviewRepository;
 public class ProductServiceImpl implements ProductService {
 
 	private final ProductRepository productRepository;
-	private final ReviewRepository reviewRepository;
 	private final DiscountRepository discountRepository;
 	private final ProductDetailsRepository productDetailsRepository;
 	private final FlagsRepository flagsRepository;
@@ -43,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 		productRepository.save(productRequestDto.dtoToEntity(productUuid));
 	}
 
-	@Override
+	@Override // 수정 필요
 	public List<ProductResponseDto> getProducts() {
 		List<Product> products = productRepository.findAll();
 		return products.stream()

@@ -118,24 +118,23 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<TopCategoryResponseDto> getTopCategories() {
 		return topCategoryRepository.findAll().stream().map(
 			topCategory -> TopCategoryResponseDto.builder()
+				.id(topCategory.getId())
 				.topCategoryName(topCategory.getCategoryName())
-				.topCategoryDescription(topCategory.getCategoryDescription())
-				.topCategoryCode(topCategory.getCategoryCode())
 				.build()
 		).toList();
 	}
 
 	@Override
 	@Transactional
+	// 단일 top 카테고리 조회
 	public TopCategoryResponseDto getTopCategoryByCategoryCode(String topCategoryCode) {
 		try {
 			TopCategory topCategory = topCategoryRepository.findByCategoryCode(topCategoryCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Top 카테고리 코드입니다."));
 			// 디비에 있는 값 객체화 시키기
 			return TopCategoryResponseDto.builder()
-				.topCategoryDescription(topCategory.getCategoryDescription())
+				.id(topCategory.getId())
 				.topCategoryName(topCategory.getCategoryName())
-				.topCategoryCode(topCategory.getCategoryCode())
 				.build();
 		} catch (IllegalArgumentException e) {
 			log.error(e.getMessage());

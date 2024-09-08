@@ -19,10 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ProductReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.service.ReviewService;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewRequestVo;
+import starbucks3355.starbucksServer.domainReview.vo.out.MyReviewResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ProductReviewResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
 
@@ -34,7 +36,7 @@ import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
 public class ReviewController {
 	private final ReviewService reviewService;
 
-	@GetMapping("/{productUuid}/allReviews")
+	@GetMapping("/{productUuid}/allReviewsOfProduct")
 	@Operation(summary = "상품별 리뷰 전체 조회")
 	public CommonResponseEntity<List<ProductReviewResponseVo>> getProductReviews(
 		@PathVariable String productUuid) {
@@ -47,6 +49,22 @@ public class ReviewController {
 				.map(ProductReviewResponseDto::dtoToResponseVo)
 				.toList()
 		);
+	}
+
+	@GetMapping("/{memberUuid}/allReviewsOfMember")
+	@Operation(summary = "회원별 리뷰 전체 조회")
+	public CommonResponseEntity<List<MyReviewResponseVo>> getMemberReviews(
+		@PathVariable String memberUuid) {
+		List<MyReviewResponseDto> memberReviewsDto = reviewService.getMyReviews(memberUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			memberReviewsDto.stream()
+				.map(MyReviewResponseDto::dtoToResponseVo)
+				.toList()
+		);
+
 	}
 
 	@GetMapping("/{reviewUuid}")

@@ -10,16 +10,20 @@ import starbucks3355.starbucksServer.category.entity.MiddleCategory;
 
 @Repository
 public interface MiddleCategoryRepository extends JpaRepository<MiddleCategory, Integer> {
-	boolean existsByCategoryCode(String categoryCode);
+	//boolean existsByTopCategoryId(Integer topCategoryId);
 
-	boolean existsByCategoryName(String categoryName);
+	boolean existsByTopCategoryIdAndCategoryName(Integer topCategoryId, String categoryName);
 
-	Optional<MiddleCategory> findByCategoryCode(String categoryCode);
+	//Optional<MiddleCategory> findByCategoryCode(String categoryCode);
 
 	Optional<MiddleCategory> findByCategoryName(String categoryName);
 
 	// 미들 카테고리 이름과 탑 카테고리 코드로 조회
 	//Optional<MiddleCategory> findByCategoryNameAndTopCategoryCategoryCode(String categoryName, String topCategoryCode);
 
-	List<MiddleCategory> findByTopCategoryCategoryCode(String topCategoryCode);
+	//List<MiddleCategory> findByTopCategoryCategoryCode(String topCategoryCode);
+
+	// 중 카테고리를 topCategoryId로 조회하는 메서드
+	List<MiddleCategory> findByTopCategoryId(Integer topCategoryId);
+
 }

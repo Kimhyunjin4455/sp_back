@@ -13,15 +13,16 @@ import starbucks3355.starbucksServer.category.vo.response.BottomCategoryResponse
 @NoArgsConstructor
 @AllArgsConstructor
 public class BottomCategoryResponseDto {
-	private String bottomCategoryCode;
+	//private String bottomCategoryCode;
 	private String bottomCategoryName;
-	private String bottomCategoryDescription;
+	private Integer id;
+	//private String bottomCategoryDescription;
 
 	public BottomCategoryResponseVo toVo() {
 		return BottomCategoryResponseVo.builder()
-			.bottomCategoryCode(bottomCategoryCode)
+			.id(id)
 			.bottomCategoryName(bottomCategoryName)
-			.bottomCategoryDescription(bottomCategoryDescription)
+			//.bottomCategoryDescription(bottomCategoryDescription)
 			.build();
 	}
 }

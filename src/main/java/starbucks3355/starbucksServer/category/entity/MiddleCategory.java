@@ -21,14 +21,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name = "middle_category", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryCode, categoryName")})
+@Table(name = "middle_category", uniqueConstraints = {@UniqueConstraint(columnNames = "top_category_id, categoryName")})
 public class MiddleCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String categoryName;
-	private String categoryCode;
-	private String categoryDescription; // 카테고리 설명
+	//private String categoryCode;
+	//private String categoryDescription; // 카테고리 설명
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private TopCategory topCategory;
 }

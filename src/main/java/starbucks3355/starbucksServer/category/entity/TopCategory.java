@@ -18,14 +18,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name = "top_category", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryCode, categoryName")})
+@Table(name = "top_category", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryName")})
 public class TopCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String categoryName; // 카테고리 이름
-	private String categoryCode; // 이름에 대한 코드 (사과에 하나의 코드 부여)
-	private String categoryDescription; // 카테고리 설명
+	//private String categoryCode; // 이름에 대한 코드 (사과에 하나의 코드 부여)
+	//private String categoryDescription; // 카테고리 설명
 	// @Column(nullable = false, length = 255)
 	// private String categoryImg;
 }

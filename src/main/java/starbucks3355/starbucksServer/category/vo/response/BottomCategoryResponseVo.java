@@ -12,7 +12,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BottomCategoryResponseVo {
-	private String bottomCategoryCode;
+	//private String bottomCategoryCode;
+	private Integer id;
 	private String bottomCategoryName;
-	private String bottomCategoryDescription;
+
+	//private String bottomCategoryDescription;
 }

@@ -10,17 +10,19 @@ import starbucks3355.starbucksServer.category.entity.BottomCategory;
 
 @Repository
 public interface BottomCategoryRepository extends JpaRepository<BottomCategory, Integer> {
-	boolean existsByCategoryCode(String categoryCode);
+	//boolean existsByCategoryCode(String categoryCode);
 
-	boolean existsByCategoryName(String categoryName);
+	//boolean existsByCategoryName(String categoryName);
 
-	List<BottomCategory> findByMiddleCategoryCategoryCode(String middleCategoryCode);
+	//List<BottomCategory> findByMiddleCategoryCategoryCode(String middleCategoryCode);
 
 	Optional<BottomCategory> findByCategoryName(String categoryName);
 
-	Optional<BottomCategory> findByCategoryCode(String categoryCode);
+	//Optional<BottomCategory> findByCategoryCode(String categoryCode);
 
 	// 바텀 카테고리 이름과 미들 카테고리 코드로 조회
-	Optional<BottomCategory> findByCategoryNameAndMiddleCategoryCategoryCode(String categoryName,
-		String middleCategoryCode);
+	//Optional<BottomCategory> findByCategoryNameAndMiddleCategoryCategoryCode(String categoryName,
+	//String middleCategoryCode);
+
+	List<BottomCategory> findByMiddleCategoryId(Integer middleCategoryId);
 }

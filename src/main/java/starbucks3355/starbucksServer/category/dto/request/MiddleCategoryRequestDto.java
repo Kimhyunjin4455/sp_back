@@ -14,14 +14,14 @@ import starbucks3355.starbucksServer.category.entity.TopCategory;
 public class MiddleCategoryRequestDto {
 
 	private String middleCategoryName;
-	private String middleCategoryDescription;
-	private String topCategoryCode;
+	//private String middleCategoryDescription;
+	//private String topCategoryCode;
+	private Integer topCategoryId;
 
-	public MiddleCategory toEntity(TopCategory topCategory, String middleCategoryCode) {
+	public MiddleCategory toEntity(TopCategory topCategory) {
 		return MiddleCategory.builder()
+			//.id(getTopCategoryId())
 			.categoryName(middleCategoryName)
-			.categoryDescription(middleCategoryDescription)
-			.categoryCode(middleCategoryCode)
 			.topCategory(topCategory)
 			.build();
 	}

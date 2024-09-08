@@ -13,15 +13,17 @@ import starbucks3355.starbucksServer.category.vo.response.MiddleCategoryResponse
 @NoArgsConstructor
 @AllArgsConstructor
 public class MiddleCategoryResponseDto {
-	private String middleCategoryCode;
+	//private String middleCategoryCode;
+	private Integer id;
 	private String middleCategoryName;
-	private String middleCategoryDescription;
+
+	//private String middleCategoryDescription;
 
 	public MiddleCategoryResponseVo toVo() {
 		return MiddleCategoryResponseVo.builder()
-			.middleCategoryCode(middleCategoryCode)
+			.id(id)
 			.middleCategoryName(middleCategoryName)
-			.middleCategoryDescription(middleCategoryDescription)
+			//.middleCategoryDescription(middleCategoryDescription)
 			.build();
 	}
 }

@@ -11,7 +11,7 @@ import starbucks3355.starbucksServer.domainReview.entity.Review;
 public class ReviewRequestDto {
 	private String content;
 	private String reviewUuid;
-	private Integer reivewScore;
+	private Integer reviewScore;
 	private String productUuid; // 회원이 구매한 '상품'에 대한 리뷰
 	private String memberUuid; // 미확실 필드: 시큐리티의 토큰처리에 따라 사용여부 결정
 	private LocalDateTime regDate, modDate; //
@@ -20,7 +20,7 @@ public class ReviewRequestDto {
 		return Review.builder()
 			.content(content)
 			.reviewUuid(reviewUuid)
-			.reivewScore(reivewScore)
+			.reviewScore(reviewScore)
 			.productUuid(productUuid)
 			.memberUuid(memberUuid)
 			.build();

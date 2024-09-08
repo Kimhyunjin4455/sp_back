@@ -28,7 +28,7 @@ public class ReviewServiceImpl implements ReviewService {
 				.map(myReview -> MyReviewResponseDto.builder()
 					.content(myReview.getContent())
 					.reviewUuid(myReview.getReviewUuid())
-					.reviewScore(myReview.getReivewScore())
+					.reviewScore(myReview.getReviewScore())
 					.productUuid(myReview.getMemberUuid())
 					.memberUuid(myReview.getMemberUuid())
 					.regDate(myReview.getRegDate())
@@ -49,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
 			return productReviews.stream()
 				.map(productReview -> ProductReviewResponseDto.builder()
 					.content(productReview.getContent())
-					.reviewScore(productReview.getReivewScore())
+					.reviewScore(productReview.getReviewScore())
 					.reviewUuid(productReview.getReviewUuid())
 					.productUuid(productReview.getProductUuid())
 					.regDate(productReview.getRegDate())
@@ -67,7 +67,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 		return ReviewResponseDto.builder()
 			.content(review.getContent())
-			.reivewScore(review.getReivewScore())
+			.reivewScore(review.getReviewScore())
 			.regDate(review.getRegDate())
 			.modDate(review.getModDate())
 			.build();
@@ -82,14 +82,14 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void modifyReview(ReviewRequestDto reviewRequestDto) {
-		String reviewUuid = UUID.randomUUID().toString();
+	public void modifyReview(ReviewRequestDto reviewRequestDto, String reviewUuid) {
+		// String reviewUuid = UUID.randomUUID().toString();
 		Optional<Review> result = reviewRepository.findByReviewUuid(reviewUuid);
 
 		Review review = result.get();
 
-		review.modifyContent(review.getContent());
-		review.modifyReviewScore(review.getReivewScore());
+		review.modifyContent(reviewRequestDto.getContent());
+		review.modifyReviewScore(reviewRequestDto.getReviewScore());
 
 		reviewRepository.save(review);
 

@@ -26,7 +26,7 @@ public class Review extends BaseEntity {
 	private String content;
 	@Column(nullable = false)
 	private String reviewUuid;
-	private Integer reivewScore;
+	private Integer reviewScore;
 	@Column(nullable = false)
 	private String productUuid;
 	@Column(nullable = false)
@@ -37,7 +37,7 @@ public class Review extends BaseEntity {
 	}
 
 	public void modifyReviewScore(Integer reviewScore) {
-		this.reivewScore = reivewScore;
+		this.reviewScore = reviewScore;
 	}
 
 }

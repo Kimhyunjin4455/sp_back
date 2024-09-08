@@ -10,9 +10,9 @@ import starbucks3355.starbucksServer.category.entity.MiddleCategory;
 
 @Repository
 public interface MiddleCategoryRepository extends JpaRepository<MiddleCategory, Integer> {
-	//boolean existsByCategoryCode(String categoryCode);
+	//boolean existsByTopCategoryId(Integer topCategoryId);
 
-	boolean existsByCategoryName(String categoryName);
+	boolean existsByTopCategoryIdAndCategoryName(Integer topCategoryId, String categoryName);
 
 	//Optional<MiddleCategory> findByCategoryCode(String categoryCode);
 

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
@@ -50,32 +51,36 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 	}
 
-	// @Transactional
-	// @Override
-	// public void createMiddleCategory(MiddleCategoryRequestDto middleCategoryRequestDto) {
-	// 	if (middleCategoryRepository.existsByCategoryName(middleCategoryRequestDto.getMiddleCategoryName())) {
-	// 		throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
-	// 	}
-	//
-	// 	try { // Top 카테고리 코드가 존재하는지 확인
-	// 		TopCategory topCategory = topCategoryRepository.findByCategoryCode(
-	// 			middleCategoryRequestDto.getTopCategoryCode()).orElseThrow(
-	// 			() -> new IllegalArgumentException("존재하지 않는 Top 카테고리 코드입니다.")
-	// 		); //
-	// 		String categoryCode = generateUniqueCategoryCode("MC-");
-	//
-	// 		// Topcategory도 객체화 시키는 이유는 middlecategory가 속할 topcategory를 지정해주는거임
-	// 		middleCategoryRepository.save(middleCategoryRequestDto.toEntity(topCategory, categoryCode));
-	// 		log.info("Middle 카테고리 코드: " + categoryCode);
-	// 	} catch (IllegalArgumentException e) {
-	// 		log.error(e.getMessage());
-	// 		throw e;
-	// 	} catch (Exception e) {
-	// 		log.error("Unexpected error occurred", e);
-	// 		throw new RuntimeException("카테고리 생성 중 오류가 발생했습니다.", e);
-	// 	}
-	//
-	// }
+	@Transactional
+	@Override
+	public void createMiddleCategory(List<MiddleCategoryRequestDto> middleCategoryRequestDto) {
+		// 중복체크 : topcategoryid와 middlecategoryname을 동시에 검사
+		for (MiddleCategoryRequestDto dto : middleCategoryRequestDto) {
+			log.info("topcategoryid : {}, categoryname: {}", dto.getTopCategoryId(), dto.getMiddleCategoryName());
+			if (middleCategoryRepository.existsByTopCategoryIdAndCategoryName(
+				dto.getTopCategoryId(),
+				dto.getMiddleCategoryName())) {
+				throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
+			}
+
+			try { // Top 카테고리 코드가 존재하는지 확인
+				TopCategory topCategory = topCategoryRepository.findById(
+					dto.getTopCategoryId()).orElseThrow(
+					() -> new IllegalArgumentException("존재하지 않는 Top 카테고리 id 입니다.")
+				); //
+
+				// Topcategory도 객체화 시키는 이유는 middlecategory가 속할 topcategory를 지정해주는거임
+				middleCategoryRepository.save(dto.toEntity(topCategory));
+			} catch (IllegalArgumentException e) {
+				log.error(e.getMessage());
+				throw e;
+			} catch (Exception e) {
+				log.error("Unexpected error occurred", e);
+				throw new RuntimeException("카테고리 생성 중 오류가 발생했습니다.", e);
+			}
+		}
+
+	}
 
 	// @Transactional
 	// @Override

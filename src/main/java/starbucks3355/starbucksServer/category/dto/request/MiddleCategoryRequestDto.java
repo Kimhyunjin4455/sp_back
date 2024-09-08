@@ -16,9 +16,11 @@ public class MiddleCategoryRequestDto {
 	private String middleCategoryName;
 	//private String middleCategoryDescription;
 	//private String topCategoryCode;
+	private Integer topCategoryId;
 
 	public MiddleCategory toEntity(TopCategory topCategory) {
 		return MiddleCategory.builder()
+			//.id(getTopCategoryId())
 			.categoryName(middleCategoryName)
 			.topCategory(topCategory)
 			.build();

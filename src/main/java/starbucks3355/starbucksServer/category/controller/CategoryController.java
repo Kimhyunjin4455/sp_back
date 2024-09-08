@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
 import starbucks3355.starbucksServer.category.repository.TopCategoryRepository;
 import starbucks3355.starbucksServer.category.sevice.CategoryService;
+import starbucks3355.starbucksServer.category.vo.request.MiddleCategoryRequestVo;
 import starbucks3355.starbucksServer.category.vo.request.TopCategoryRequestVo;
 import starbucks3355.starbucksServer.category.vo.response.MiddleCategoryResponseVo;
 import starbucks3355.starbucksServer.category.vo.response.TopCategoryResponseVo;
@@ -48,22 +50,25 @@ public class CategoryController {
 			null);
 	}
 
-	// @PostMapping("/middle-category")
-	// @Operation(summary = "Middle 카테고리 생성")
-	// public CommonResponseEntity<Void> createMiddleCategory(
-	// 	@RequestBody MiddleCategoryRequestVo middleCategoryRequestVo) {
-	//
-	// 	MiddleCategoryRequestDto middleCategoryRequestDto = MiddleCategoryRequestDto.builder()
-	// 		.middleCategoryName(middleCategoryRequestVo.getMiddleCategoryName())
-	// 		.middleCategoryDescription(middleCategoryRequestVo.getMiddleCategoryDescription())
-	// 		.topCategoryCode(middleCategoryRequestVo.getTopCategoryCode())
-	// 		.build();
-	// 	categoryService.createMiddleCategory(middleCategoryRequestDto);
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		null);
-	// }
+	@PostMapping("/middle-category")
+	@Operation(summary = "Middle 카테고리 생성")
+	public CommonResponseEntity<Void> createMiddleCategory(
+		@RequestBody List<MiddleCategoryRequestVo> middleCategoryRequestVo) {
+
+		List<MiddleCategoryRequestDto> middleCategoryRequestDto = middleCategoryRequestVo.stream()
+			.map(vo -> MiddleCategoryRequestDto.builder()
+				.middleCategoryName(vo.getMiddleCategoryName())
+				.topCategoryId(vo.getTopCategoryId())
+				.build())
+			.collect(Collectors.toList());
+		// 서비스에 전달하여 여러 미들 카테고리 생성
+		categoryService.createMiddleCategory(middleCategoryRequestDto);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
 
 	// @PostMapping("/bottom-category")
 	// @Operation(summary = "Bottom 카테고리 생성")

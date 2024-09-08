@@ -2,6 +2,7 @@ package starbucks3355.starbucksServer.category.sevice;
 
 import java.util.List;
 
+import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
@@ -9,7 +10,7 @@ import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDt
 public interface CategoryService {
 	void createTopCategory(TopCategoryRequestDto topCategoryRequestDto);
 
-	//void createMiddleCategory(MiddleCategoryRequestDto middleCategoryRequestDto);
+	void createMiddleCategory(List<MiddleCategoryRequestDto> middleCategoryRequestDto);
 
 	//void createBottomCategory(BottomCategoryRequestDto bottomCategoryRequestDto);
 

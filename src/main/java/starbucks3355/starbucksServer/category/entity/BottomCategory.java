@@ -21,7 +21,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name = "bottom_category", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryName, categoryCode")})
+@Table(name = "bottom_category", uniqueConstraints = {
+	@UniqueConstraint(columnNames = "middle_category_id, categoryCode")})
 public class BottomCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

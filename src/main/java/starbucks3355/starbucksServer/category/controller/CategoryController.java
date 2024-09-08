@@ -99,6 +99,30 @@ public class CategoryController {
 				.collect(Collectors.toList()));
 	}
 
+	@GetMapping("/middle-categories")
+	@Operation(summary = "Middle 전체 카테고리 조회")
+	public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategories() {
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			categoryService.getMiddleCategories()
+				.stream()
+				.map(MiddleCategoryResponseDto::toVo)
+				.collect(Collectors.toList()));
+	}
+
+	@GetMapping("/bottom-categories")
+	@Operation(summary = "Bottom 전체 카테고리 조회")
+	public CommonResponseEntity<List<BottomCategoryResponseVo>> getBottomCategories() {
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			categoryService.getBottomCategories()
+				.stream()
+				.map(BottomCategoryResponseDto::toVo)
+				.collect(Collectors.toList()));
+	}
+
 	// @GetMapping("/middle-categories/{topCategoryName}")
 	// @Operation(summary = "Middle 카테고리 조회")
 	// public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategories(

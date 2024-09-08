@@ -18,6 +18,10 @@ public interface CategoryService {
 	// 대 카테고리 조회
 	List<TopCategoryResponseDto> getTopCategories();
 
+	List<MiddleCategoryResponseDto> getMiddleCategories();
+
+	List<BottomCategoryResponseDto> getBottomCategories();
+
 	// 중 카테고리 조회
 	//List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryCode);
 
@@ -44,4 +48,6 @@ public interface CategoryService {
 
 	// middleCategoryId로 bottomCategory 조회
 	List<BottomCategoryResponseDto> getBottomCategoriesByMiddleCategoryId(Integer middleCategoryId);
+
+	//List<FullTopCategoryResponseDto> getAllCategories();
 }

@@ -25,4 +25,5 @@ public interface MiddleCategoryRepository extends JpaRepository<MiddleCategory, 
 
 	// 중 카테고리를 topCategoryId로 조회하는 메서드
 	List<MiddleCategory> findByTopCategoryId(Integer topCategoryId);
+
 }

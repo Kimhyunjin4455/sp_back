@@ -121,6 +121,26 @@ public class CategoryServiceImpl implements CategoryService {
 		).toList();
 	}
 
+	@Override
+	public List<MiddleCategoryResponseDto> getMiddleCategories() {
+		return middleCategoryRepository.findAll().stream().map(
+			middleCategory -> MiddleCategoryResponseDto.builder()
+				.id(middleCategory.getId())
+				.middleCategoryName(middleCategory.getCategoryName())
+				.build()
+		).toList();
+	}
+
+	@Override
+	public List<BottomCategoryResponseDto> getBottomCategories() {
+		return bottomCategoryRepository.findAll().stream().map(
+			bottomCategory -> BottomCategoryResponseDto.builder()
+				.id(bottomCategory.getId())
+				.bottomCategoryName(bottomCategory.getCategoryName())
+				.build()
+		).toList();
+	}
+
 	// @Override
 	// @Transactional
 	// // 단일 top 카테고리 조회
@@ -294,6 +314,17 @@ public class CategoryServiceImpl implements CategoryService {
 			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
 		}
 	}
+
+	// 모든 카테고리 조회
+	// @Override
+	// @Transactional(readOnly = true)
+	// public List<FullTopCategoryResponseDto> getAllCategories() {
+	// 	List<TopCategory> topCategories = topCategoryRepository.findAll();
+	// 	return topCategories.stream().map(
+	// 		topCategory -> {
+	// 			List<MiddleCategory> middleCategories = middleCategoryRepository.findByTopCategoryId(topCategory.getId());
+	// 		}
+	// }
 
 	// private String generateUniqueCategoryCode(String prefix) {
 	// 	for (int i = 0; i < MAX_CODE_TRIES; i++) {

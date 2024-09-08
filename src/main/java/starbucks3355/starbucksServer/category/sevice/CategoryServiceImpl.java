@@ -9,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
+import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
+import starbucks3355.starbucksServer.category.entity.BottomCategory;
 import starbucks3355.starbucksServer.category.entity.MiddleCategory;
 import starbucks3355.starbucksServer.category.entity.TopCategory;
 import starbucks3355.starbucksServer.category.repository.BottomCategoryRepository;
@@ -254,10 +256,36 @@ public class CategoryServiceImpl implements CategoryService {
 
 			return middleCategories.stream().map(
 				middleCategory -> MiddleCategoryResponseDto.builder()
+					.id(middleCategory.getId())
 					.middleCategoryName(middleCategory.getCategoryName())
 					.build()
 			).toList();
 
+		} catch (IllegalArgumentException e) {
+			log.error(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected error occurred", e);
+			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+		}
+	}
+
+	@Override
+	public List<BottomCategoryResponseDto> getBottomCategoriesByMiddleCategoryId(Integer middleCategoryId) {
+		List<BottomCategory> bottomCategories = bottomCategoryRepository.findByMiddleCategoryId(middleCategoryId);
+		// db에 저장된 객체를 dto로 변환해서 반환
+
+		try {
+			MiddleCategory middleCategory = middleCategoryRepository.findById(middleCategoryId)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Middle 카테고리 ID입니다."));
+			log.info("middleCategory : {}", middleCategory);
+			// bottom db entity를 dto로 변환
+			return bottomCategories.stream().map(
+				bottomCategory -> BottomCategoryResponseDto.builder()
+					.id(bottomCategory.getId())
+					.bottomCategoryName(bottomCategory.getCategoryName())
+					.build()
+			).toList();
 		} catch (IllegalArgumentException e) {
 			log.error(e.getMessage());
 			throw e;

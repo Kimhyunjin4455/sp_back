@@ -13,6 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class BottomCategoryResponseVo {
 	//private String bottomCategoryCode;
+	private Integer id;
 	private String bottomCategoryName;
+
 	//private String bottomCategoryDescription;
 }

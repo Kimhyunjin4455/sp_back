@@ -16,12 +16,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
+import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
 import starbucks3355.starbucksServer.category.repository.TopCategoryRepository;
 import starbucks3355.starbucksServer.category.sevice.CategoryService;
 import starbucks3355.starbucksServer.category.vo.request.MiddleCategoryRequestVo;
 import starbucks3355.starbucksServer.category.vo.request.TopCategoryRequestVo;
+import starbucks3355.starbucksServer.category.vo.response.BottomCategoryResponseVo;
 import starbucks3355.starbucksServer.category.vo.response.MiddleCategoryResponseVo;
 import starbucks3355.starbucksServer.category.vo.response.TopCategoryResponseVo;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
@@ -169,5 +171,19 @@ public class CategoryController {
 				.map(MiddleCategoryResponseDto::toVo)
 				.collect(Collectors.toList()));
 
+	}
+
+	@GetMapping("/bottom-categories/by-id/{middleCategoryId}")
+	@Operation(summary = "Middle 카테고리 ID로 Bottom 카테고리 조회")
+	public CommonResponseEntity<List<BottomCategoryResponseVo>> getBottomCategoriesByMiddleCategoryId(
+		@PathVariable Integer middleCategoryId) {
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			// data -> 응답값에 실려 들어갈 데이터들
+			categoryService.getBottomCategoriesByMiddleCategoryId(middleCategoryId)
+				.stream()
+				.map(BottomCategoryResponseDto::toVo)
+				.collect(Collectors.toList()));
 	}
 }

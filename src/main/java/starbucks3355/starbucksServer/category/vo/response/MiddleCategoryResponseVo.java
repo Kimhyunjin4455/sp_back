@@ -14,5 +14,6 @@ import lombok.ToString;
 public class MiddleCategoryResponseVo {
 	//private String middleCategoryCode;
 	private String middleCategoryName;
+	private Integer id;
 	//private String middleCategoryDescription;
 }

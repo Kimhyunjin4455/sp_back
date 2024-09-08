@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainImage.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,17 +26,19 @@ import starbucks3355.starbucksServer.domainImage.vo.ImageResponseVo;
 public class ImageController {
 	private final ImageService imageService;
 
-	@GetMapping("/{otherUuid}")
-	@Operation(summary = "상품 대표 이미지 조회")
-	public CommonResponseEntity<ImageResponseVo> getImage(
+	@GetMapping("/allMedias/{otherUuid}")
+	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 목록 이미지 조회")
+	public CommonResponseEntity<List<ImageResponseVo>> getImages(
 		@PathVariable String otherUuid
 	) {
-		ImageResponseDto imageDto = imageService.getImage(otherUuid);
+		List<ImageResponseDto> imageDtoList = imageService.getImages(otherUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			imageDto.dtoToResponseVo()
+			imageDtoList.stream()
+				.map(ImageResponseDto::dtoToResponseVo)
+				.toList()
 		);
 	}
 }

@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainReview.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.ProductReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.service.ReviewService;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewRequestVo;
+import starbucks3355.starbucksServer.domainReview.vo.out.MyReviewResponseVo;
+import starbucks3355.starbucksServer.domainReview.vo.out.ProductReviewResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
 
 @Slf4j
@@ -29,6 +35,37 @@ import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
 @Tag(name = "Review", description = "리뷰 API")
 public class ReviewController {
 	private final ReviewService reviewService;
+
+	@GetMapping("/{productUuid}/allReviewsOfProduct")
+	@Operation(summary = "상품별 리뷰 전체 조회")
+	public CommonResponseEntity<List<ProductReviewResponseVo>> getProductReviews(
+		@PathVariable String productUuid) {
+		List<ProductReviewResponseDto> productReviewResponseDtoList = reviewService.getProductReviews(productUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			productReviewResponseDtoList.stream()
+				.map(ProductReviewResponseDto::dtoToResponseVo)
+				.toList()
+		);
+	}
+
+	@GetMapping("/{memberUuid}/allReviewsOfMember")
+	@Operation(summary = "회원별 리뷰 전체 조회")
+	public CommonResponseEntity<List<MyReviewResponseVo>> getMemberReviews(
+		@PathVariable String memberUuid) {
+		List<MyReviewResponseDto> memberReviewsDto = reviewService.getMyReviews(memberUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			memberReviewsDto.stream()
+				.map(MyReviewResponseDto::dtoToResponseVo)
+				.toList()
+		);
+
+	}
 
 	@GetMapping("/{reviewUuid}")
 	@Operation(summary = "리뷰 한개 조회")
@@ -51,7 +88,7 @@ public class ReviewController {
 		ReviewRequestDto reviewRequestDto = ReviewRequestDto.builder()
 			.content(reviewRequestVo.getContent())
 			.reviewUuid(reviewRequestVo.getReviewUuid())
-			.reivewScore(reviewRequestVo.getReivewScore())
+			.reviewScore(reviewRequestVo.getReviewScore())
 			.productUuid(reviewRequestVo.getProductUuid())
 			.memberUuid(reviewRequestVo.getMemberUuid())
 			.regDate(reviewRequestVo.getRegDate())
@@ -76,14 +113,14 @@ public class ReviewController {
 		ReviewRequestDto reviewRequestDto = ReviewRequestDto.builder()
 			.content(reviewRequestVo.getContent())
 			.reviewUuid(reviewRequestVo.getReviewUuid())
-			.reivewScore(reviewRequestVo.getReivewScore())
+			.reviewScore(reviewRequestVo.getReviewScore())
 			.productUuid(reviewRequestVo.getProductUuid())
 			.memberUuid(reviewRequestVo.getMemberUuid())
 			.regDate(reviewRequestVo.getRegDate())
 			.modDate(reviewRequestVo.getModDate())
 			.build();
 
-		reviewService.modifyReview(reviewRequestDto);
+		reviewService.modifyReview(reviewRequestDto, reviewUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

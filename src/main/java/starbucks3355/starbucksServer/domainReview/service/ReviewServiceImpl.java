@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -46,26 +49,21 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<ProductReviewResponseDto> getProductReviews(String productUuid) {
-		List<Review> productReviews = reviewRepository.findByProductUuid(productUuid);
+	public Slice<ProductReviewResponseDto> getProductReviews(String productUuid, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Slice<Review> productReviews = reviewRepository.findPageByProductUuid(productUuid, pageable);
 
-		if (productReviews != null) {
-			return productReviews.stream()
-				.map(productReview -> ProductReviewResponseDto.builder()
-					.content(productReview.getContent())
-					.reviewScore(productReview.getReviewScore())
-					.reviewUuid(productReview.getReviewUuid())
-					.productUuid(productReview.getProductUuid())
-					.userId(memberRepository.findByUuid(productReview.getMemberUuid())
-						.get()
-						.getUserId()
-						.substring(0, 3) + "*******")
-					.regDate(productReview.getRegDate())
-					.modDate(productReview.getModDate())
-					.build()
-				).toList();
-		}
-		return List.of();
+		return productReviews.map(review -> ProductReviewResponseDto.builder()
+			.content(review.getContent())
+			.reviewScore(review.getReviewScore())
+			.reviewUuid(review.getReviewUuid())
+			.productUuid(review.getProductUuid())
+			.userId(memberRepository.findByUuid(review.getMemberUuid())
+				.map(member -> member.getUserId().substring(0, 3) + "*******")
+				.orElse("UNKNOWN")) // 회원 정보가 없을 경우 처리
+			.regDate(review.getRegDate())
+			.modDate(review.getModDate())
+			.build());
 	}
 
 	@Override

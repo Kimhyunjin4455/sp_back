@@ -15,4 +15,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 	List<Image> findByOtherUuid(String otherUuid);
 
 	Optional<Image> findByOtherUuidAndIsMainImage(String otherUuid, boolean isMainImage); // 상품에 대한 대표 이미지 호출
+
 }

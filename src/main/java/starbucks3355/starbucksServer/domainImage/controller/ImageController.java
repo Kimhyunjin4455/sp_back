@@ -16,7 +16,7 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainImage.dto.out.ImageResponseDto;
 import starbucks3355.starbucksServer.domainImage.service.ImageService;
-import starbucks3355.starbucksServer.domainImage.vo.ImageResponseVo;
+import starbucks3355.starbucksServer.domainImage.vo.out.ImageResponseVo;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,4 +41,19 @@ public class ImageController {
 				.toList()
 		);
 	}
+
+	@GetMapping("/mainMedia/{otherUuid}")
+	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 메인 이미지 조회")
+	public CommonResponseEntity<ImageResponseVo> getMainImage(
+		@PathVariable String otherUuid
+	) {
+		ImageResponseDto imageDto = imageService.getMainImage(otherUuid, true);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			imageDto.dtoToResponseVo()
+		);
+	}
+
 }

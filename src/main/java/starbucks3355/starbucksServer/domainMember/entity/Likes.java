@@ -24,7 +24,7 @@ public class Likes {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Likes;
 	@Column(nullable = false)
-	private Long memberUuid;
+	private Long uuid;
 	@Column(nullable = false)
 	private Long productUuid;
 	@Column(nullable = false)

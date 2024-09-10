@@ -38,5 +38,5 @@ public class MemberAddresses {
 	private String extraContact;
 	@Column(length = 255)
 	private String deliveryMemo;
-	private UUID memberUuid;
+	private String uuid;
 }

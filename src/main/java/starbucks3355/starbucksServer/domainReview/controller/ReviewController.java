@@ -51,6 +51,22 @@ public class ReviewController {
 		);
 	}
 
+	@GetMapping("/{productUuid}/allReviewsHaveMediaOfProduct")
+	@Operation(summary = "상품별 리뷰 전체 조회(이미지가 있는 리뷰만)")
+	public CommonResponseEntity<List<ProductReviewResponseVo>> getProductReviewsHaveMedia(
+		@PathVariable String productUuid) {
+		List<ProductReviewResponseDto> productReviewResponseDtoList = reviewService.getProductReviewsHaveMedia(
+			productUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			productReviewResponseDtoList.stream()
+				.map(ProductReviewResponseDto::dtoToResponseVo)
+				.toList()
+		);
+	}
+
 	@GetMapping("/{memberUuid}/allReviewsOfMember")
 	@Operation(summary = "회원별 리뷰 전체 조회")
 	public CommonResponseEntity<List<MyReviewResponseVo>> getMemberReviews(

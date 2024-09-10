@@ -33,5 +33,6 @@ public class Image {
 	private boolean isMainImage; // 대표이미지 여부, 이 값 통해 상품의 대표이미지, 리뷰의 썸네일 판단, 응답 dto에 있어야될지?
 	@Column(nullable = false)
 	private String otherUuid; // 상품, 쿠폰, 리뷰 등은 각각 자신만의 이미지를 보유 -> 각종 uuid값을 통해 연결할 필드
+	private String anotherUuid; // 다른 uuid값을 가진 이미지와 연결할 필드
 
 }

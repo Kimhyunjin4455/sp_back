@@ -12,6 +12,8 @@ public interface ReviewService {
 
 	public List<ProductReviewResponseDto> getProductReviews(String productUuid);
 
+	public List<ProductReviewResponseDto> getProductReviewsHaveMedia(String productUuid);
+
 	public ReviewResponseDto getReview(String reviewUuid);
 
 	void addReview(ReviewRequestDto reviewRequestDto);

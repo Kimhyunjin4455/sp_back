@@ -12,5 +12,6 @@ public class ProductReviewResponseVo {
 	private String reviewUuid;
 	private Integer reviewScore;
 	private String productUuid;
+	private String userId;
 	private LocalDateTime regDate, modDate;
 }

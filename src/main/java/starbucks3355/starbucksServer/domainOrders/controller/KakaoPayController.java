@@ -31,7 +31,7 @@ public class KakaoPayController {
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			null);
+			response);
 
 	}
 
@@ -43,6 +43,6 @@ public class KakaoPayController {
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			null);
+			response);
 	}
 }

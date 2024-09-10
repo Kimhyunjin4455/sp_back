@@ -36,5 +36,5 @@ public class MobileGiftCard {
 	@Column(nullable = false)
 	private Boolean registrationStatus;
 	@Column(nullable = false)
-	private UUID memberUuid;
+	private String uuid;
 }

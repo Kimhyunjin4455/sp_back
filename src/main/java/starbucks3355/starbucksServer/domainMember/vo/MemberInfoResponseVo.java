@@ -9,19 +9,16 @@ import lombok.NoArgsConstructor;
 public class MemberInfoResponseVo {
 
 	private String userId;
-	private String password;
 	private String email;
 	private String nickname;
 
 	@Builder
 	public MemberInfoResponseVo(
 		String userId,
-		String password,
 		String email,
 		String nickname
 	) {
 		this.userId = userId;
-		this.password = password;
 		this.email = email;
 		this.nickname = nickname;
 	}

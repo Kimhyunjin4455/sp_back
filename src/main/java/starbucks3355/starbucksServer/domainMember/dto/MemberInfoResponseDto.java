@@ -11,7 +11,6 @@ import starbucks3355.starbucksServer.domainMember.vo.MemberInfoResponseVo;
 public class MemberInfoResponseDto {
 
 	private String userId;
-	private String password;
 	private String email;
 	private String nickname;
 
@@ -23,7 +22,6 @@ public class MemberInfoResponseDto {
 		String nickname
 	) {
 		this.userId = userId;
-		this.password = password;
 		this.email = email;
 		this.nickname = nickname;
 	}
@@ -31,7 +29,6 @@ public class MemberInfoResponseDto {
 	public static MemberInfoResponseDto from(Member member) {
 		return MemberInfoResponseDto.builder()
 			.userId(member.getUserId())
-			.password(member.getPassword())
 			.email(member.getEmail())
 			.nickname(member.getNickname())
 			.build();
@@ -40,7 +37,6 @@ public class MemberInfoResponseDto {
 	public MemberInfoResponseVo toVo() {
 		return MemberInfoResponseVo.builder()
 			.userId(userId)
-			.password(password)
 			.email(email)
 			.nickname(nickname)
 			.build();

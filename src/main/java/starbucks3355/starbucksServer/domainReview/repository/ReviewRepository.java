@@ -3,8 +3,8 @@ package starbucks3355.starbucksServer.domainReview.repository;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +19,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	List<Review> findByMemberUuid(String memberUuid);
 
 	// 페이지네이션을 위한 메소드 추가
-	Page<Review> findPageByProductUuid(String productUuid, Pageable pageable);
+	Slice<Review> findPageByProductUuid(String productUuid, Pageable pageable);
 
 }

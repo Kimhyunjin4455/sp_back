@@ -1,13 +1,14 @@
 package starbucks3355.starbucksServer.domainMember.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import starbucks3355.starbucksServer.domainMember.entity.Member;
+import java.util.UUID;
 
-@Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-	boolean existsByUserId(String userId);
-	Member findByUserId(String userId);
+	Optional<Member> findByEmail(String email);
+	Optional<Member> findByUuid(String uuid);
 
 }

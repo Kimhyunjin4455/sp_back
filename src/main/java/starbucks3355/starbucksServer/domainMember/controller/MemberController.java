@@ -1,74 +1,78 @@
 package starbucks3355.starbucksServer.domainMember.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import starbucks3355.starbucksServer.domainMember.dto.requestDto.LoginRequestDto;
-import starbucks3355.starbucksServer.domainMember.dto.requestDto.MemberRequestDto;
-import starbucks3355.starbucksServer.domainMember.dto.reseponseDto.LoginResponseDto;
-import starbucks3355.starbucksServer.domainMember.entity.Member;
+import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
+import starbucks3355.starbucksServer.common.entity.BaseResponse;
+import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
+import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
+import starbucks3355.starbucksServer.domainMember.dto.MemberReviewResponseDto;
 import starbucks3355.starbucksServer.domainMember.service.MemberService;
-import starbucks3355.starbucksServer.domainMember.vo.requestVo.MemberRequestVo;
+import starbucks3355.starbucksServer.domainMember.vo.MemberInfoResponseVo;
+import starbucks3355.starbucksServer.domainMember.vo.MemberReviewResponseVo;
 
+@Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/member")
-@RequiredArgsConstructor
-@Tag(name ="회원 관리", description = "회원 관리 API")
 public class MemberController {
 
 	private final MemberService memberService;
 
-	@PostMapping("/signup")
-	@Operation(summary = "회원가입")
-	// vo의 값을 Dto로 변환
-	// 변환된 값을 Service로 넘겨줌
-	public ResponseEntity<Member> signUpMember(@RequestBody MemberRequestVo memberRequestVo) {
-		MemberRequestDto memberRequestDto = new MemberRequestDto(
-			memberRequestVo.getUserId(),
-			memberRequestVo.getPassword(),
-			memberRequestVo.getEmail(),
-			memberRequestVo.getNickname()
+
+	/**
+	 * api/v1/member
+	 * 1. 회원 정보 조회
+	 * 2. 회원 정보 수정
+	 * 3. 회원 탈퇴
+	 */
+
+
+	/**
+	 * 회원 정보 조회
+	 * @param authUserDetail
+	 * @return
+	 */
+
+	@Operation(summary = "Member Get Info API", description = "Member 정보 조회 API", tags = {"Member"})
+	@SecurityRequirement(name = "Bearer Auth")
+	@GetMapping
+	public BaseResponse<MemberInfoResponseVo> getMemberInfo(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail
+	) {
+		log.info("authUserDetail : {}", authUserDetail);
+		log.info("authUserDetail.getUername() : {}", authUserDetail.getUsername());
+		return new BaseResponse<>(
+			memberService.getMemberInfo(authUserDetail.getUsername()
+			).toVo()
 		);
-		memberService.signUpMember(memberRequestDto);
-		return new ResponseEntity<Member>(HttpStatus.CREATED);
 	}
 
-	@PostMapping("/login")
-	@Operation(summary = "로그인")
-	public ResponseEntity<LoginResponseDto> loginMember(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
-		// 로그인 서비스 호출하여 LoginResponseDto 객체 가져옴
-		LoginResponseDto loginResponseDto = memberService.loginMember(loginRequestDto);
+	@GetMapping("/{uuid}")
+	@Operation(summary = "회원 닉네임 조회")
+	public CommonResponseEntity<MemberReviewResponseVo> getNickname(@PathVariable String uuid) {
+		// MemberReviewResponseDto를 가져옴
+		MemberReviewResponseDto nicknameDto = memberService.getNickname(uuid);
 
-		// 로그인 성공시 세션에 사용자 정보 저장
-		HttpSession session = request.getSession();
-		session.setAttribute("user", loginRequestDto.getUserId()); // 예시로 사용자 ID 저장
-		// 로그인 성공
-		return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
+		// MemberReviewResponseVo로 변환
+		MemberReviewResponseVo nicknameVo = nicknameDto.toVo();
+
+		// CommonResponseEntity를 반환
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			nicknameVo
+		);
 	}
-
-	@DeleteMapping("/logout")
-	@Operation(summary = "로그아웃")
-	public ResponseEntity<Void> logoutMember(HttpServletRequest request) {
-		HttpSession session = request.getSession(false); // 현재 세션 가져오기 (없으면 null 반환)
-
-		if (session != null) {
-			memberService.logoutMember(session); // MemberService 호출
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content
-		} else {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // 401 Unauthorized
-		}
-	}
-
 
 
 }

@@ -12,11 +12,8 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-@EntityListeners(AuditingEntityListener.class)
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +21,8 @@ public class Member {
     @Column(nullable = false, length = 30)
     private String userId;
     @Column(nullable = false, length = 30)
+    private String name;
+    @Column(nullable = false, length = 255)
     private String password;
     @Column(nullable = false, length = 100)
     private String email;
@@ -31,5 +30,26 @@ public class Member {
     private String nickname;
     @LastModifiedDate
     private LocalDateTime withdrawalTime;
-    private UUID memberUuid;
+    private String uuid;
+
+    @Builder
+    public Member(
+        Long id,
+        String userId,
+        String name,
+        String password,
+        String email,
+        String nickname,
+        LocalDateTime withdrawalTime,
+        String uuid
+    ) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
+        this.withdrawalTime = withdrawalTime;
+        this.uuid = uuid;
+    }
 }

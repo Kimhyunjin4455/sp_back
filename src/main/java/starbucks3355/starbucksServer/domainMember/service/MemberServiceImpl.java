@@ -1,13 +1,15 @@
 package starbucks3355.starbucksServer.domainMember.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import starbucks3355.starbucksServer.domainMember.dto.requestDto.LoginRequestDto;
-import starbucks3355.starbucksServer.domainMember.dto.requestDto.MemberRequestDto;
-import starbucks3355.starbucksServer.domainMember.dto.reseponseDto.LoginResponseDto;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
+import starbucks3355.starbucksServer.common.exception.BaseException;
+import starbucks3355.starbucksServer.domainMember.dto.MemberInfoResponseDto;
+import starbucks3355.starbucksServer.domainMember.dto.MemberReviewResponseDto;
 import starbucks3355.starbucksServer.domainMember.entity.Member;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 
@@ -19,35 +21,31 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
 
 	@Override
-	public Member signUpMember(MemberRequestDto memberRequestDto) {
-		//중복 검사
-		if (memberRepository.existsByUserId(memberRequestDto.getUserId())) {
-			throw new RuntimeException("이미 존재하는 아이디입니다.");
-		}
-
-		//Member 엔티티로 변환 후 저장
-		Member member = memberRequestDto.toEntity(memberRequestDto);
-		return memberRepository.save(member);
-
+	public MemberInfoResponseDto getMemberInfo(String userUuid) {
+		log.info("userUuid : {}", userUuid);
+		return MemberInfoResponseDto.from(memberRepository.findByUuid(userUuid).orElseThrow(
+			() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
+		));
 	}
 
 	@Override
-	public LoginResponseDto loginMember(LoginRequestDto loginRequestDto) {
-		// 사용자 ID로 회원 조회
-		Member member = memberRepository.findByUserId(loginRequestDto.getUserId());
+	public MemberReviewResponseDto getNickname(String uuid) {
+		// 데이터베이스에서 회원 정보 조회
+		Optional<Member> optionalMember = memberRepository.findByUuid(uuid);
 
-		// 비밀번호 확인
-		if (member != null && !member.getPassword().equals(loginRequestDto.getPassword())) {
-			throw new RuntimeException("로그인에 실패하였습니다.");
+		// 회원이 존재하지 않을 경우 null 반환
+		if (!optionalMember.isPresent()) {
+			return null; // 또는 적절한 기본값을 반환할 수 있습니다.
 		}
-		return new LoginResponseDto(member.getUserId());
-	}
 
-	@Override
-	public void logoutMember(HttpSession session) {
-		// 세션 무효화
-		session.invalidate();
-		log.info("로그아웃 성공");
+		// 회원 정보를 가져옴
+		Member member = optionalMember.get();
+
+		// MemberReviewResponseDto로 변환하여 반환
+		return MemberReviewResponseDto.builder()
+			.uuid(member.getUuid())
+			.nickname(member.getNickname())
+			.build();
 	}
 
 }

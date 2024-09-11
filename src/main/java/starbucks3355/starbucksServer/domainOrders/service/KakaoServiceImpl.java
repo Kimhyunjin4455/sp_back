@@ -14,7 +14,7 @@ import starbucks3355.starbucksServer.common.config.KakaoProperties;
 import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestApproveDto;
 import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestReadyDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseApproveDto;
-import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseGetDto;
+import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseReadyDto;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class KakaoServiceImpl implements KakaoService {
 
 	@Override
 	// 카카오페이의 결제 준비
-	public KakaoResponseGetDto getKakaoPayReady(KakaoRequestReadyDto kakaoRequestReadyDto) {
+	public KakaoResponseReadyDto getKakaoPayReady(KakaoRequestReadyDto kakaoRequestReadyDto) {
 		// HttpEntity 객체 생성: HTTP 요청(body)와 HTTP 헤더를 포함한 엔티티를 생성
 		// getReadyParameters(kakaoRequestDto)는 요청에 필요한 파라미터를 설정하며,
 		// getHeaders()는 Authorization 등의 HTTP 헤더를 설정하는 메소드.
@@ -38,12 +38,13 @@ public class KakaoServiceImpl implements KakaoService {
 
 			// 카카오페이 결제 준비 API에 POST 요청을 보냄.
 
-			KakaoResponseGetDto response = restTemplate.postForObject(
-				"https://open-api.kakaopay.com/v1/payment/ready", //카카오 api 호출하여 결제 준비를 처리함
+			KakaoResponseReadyDto response = restTemplate.postForObject(
+				"https://open-api.kakaopay.com/online/v1/payment/ready", //카카오 api 호출하여 결제 준비를 처리함
 				requestEntity, // 두 번째 인자는 실제 요청 데이터(requestEntity)로, 요청 본문과 헤더가 포함되어 있음.
-				KakaoResponseGetDto.class); // 카카오페이 API 응답 데이터를 해당 DTO 객체로 변환하여 반환함.
-
+				KakaoResponseReadyDto.class); // 카카오페이 API 응답 데이터를 해당 DTO 객체로 변환하여 반환함.
+			System.out.println(response);
 			return response; // 결제 준비 API의 응답을 반환.
+
 		} catch (HttpClientErrorException e) {
 			throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
 		}
@@ -60,7 +61,7 @@ public class KakaoServiceImpl implements KakaoService {
 		// Authorization 헤더 설정: "Authorization" 헤더에 방금 만든 auth 문자열을 추가합니다.
 		// 이 헤더는 서버에 클라이언트의 인증 정보(카카오페이 adminKey)를 전달합니다.
 		httpHeaders.set("Authorization", auth);
-		httpHeaders.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		httpHeaders.set("Content-type", "application/json");
 
 		return httpHeaders;
 	}
@@ -76,9 +77,11 @@ public class KakaoServiceImpl implements KakaoService {
 		parameters.put("quantity", kakaoRequestReadyDto.getQuantity().toString());
 		parameters.put("total_amount", kakaoRequestReadyDto.getTotalAmount().toString());
 		parameters.put("tax_free_amount", kakaoRequestReadyDto.getTaxFreeAmount().toString());
-		parameters.put("approval_url", kakaoRequestReadyDto.getApprovalUrl());
-		parameters.put("cancel_url", kakaoRequestReadyDto.getCancelUrl());
-		parameters.put("fail_url", kakaoRequestReadyDto.getFailUrl());
+		//url은 Redirect URL로 결제 완료 후 이동할 URL을 설정합니다.
+		parameters.put("approval_url",
+			"http://localhost:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
+		parameters.put("cancel_url", "http://localhost:8080/cancel");
+		parameters.put("fail_url", "http://localhost:8080/fail");
 
 		return parameters;
 	}
@@ -101,7 +104,7 @@ public class KakaoServiceImpl implements KakaoService {
 			RestTemplate restTemplate = new RestTemplate();
 
 			KakaoResponseApproveDto response = restTemplate.postForObject(
-				"https://open-api.kakaopay.com/v1/payment/approve",
+				"https://open-api.kakaopay.com/online/v1/payment/approve",
 				requestEntity,
 				KakaoResponseApproveDto.class);
 

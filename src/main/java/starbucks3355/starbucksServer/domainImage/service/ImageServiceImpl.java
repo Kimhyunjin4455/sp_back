@@ -56,6 +56,16 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public void addImage(List<ImageRequestDto> imageRequestDtos) {
+		imageRequestDtos.stream()
+			.map(imageRequestDto -> Image.builder()
+				.s3url(imageRequestDto.getS3url())
+				.imageName(imageRequestDto.getImageName())
+				.thumbnailPath(imageRequestDto.getThumbnailPath())
+				.imageUuid(imageRequestDto.getImageUuid())
+				.otherUuid(imageRequestDto.getOtherUuid())
+				.isMainImage(imageRequestDto.isMainImage())
+				.build()
+			).forEach(imageRepository::save);
 
 	}
 
@@ -65,7 +75,14 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public void deleteImage(Long id) {
-
+	public void deleteImage(Long id, String otherUuid) {
+		imageRepository.deleteById(id);
+		// 남은 이미지가 존재할 경우 그 이미지중 첫번째가 메인이미지가 되도록 설정
+		// 메인이미지가 없을 경우 null로 설정
+		if (imageRepository.findByOtherUuid(otherUuid).size() > 0) {
+			Image image = imageRepository.findByOtherUuid(otherUuid).get(0);
+			image.modifyIsMainImage(true);
+			imageRepository.save(image);
+		}
 	}
 }

@@ -3,6 +3,7 @@ package starbucks3355.starbucksServer.domainImage.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +54,20 @@ public class ImageController {
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			imageDto.dtoToResponseVo()
+		);
+	}
+
+	@DeleteMapping("/deleteMedia/{id}/{otherUuid}")
+	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 삭제")
+	public CommonResponseEntity<Void> deleteImage(
+		@PathVariable Long id, String otherUuid
+	) {
+		imageService.deleteImage(id, otherUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null
 		);
 	}
 

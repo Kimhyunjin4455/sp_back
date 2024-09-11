@@ -14,6 +14,6 @@ public interface ImageService {
 
 	void modifyImage(ImageRequestDto imageRequestDto, String imageUuid);
 
-	void deleteImage(Long id);
+	void deleteImage(Long id, String otherUuid);
 
 }

@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import starbucks3355.starbucksServer.auth.dto.in.SignInRequestDto;
-import starbucks3355.starbucksServer.auth.dto.in.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
 import starbucks3355.starbucksServer.auth.service.AuthService;
-import starbucks3355.starbucksServer.auth.vo.in.SignInRequestVo;
-import starbucks3355.starbucksServer.auth.vo.in.SignUpRequestVo;
-import starbucks3355.starbucksServer.auth.vo.out.SignInResponseVo;
+import starbucks3355.starbucksServer.auth.vo.request.SignInRequestVo;
+import starbucks3355.starbucksServer.auth.vo.request.SignUpRequestVo;
+import starbucks3355.starbucksServer.auth.vo.response.SignInResponseVo;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 

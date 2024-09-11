@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.auth.vo.out;
+package starbucks3355.starbucksServer.auth.vo.response;
 
 import lombok.Builder;
 import lombok.Getter;

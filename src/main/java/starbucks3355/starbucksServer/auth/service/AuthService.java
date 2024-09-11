@@ -1,8 +1,8 @@
 package starbucks3355.starbucksServer.auth.service;
 
-import starbucks3355.starbucksServer.auth.dto.in.SignInRequestDto;
-import starbucks3355.starbucksServer.auth.dto.in.SignUpRequestDto;
-import starbucks3355.starbucksServer.auth.dto.out.SignInResponseDto;
+import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
 
 public interface AuthService {
 

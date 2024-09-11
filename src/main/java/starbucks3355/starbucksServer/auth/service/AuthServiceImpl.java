@@ -1,17 +1,19 @@
 package starbucks3355.starbucksServer.auth.service;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import starbucks3355.starbucksServer.auth.dto.in.SignInRequestDto;
-import starbucks3355.starbucksServer.auth.dto.in.SignUpRequestDto;
-import starbucks3355.starbucksServer.auth.dto.out.SignInResponseDto;
+import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;

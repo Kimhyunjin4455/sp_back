@@ -8,24 +8,24 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-public class KakaoRequestGetDto {
-
+public class KakaoRequestReadyDto {
 	private String cid;
 	private String partnerOrderId;
+	private String partnerUserId;
 	private String itemName;
 	private Integer quantity;
 	private Integer totalAmount;
+	private Integer vatAmount;
 	private Integer taxFreeAmount;
 	private String approvalUrl;
-	private String cancelUrl;
 	private String failUrl;
-	private String tid;
-	private String pgToken;
+	private String cancelUrl;
 
 	@Builder
-	public KakaoRequestGetDto(String cid, String partnerOrderId, String itemName, Integer quantity, Integer totalAmount,
-		Integer taxFreeAmount, String approvalUrl, String cancelUrl, String failUrl, String tid, String pgToken) {
-		this.cid = cid;
+	public KakaoRequestReadyDto(String partnerOrderId, String itemName, Integer quantity,
+		Integer totalAmount,
+		Integer taxFreeAmount, String approvalUrl, String cancelUrl, String failUrl, String partnerUserId,
+		Integer vatAmount, String cid) {
 		this.partnerOrderId = partnerOrderId;
 		this.itemName = itemName;
 		this.quantity = quantity;
@@ -34,7 +34,8 @@ public class KakaoRequestGetDto {
 		this.approvalUrl = approvalUrl;
 		this.cancelUrl = cancelUrl;
 		this.failUrl = failUrl;
-		this.tid = tid;
-		this.pgToken = pgToken;
+		this.partnerUserId = partnerUserId;
+		this.vatAmount = vatAmount;
+		this.cid = cid;
 	}
 }

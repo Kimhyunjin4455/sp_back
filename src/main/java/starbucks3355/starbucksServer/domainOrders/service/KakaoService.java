@@ -1,11 +1,12 @@
 package starbucks3355.starbucksServer.domainOrders.service;
 
-import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestGetDto;
+import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestApproveDto;
+import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestReadyDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseApproveDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseGetDto;
 
 public interface KakaoService {
-	KakaoResponseGetDto getKakaoPayReady(KakaoRequestGetDto kakaoRequestGetDto);
+	KakaoResponseGetDto getKakaoPayReady(KakaoRequestReadyDto kakaoRequestReadyDto);
 
-	KakaoResponseApproveDto getKakaoPayApprove(KakaoRequestGetDto kakaoRequestGetDto);
+	KakaoResponseApproveDto getKakaoPayApprove(KakaoRequestApproveDto kakaoRequestApproveDto);
 }

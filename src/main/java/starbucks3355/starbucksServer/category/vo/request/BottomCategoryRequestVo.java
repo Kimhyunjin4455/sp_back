@@ -8,6 +8,7 @@ import lombok.ToString;
 public class BottomCategoryRequestVo {
 
 	private String bottomCategoryName;
+	private Integer middleCategoryId;
 	//private String bottomCategoryDescription;
 	//private String middleCategoryCode;
 }

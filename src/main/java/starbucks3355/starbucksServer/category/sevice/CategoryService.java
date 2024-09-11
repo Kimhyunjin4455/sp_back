@@ -2,6 +2,7 @@ package starbucks3355.starbucksServer.category.sevice;
 
 import java.util.List;
 
+import starbucks3355.starbucksServer.category.dto.request.BottomCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
@@ -13,7 +14,7 @@ public interface CategoryService {
 
 	void createMiddleCategory(List<MiddleCategoryRequestDto> middleCategoryRequestDto);
 
-	//void createBottomCategory(BottomCategoryRequestDto bottomCategoryRequestDto);
+	void createBottomCategory(List<BottomCategoryRequestDto> bottomCategoryRequestDto);
 
 	// 대 카테고리 조회
 	List<TopCategoryResponseDto> getTopCategories();
@@ -50,4 +51,6 @@ public interface CategoryService {
 	List<BottomCategoryResponseDto> getBottomCategoriesByMiddleCategoryId(Integer middleCategoryId);
 
 	//List<FullTopCategoryResponseDto> getAllCategories();
+
+	MiddleCategoryResponseDto getMiddleCategoryByNameAndTopCategoryId(String middleCategoryName, Integer topCategoryId);
 }

@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.category.dto.response;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +18,7 @@ public class MiddleCategoryResponseDto {
 	//private String middleCategoryCode;
 	private Integer id;
 	private String middleCategoryName;
+	private List<BottomCategoryResponseDto> bottomCategories;
 
 	//private String middleCategoryDescription;
 

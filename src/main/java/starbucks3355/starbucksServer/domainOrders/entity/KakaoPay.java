@@ -19,16 +19,19 @@ public class KakaoPay {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "kakao_id")
 	private Long id;
+	@Column(nullable = false, length = 10)
 	private String cid; // 가맹점 코드, 10자
-	@Column(length = 100)
+	@Column(nullable = false, length = 100)
 	private String partnerOrderId; // 가맹점 주문번호, 최대 100자
-	@Column(length = 100)
+	@Column(nullable = false, length = 100)
+	private String partnerUserId; // 가맹점 회원 id, 최대 100자
+	@Column(nullable = false, length = 100)
 	private String itemName; // 상품명, 최대 100자
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false)
 	private Integer quantity; // 상품 수량
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false)
 	private Integer totalAmount; // 상품 총액
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false)
 	private Integer taxFreeAmount; // 상품 비과세 금액
 	@Column(length = 300)
 	private String approvalUrl; // 결제 성공 시 Redirect URL. 최대 255자
@@ -40,7 +43,7 @@ public class KakaoPay {
 	@Builder
 	public KakaoPay(Long id, String cid, String partnerOrderId, String itemName, Integer quantity,
 		Integer totalAmount,
-		Integer taxFreeAmount, String approvalUrl, String cancelUrl, String failUrl) {
+		Integer taxFreeAmount, String approvalUrl, String cancelUrl, String failUrl, String partnerUserId) {
 		this.id = id;
 		this.cid = cid;
 		this.partnerOrderId = partnerOrderId;
@@ -51,5 +54,6 @@ public class KakaoPay {
 		this.approvalUrl = approvalUrl;
 		this.cancelUrl = cancelUrl;
 		this.failUrl = failUrl;
+		this.partnerUserId = partnerUserId;
 	}
 }

@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class KakaoProperties {
-	private String adminKey;
+	private String secretKey;
 	private String cid;
 	private String readyUrl;
 	private String approveUrl;

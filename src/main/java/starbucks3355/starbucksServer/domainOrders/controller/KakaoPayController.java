@@ -11,7 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
-import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestGetDto;
+import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestApproveDto;
+import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestReadyDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseApproveDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseGetDto;
 import starbucks3355.starbucksServer.domainOrders.service.KakaoService;
@@ -26,8 +27,8 @@ public class KakaoPayController {
 	@PostMapping("/ready")
 	@Operation(summary = "카카오페이 결제 준비", description = "카카오페이 결제 준비 API를 호출합니다.")
 	public CommonResponseEntity<KakaoResponseGetDto> KakaoPayReady(
-		@RequestBody KakaoRequestGetDto kakaoRequestGetDto) {
-		KakaoResponseGetDto response = kakaoService.getKakaoPayReady(kakaoRequestGetDto);
+		@RequestBody KakaoRequestReadyDto kakaoRequestReadyDto) {
+		KakaoResponseGetDto response = kakaoService.getKakaoPayReady(kakaoRequestReadyDto);
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
@@ -38,8 +39,8 @@ public class KakaoPayController {
 	@PostMapping("/approve")
 	@Operation(summary = "카카오페이 결제 승인", description = "카카오페이 결제 승인 API를 호출합니다.")
 	public CommonResponseEntity<KakaoResponseApproveDto> KakaoPayApprove(
-		@RequestBody KakaoRequestGetDto kakaoRequestGetDto) {
-		KakaoResponseApproveDto response = kakaoService.getKakaoPayApprove(kakaoRequestGetDto);
+		@RequestBody KakaoRequestApproveDto kakaoRequestApproveDto) {
+		KakaoResponseApproveDto response = kakaoService.getKakaoPayApprove(kakaoRequestApproveDto);
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),

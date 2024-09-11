@@ -16,7 +16,7 @@ public class KakaoRequestApproveDto {
 	private String pgToken;
 
 	@Builder
-	public KakaoRequestApproveDto(String cid, String tid, String partnerOrderId, String partnerUserId, String pgToken) {
+	public KakaoRequestApproveDto(String tid, String partnerOrderId, String partnerUserId, String pgToken, String cid) {
 		this.cid = cid;
 		this.tid = tid;
 		this.partnerOrderId = partnerOrderId;

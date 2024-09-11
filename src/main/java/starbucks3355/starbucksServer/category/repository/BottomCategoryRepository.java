@@ -25,4 +25,6 @@ public interface BottomCategoryRepository extends JpaRepository<BottomCategory, 
 	//String middleCategoryCode);
 
 	List<BottomCategory> findByMiddleCategoryId(Integer middleCategoryId);
+
+	boolean existsByMiddleCategoryIdAndCategoryName(Integer middleCategoryId, String categoryName);
 }

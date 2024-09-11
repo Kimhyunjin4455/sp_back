@@ -82,4 +82,12 @@ public class SwaggerConfig {
 			.build();
 	}
 
+	@Bean
+	GroupedOpenApi KakaoAPI() {
+		return GroupedOpenApi.builder()
+			.group("카카오페이")
+			.pathsToMatch("/api/v1/kakao/**")
+			.build();
+	}
+
 }

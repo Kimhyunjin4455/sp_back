@@ -50,9 +50,6 @@ public class SecurityConfig {
 						"/api/v1/product/**",
 						"/api/v1/category/**",
 						"/api/v1/vendor/**",
-						"/api/v1/image/**",//
-						"/api/v1/review/**",//
-						"/api/v1/coupon/**",//
 						"/swagger-ui/**",
 						"/v3/api-docs/**",
 						"/error"

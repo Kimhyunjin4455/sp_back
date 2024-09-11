@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountPriceResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountRateResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
@@ -96,12 +97,23 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public DiscountResponseDto getDiscountInfo(Long productCode) {
-		ProductDefaultDisCount productDefaultDisCount = discountRepository.findById(productCode)
+	public DiscountRateResponseDto getDiscountRateInfo(String productUuid) {
+		ProductDefaultDisCount productDefaultDisCount = discountRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
-		return DiscountResponseDto.builder()
-			.discountType(productDefaultDisCount.getDiscountType()) // Q3. enum 타입인데 알아서 DB에서 가져와 입력되는지?
-			.value(productDefaultDisCount.getValue())
+
+		return DiscountRateResponseDto.builder()
+			.discountType(productDefaultDisCount.getDiscountType())
+			.discountRate(productDefaultDisCount.getDiscountRate())
+			.build();
+	}
+
+	@Override
+	public DiscountPriceResponseDto getDiscountPriceInfo(String productUuid) {
+		ProductDefaultDisCount productDefaultDisCount = discountRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
+		return DiscountPriceResponseDto.builder()
+			.discountType(productDefaultDisCount.getDiscountType())
+			.discountPrice(productDefaultDisCount.getDiscountPrice())
 			.build();
 	}
 

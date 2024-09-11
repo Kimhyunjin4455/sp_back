@@ -10,7 +10,7 @@ import starbucks3355.starbucksServer.domainProduct.entity.DiscountType;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiscountResponseVo {
+public class DiscountPriceResponseVo {
 	private DiscountType discountType;
-	private Integer value;
+	private Integer discountPrice;
 }

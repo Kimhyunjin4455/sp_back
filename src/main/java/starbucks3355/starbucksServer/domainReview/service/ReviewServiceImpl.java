@@ -110,6 +110,7 @@ public class ReviewServiceImpl implements ReviewService {
 		String reviewUuid = UUID.randomUUID().toString();
 		String productUuid = UUID.randomUUID().toString();
 		String memberUuid = UUID.randomUUID().toString();
+		// 스웨거랑 별개로 리뷰 등록 시에는 리뷰, 상품, 회원의 UUID를 생성하여 저장
 		reviewRepository.save(reviewRequestDto.toEntity(reviewUuid, productUuid, memberUuid));
 	}
 

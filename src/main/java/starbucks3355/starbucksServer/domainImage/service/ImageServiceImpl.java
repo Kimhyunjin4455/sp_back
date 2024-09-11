@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.domainImage.dto.in.ImageRequestDto;
 import starbucks3355.starbucksServer.domainImage.dto.out.ImageResponseDto;
@@ -55,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public void addImage(List<ImageRequestDto> imageRequestDtos) {
+	public void addImages(List<ImageRequestDto> imageRequestDtos) {
 		imageRequestDtos.stream()
 			.map(imageRequestDto -> Image.builder()
 				.s3url(imageRequestDto.getS3url())
@@ -71,7 +72,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public void modifyImage(ImageRequestDto imageRequestDto, String imageUuid) {
-
+		List<Image> imageList = imageRepository.findByOtherUuid(imageRequestDto.getOtherUuid());
 	}
 
 	@Override
@@ -84,5 +85,11 @@ public class ImageServiceImpl implements ImageService {
 			image.modifyIsMainImage(true);
 			imageRepository.save(image);
 		}
+	}
+
+	@Override
+	@Transactional
+	public void deleteAllImages(String otherUuid) {
+		imageRepository.deleteByOtherUuid(otherUuid);
 	}
 }

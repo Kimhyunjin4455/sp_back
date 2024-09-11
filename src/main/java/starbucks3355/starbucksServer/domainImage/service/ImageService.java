@@ -10,10 +10,12 @@ public interface ImageService {
 
 	public ImageResponseDto getMainImage(String otherUuid, boolean isMainImage);
 
-	void addImage(List<ImageRequestDto> imageRequestDtos);
+	void addImages(List<ImageRequestDto> imageRequestDtos);
 
 	void modifyImage(ImageRequestDto imageRequestDto, String imageUuid);
 
 	void deleteImage(Long id, String otherUuid);
+
+	void deleteAllImages(String otherUuid);
 
 }

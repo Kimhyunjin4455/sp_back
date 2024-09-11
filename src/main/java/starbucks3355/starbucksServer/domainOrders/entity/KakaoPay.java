@@ -33,11 +33,11 @@ public class KakaoPay {
 	private Integer totalAmount; // 상품 총액
 	@Column(nullable = false)
 	private Integer taxFreeAmount; // 상품 비과세 금액
-	@Column(length = 300)
+	@Column(nullable = false, length = 300)
 	private String approvalUrl; // 결제 성공 시 Redirect URL. 최대 255자
-	@Column(length = 300)
+	@Column(nullable = false, length = 300)
 	private String cancelUrl; // 결제 취소 시 Redirect URL. 최대 255자
-	@Column(length = 300)
+	@Column(nullable = false, length = 300)
 	private String failUrl; // 결제 실패 시 Redirect URL. 최대 255자
 
 	@Builder

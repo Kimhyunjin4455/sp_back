@@ -11,14 +11,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "productOptions")
+//@ToString(exclude = "productOptions")
 public class ProductDefaultDisCount {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

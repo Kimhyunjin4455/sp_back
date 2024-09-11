@@ -1,9 +1,10 @@
 package starbucks3355.starbucksServer.domainProduct.service;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -42,16 +43,16 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override // 수정 필요
-	public List<ProductResponseDto> getProducts() {
-		List<Product> products = productRepository.findAll();
-		return products.stream()
-			.map(product -> ProductResponseDto.builder()
-				.productUuid(product.getProductUuid())
-				.productName(product.getProductName())
-				.productDescription(product.getProductDescription())
-				.productInfo(product.getProductInfo())
-				.build())
-			.collect(Collectors.toList());
+	public Slice<ProductResponseDto> getProducts(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Slice<Product> products = productRepository.findAll(pageable);
+
+		return products.map(product -> ProductResponseDto.builder()
+			.productUuid(product.getProductUuid())
+			.productName(product.getProductName())
+			.productDescription(product.getProductDescription())
+			.productInfo(product.getProductInfo())
+			.build());
 	}
 
 	@Override

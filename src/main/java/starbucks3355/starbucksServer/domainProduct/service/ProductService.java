@@ -1,6 +1,6 @@
 package starbucks3355.starbucksServer.domainProduct.service;
 
-import java.util.List;
+import org.springframework.data.domain.Slice;
 
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
@@ -11,7 +11,9 @@ import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseD
 public interface ProductService {
 	public void addProduct(ProductRequestDto productRequestDto);
 
-	public List<ProductResponseDto> getProducts();
+	// public List<ProductResponseDto> getProducts();
+
+	public Slice<ProductResponseDto> getProducts(int page, int size);
 
 	public ProductResponseDto getProduct(String productUuid);
 

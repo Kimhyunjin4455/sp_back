@@ -3,10 +3,12 @@ package starbucks3355.starbucksServer.domainProduct.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
+import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.service.ProductService;
@@ -56,21 +59,23 @@ public class ProductController {
 	}
 
 	@GetMapping
-	@Operation(summary = "상품 목록 조회")
-	public CommonResponseEntity<List<ProductResponseVo>> getProducts() {
-		List<ProductResponseDto> productResponseDtos = productService.getProducts();
+	@Operation(summary = "상품 목록 조회 (무한 스크롤 페이지 처리)")
+	public CommonResponseSliceEntity<List<ProductResponseVo>> getProducts(
 
-		return new CommonResponseEntity<>(
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "20") int size
+	) {
+		Slice<ProductResponseDto> productResponseDtos = productService.getProducts(page, size);
+
+		List<ProductResponseVo> productResponseVos = productResponseDtos.stream()
+			.map(ProductResponseDto::dtoToResponseVo)
+			.collect(Collectors.toList());
+
+		return new CommonResponseSliceEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			productResponseDtos.stream()
-				.map(dto -> ProductResponseVo.builder()
-					.productUuid(dto.getProductUuid())
-					.productName(dto.getProductName())
-					.productDescription(dto.getProductDescription())
-					.productInfo(dto.getProductInfo())
-					.build())
-				.collect(Collectors.toList())
+			productResponseVos,
+			productResponseDtos.hasNext()
 		);
 	}
 

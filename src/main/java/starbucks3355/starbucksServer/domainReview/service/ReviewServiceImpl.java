@@ -4,9 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
+import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ProductReviewResponseDto;
@@ -18,6 +23,8 @@ import starbucks3355.starbucksServer.domainReview.repository.ReviewRepository;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 	private final ReviewRepository reviewRepository;
+	private final MemberRepository memberRepository;
+	private final ImageRepository imageRepository;
 
 	@Override
 	public List<MyReviewResponseDto> getMyReviews(String memberUuid) {
@@ -42,20 +49,45 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<ProductReviewResponseDto> getProductReviews(String productUuid) {
+	public Slice<ProductReviewResponseDto> getProductReviews(String productUuid, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Slice<Review> productReviews = reviewRepository.findPageByProductUuid(productUuid, pageable);
+
+		return productReviews.map(review -> ProductReviewResponseDto.builder()
+			.content(review.getContent())
+			.reviewScore(review.getReviewScore())
+			.reviewUuid(review.getReviewUuid())
+			.productUuid(review.getProductUuid())
+			.userId(memberRepository.findByUuid(review.getMemberUuid())
+				.map(member -> member.getUserId().substring(0, 3) + "*******")
+				.orElse("UNKNOWN")) // 회원 정보가 없을 경우 처리
+			.regDate(review.getRegDate())
+			.modDate(review.getModDate())
+			.build());
+	}
+
+	@Override
+	public List<ProductReviewResponseDto> getProductReviewsHaveMedia(String productUuid) {
 		List<Review> productReviews = reviewRepository.findByProductUuid(productUuid);
 
 		if (productReviews != null) {
+			// 상품의 리뷰들에 대해 리뷰에 대한 이미지가 한개라도 있으면 리뷰들을 반환
 			return productReviews.stream()
+				.filter(productReview -> imageRepository.findByOtherUuid(productReview.getReviewUuid()).size() > 0)
 				.map(productReview -> ProductReviewResponseDto.builder()
 					.content(productReview.getContent())
 					.reviewScore(productReview.getReviewScore())
 					.reviewUuid(productReview.getReviewUuid())
 					.productUuid(productReview.getProductUuid())
+					.userId(memberRepository.findByUuid(productReview.getMemberUuid())
+						.get()
+						.getUserId()
+						.substring(0, 3) + "*******")
 					.regDate(productReview.getRegDate())
 					.modDate(productReview.getModDate())
 					.build()
 				).toList();
+
 		}
 		return List.of();
 	}

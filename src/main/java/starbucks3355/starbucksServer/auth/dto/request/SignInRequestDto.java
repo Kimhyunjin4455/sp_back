@@ -1,10 +1,10 @@
-package starbucks3355.starbucksServer.auth.dto.in;
+package starbucks3355.starbucksServer.auth.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import starbucks3355.starbucksServer.auth.vo.in.SignInRequestVo;
+import starbucks3355.starbucksServer.auth.vo.request.SignInRequestVo;
 
 @Getter
 @NoArgsConstructor

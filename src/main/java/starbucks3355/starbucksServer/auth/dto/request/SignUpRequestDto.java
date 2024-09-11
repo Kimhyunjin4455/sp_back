@@ -1,6 +1,5 @@
-package starbucks3355.starbucksServer.auth.dto.in;
+package starbucks3355.starbucksServer.auth.dto.request;
 
-import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import starbucks3355.starbucksServer.auth.vo.in.SignUpRequestVo;
+import starbucks3355.starbucksServer.auth.vo.request.SignUpRequestVo;
 import starbucks3355.starbucksServer.domainMember.entity.Member;
 
 @Getter

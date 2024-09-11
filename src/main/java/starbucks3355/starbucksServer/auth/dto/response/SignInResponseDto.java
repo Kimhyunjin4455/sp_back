@@ -1,9 +1,9 @@
-package starbucks3355.starbucksServer.auth.dto.out;
+package starbucks3355.starbucksServer.auth.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import starbucks3355.starbucksServer.auth.vo.out.SignInResponseVo;
+import starbucks3355.starbucksServer.auth.vo.response.SignInResponseVo;
 
 @Getter
 @NoArgsConstructor

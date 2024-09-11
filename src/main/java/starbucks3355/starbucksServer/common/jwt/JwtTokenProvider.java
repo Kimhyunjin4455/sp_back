@@ -126,4 +126,5 @@ public class JwtTokenProvider {
 		return Keys.hmacShaKeyFor( env.getProperty("jwt.secret-key").getBytes() );
 	}
 
+
 }

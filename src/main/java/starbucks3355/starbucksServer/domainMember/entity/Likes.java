@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainMember.entity;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
@@ -8,6 +10,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,15 +22,27 @@ import lombok.ToString;
 @Getter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Likes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Likes;
+	private Long id;
 	@Column(nullable = false)
-	private Long uuid;
+	private String uuid;
 	@Column(nullable = false)
-	private Long productUuid;
+	private String productUuid;
 	@Column(nullable = false)
-	private Boolean isLikes = false;
+	private boolean isLikes = false;
+
+	@Builder
+	public Likes(
+		Long id,
+		String uuid,
+		String productUuid,
+		Boolean isLikes
+	) {
+		this.id = id;
+		this.uuid = uuid;
+		this.productUuid = productUuid;
+		this.isLikes = isLikes;
+	}
 }

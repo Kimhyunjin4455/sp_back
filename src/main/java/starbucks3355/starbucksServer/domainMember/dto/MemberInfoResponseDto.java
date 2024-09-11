@@ -17,7 +17,6 @@ public class MemberInfoResponseDto {
 	@Builder
 	public MemberInfoResponseDto(
 		String userId,
-		String password,
 		String email,
 		String nickname
 	) {

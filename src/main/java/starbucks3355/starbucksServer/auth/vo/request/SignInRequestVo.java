@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.auth.vo.in;
+package starbucks3355.starbucksServer.auth.vo.request;
 
 import lombok.Getter;
 import lombok.ToString;

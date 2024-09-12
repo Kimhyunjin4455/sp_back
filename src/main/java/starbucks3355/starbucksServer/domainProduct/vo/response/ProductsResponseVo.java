@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import starbucks3355.starbucksServer.domainProduct.entity.DiscountType;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiscountRateResponseVo {
-	private DiscountType discountType;
-	private Integer discountRate;
+public class ProductsResponseVo {
+	private String productUuid;
+	private String productName;
+	private String productDescription;
+	private String productInfo;
+
 }

@@ -7,17 +7,14 @@ import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsPri
 @Getter
 @Builder
 public class ProductDetailsPriceResponseDto {
-	private String productUuid; // 상품에 대한 상세정보 엔티티로 접근 하기 위한 필드
 	private Integer price;
 
-	public ProductDetailsPriceResponseDto(String productUuid, Integer price) {
-		this.productUuid = productUuid;
+	public ProductDetailsPriceResponseDto(Integer price) {
 		this.price = price;
 	}
 
 	public ProductDetailsPriceResponseVo dtoToResponseVo() {
 		return ProductDetailsPriceResponseVo.builder()
-			.productUuid(productUuid)
 			.price(price)
 			.build();
 	}

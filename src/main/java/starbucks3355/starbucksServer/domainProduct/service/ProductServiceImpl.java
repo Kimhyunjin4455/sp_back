@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountPriceResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountRateResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductInfoResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductDefaultDisCount;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductDetails;
@@ -49,11 +49,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override // 수정 필요
-	public Slice<ProductResponseDto> getProducts(int page, int size) {
+	public Slice<ProductsResponseDto> getProducts(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Slice<Product> products = productRepository.findAll(pageable);
 
-		return products.map(product -> ProductResponseDto.builder()
+		return products.map(product -> ProductsResponseDto.builder()
 			.productUuid(product.getProductUuid())
 			.productName(product.getProductName())
 			.productDescription(product.getProductDescription())
@@ -68,7 +68,6 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
 		return ProductResponseDto.builder()
-			.productUuid(product.getProductUuid())
 			.productName(product.getProductName())
 			.productDescription(product.getProductDescription())
 			.productInfo(product.getProductInfo())
@@ -104,7 +103,6 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
 
 		return ProductDetailsPriceResponseDto.builder()
-			.productUuid(productDetails.getProductUuid())
 			.price(productDetails.getProductPrice())
 			.build();
 	}
@@ -124,23 +122,13 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public DiscountRateResponseDto getDiscountRateInfo(String productUuid) {
+	public DiscountResponseDto getDiscountInfo(String productUuid) {
 		ProductDefaultDisCount productDefaultDisCount = discountRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
 
-		return DiscountRateResponseDto.builder()
+		return DiscountResponseDto.builder()
 			.discountType(productDefaultDisCount.getDiscountType())
-			.discountRate(productDefaultDisCount.getDiscountRate())
-			.build();
-	}
-
-	@Override
-	public DiscountPriceResponseDto getDiscountPriceInfo(String productUuid) {
-		ProductDefaultDisCount productDefaultDisCount = discountRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
-		return DiscountPriceResponseDto.builder()
-			.discountType(productDefaultDisCount.getDiscountType())
-			.discountPrice(productDefaultDisCount.getDiscountPrice())
+			.discountValue(productDefaultDisCount.getDiscountValue())
 			.build();
 	}
 

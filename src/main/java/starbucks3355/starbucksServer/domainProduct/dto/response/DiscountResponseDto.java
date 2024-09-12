@@ -3,18 +3,18 @@ package starbucks3355.starbucksServer.domainProduct.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import starbucks3355.starbucksServer.domainProduct.entity.DiscountType;
-import starbucks3355.starbucksServer.domainProduct.vo.response.DiscountRateResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.DiscountResponseVo;
 
 @Getter
 @Builder
-public class DiscountRateResponseDto {
+public class DiscountResponseDto {
 	private DiscountType discountType;
-	private Integer discountRate;
+	private Integer discountValue;
 
-	public DiscountRateResponseVo dtoToResponseVo() {
-		return DiscountRateResponseVo.builder()
+	public DiscountResponseVo dtoToResponseVo() {
+		return DiscountResponseVo.builder()
 			.discountType(discountType)
-			.discountRate(discountRate)
+			.discountValue(discountValue)
 			.build();
 	}
 }

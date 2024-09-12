@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductResponseVo {
-	private String productUuid;
 	private String productName;
 	private String productDescription;
 	private String productInfo;
-
 }

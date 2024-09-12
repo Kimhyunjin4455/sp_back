@@ -23,5 +23,5 @@ public class ProductTag { //out -> etc등의 도메인으로
 	private Long id;
 	@Column(length = 255)
 	private String tagName;
-	private Long productCode;
+	private String productUuid;
 }

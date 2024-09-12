@@ -31,7 +31,7 @@ public interface MiddleCategoryRepository extends JpaRepository<MiddleCategory, 
 	// 탑 카테고리 id를 통해 미들 카테고리의 이름이 카테고리 조회
 
 	@Query(value = "SELECT * FROM middle_category WHERE top_category_id = :topCategoryId AND category_name = :middleCategoryName", nativeQuery = true)
-	Optional<MiddleCategory> findByTopCategoryIdAndCategoryNameUsingQuery(
+	List<MiddleCategory> findByTopCategoryIdAndCategoryNameUsingQuery(
 		@Param("topCategoryId") Integer topCategoryId, @Param("middleCategoryName") String middleCategoryName);
 
 }

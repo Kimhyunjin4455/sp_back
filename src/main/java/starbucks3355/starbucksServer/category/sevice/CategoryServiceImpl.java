@@ -1,7 +1,9 @@
 package starbucks3355.starbucksServer.category.sevice;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,7 +122,7 @@ public class CategoryServiceImpl implements CategoryService {
 	// top 카테고리 조회
 	// db에 저장 돼 있는 객체를 dto로 변환 시키는 과정
 	public List<TopCategoryResponseDto> getTopCategories() {
-		return topCategoryRepository.findAll().stream().map(
+		return topCategoryRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream().map(
 			topCategory -> TopCategoryResponseDto.builder()
 				.id(topCategory.getId())
 				.topCategoryName(topCategory.getCategoryName())
@@ -154,39 +156,61 @@ public class CategoryServiceImpl implements CategoryService {
 	// 미들 카테고리 Name = '카테고리' 목록 조회
 	@Override
 	@Transactional(readOnly = true)
-	public MiddleCategoryResponseDto getMiddleCategoryByNameAndTopCategoryId(String middleCategoryName,
-		Integer topCategoryId) {
-		try {
-			// top 카테고리 id로 middle 카테고리 조회
-			MiddleCategory middleCategory = middleCategoryRepository.findByTopCategoryIdAndCategoryNameUsingQuery(
-					topCategoryId, middleCategoryName)
-				.orElseThrow(() -> new IllegalArgumentException("해당 Top 카테고리 id에 '카테고리' 이름을 가진"
-					+ "Middle 카테고리가 존재하지 않습니다."));
-			// BottomCategory 목록 조회
-			List<BottomCategory> bottomCategories = bottomCategoryRepository.findByMiddleCategoryId(
-				middleCategory.getId());
+	public List<MiddleCategoryResponseDto> getMiddleCategoryByNameAndTopCategoryId(Integer topCategoryId,
+		String middleCategoryName) {
+		// try {
+		// top 카테고리 id로 middle 카테고리 조회
+		List<MiddleCategory> middleCategories = middleCategoryRepository.findByTopCategoryIdAndCategoryNameUsingQuery(
+			topCategoryId, middleCategoryName);
 
-			//BottomCategoryResponseDto로 변환
-			List<BottomCategoryResponseDto> bottomCategoryResponseDtos = bottomCategories.stream().map(
-				bottomCategory -> BottomCategoryResponseDto.builder()
-					.id(bottomCategory.getId())
-					.bottomCategoryName(bottomCategory.getCategoryName())
-					.build()
-			).toList();
-
-			// MiddleCategory와 함께 BottomCategory 목록을 포함한 DTO 반환
-			return MiddleCategoryResponseDto.builder()
-				.id(middleCategory.getId())
-				.middleCategoryName(middleCategory.getCategoryName())
-				.bottomCategories(bottomCategoryResponseDtos)
-				.build();
-		} catch (IllegalArgumentException e) {
-			log.error(e.getMessage());
-			throw e;
-		} catch (Exception e) {
-			log.error("Unexpected error occurred", e);
-			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+		if (middleCategories.isEmpty()) {
+			return Collections.emptyList();
 		}
+		// 각 MiddleCategory에 속한 BottomCategory 목록 조회 및 반환
+		return middleCategories.stream().map(
+			middleCategory -> {
+				List<BottomCategory> bottomCategories = bottomCategoryRepository.findByMiddleCategoryId(
+					middleCategory.getId());
+				// BottomCategoryResponseDto로 변환
+				List<BottomCategoryResponseDto> bottomCategoryResponseDtos = bottomCategories.stream().map(
+					bottomCategory -> BottomCategoryResponseDto.builder()
+						.id(bottomCategory.getId())
+						.bottomCategoryName(bottomCategory.getCategoryName())
+						.build()
+				).toList();
+				// MiddleCategoryResponseDto로 변환
+				return MiddleCategoryResponseDto.builder()
+					.id(middleCategory.getId())
+					.middleCategoryName(middleCategory.getCategoryName())
+					.bottomCategories(bottomCategoryResponseDtos)
+					.build();
+
+			}).toList();
+		// BottomCategory 목록 조회
+		// List<BottomCategory> bottomCategories = bottomCategoryRepository.findByMiddleCategoryId(
+		// 	middleCategories.getId());
+		//
+		// //BottomCategoryResponseDto로 변환
+		// List<BottomCategoryResponseDto> bottomCategoryResponseDtos = bottomCategories.stream().map(
+		// 	bottomCategory -> BottomCategoryResponseDto.builder()
+		// 		.id(bottomCategory.getId())
+		// 		.bottomCategoryName(bottomCategory.getCategoryName())
+		// 		.build()
+		// ).toList();
+		//
+		// // MiddleCategory와 함께 BottomCategory 목록을 포함한 DTO 반환
+		// return MiddleCategoryResponseDto.builder()
+		// 	.id(middleCategories.getId())
+		// 	.middleCategoryName(middleCategories.getCategoryName())
+		// 	.bottomCategories(bottomCategoryResponseDtos)
+		// 	.build();
+		// } catch (IllegalArgumentException e) {
+		// 	log.error(e.getMessage());
+		// 	throw e;
+		// } catch (Exception e) {
+		// 	log.error("Unexpected error occurred", e);
+		// 	throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+		// }
 	}
 
 	// @Override

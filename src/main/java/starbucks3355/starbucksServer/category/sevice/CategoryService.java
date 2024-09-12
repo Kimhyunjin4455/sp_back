@@ -52,5 +52,6 @@ public interface CategoryService {
 
 	//List<FullTopCategoryResponseDto> getAllCategories();
 
-	MiddleCategoryResponseDto getMiddleCategoryByNameAndTopCategoryId(String middleCategoryName, Integer topCategoryId);
+	List<MiddleCategoryResponseDto> getMiddleCategoryByNameAndTopCategoryId(Integer topCategoryId,
+		String middleCategoryName);
 }

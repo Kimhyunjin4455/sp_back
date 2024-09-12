@@ -14,8 +14,9 @@ import starbucks3355.starbucksServer.category.vo.response.BottomCategoryResponse
 @AllArgsConstructor
 public class BottomCategoryResponseDto {
 	//private String bottomCategoryCode;
-	private String bottomCategoryName;
 	private Integer id;
+	private String bottomCategoryName;
+
 	//private String bottomCategoryDescription;
 
 	public BottomCategoryResponseVo toVo() {

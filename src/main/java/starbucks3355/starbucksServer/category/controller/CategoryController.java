@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -121,17 +120,17 @@ public class CategoryController {
 				.collect(Collectors.toList()));
 	}
 
-	@GetMapping("/middle-categories")
-	@Operation(summary = "Middle 전체 카테고리 조회")
-	public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategories() {
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			categoryService.getMiddleCategories()
-				.stream()
-				.map(MiddleCategoryResponseDto::toVo)
-				.collect(Collectors.toList()));
-	}
+	// @GetMapping("/middle-categories")
+	// @Operation(summary = "Middle 전체 카테고리 조회")
+	// public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategories() {
+	// 	return new CommonResponseEntity<>(
+	// 		HttpStatus.OK,
+	// 		CommonResponseMessage.SUCCESS.getMessage(),
+	// 		categoryService.getMiddleCategories()
+	// 			.stream()
+	// 			.map(MiddleCategoryResponseDto::toVo)
+	// 			.collect(Collectors.toList()));
+	// }
 
 	@GetMapping("/bottom-categories")
 	@Operation(summary = "Bottom 전체 카테고리 조회")
@@ -147,12 +146,13 @@ public class CategoryController {
 
 	@GetMapping("/top-categories/{topCategoryId}/middle-categories")
 	@Operation(summary = " Top 카테고리 id에 '카테고리' 이름을 가진 Middle 카테고리")
-	public CommonResponseEntity<MiddleCategoryResponseDto> getMiddleCategoryByNameAndTopCategoryId(
-		@PathVariable Integer topCategoryId,
-		@RequestParam String middleCategoryName) {
-		MiddleCategoryResponseDto response = categoryService.getMiddleCategoryByNameAndTopCategoryId(
-			middleCategoryName,
-			topCategoryId);
+	public CommonResponseEntity<List<MiddleCategoryResponseDto>> getMiddleCategoryByNameAndTopCategoryId(
+		@PathVariable Integer topCategoryId) {
+		String middleCategoryName = "카테고리";
+		List<MiddleCategoryResponseDto> response = categoryService.getMiddleCategoryByNameAndTopCategoryId(
+			topCategoryId,
+			middleCategoryName);
+
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),

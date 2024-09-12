@@ -2,6 +2,8 @@ package starbucks3355.starbucksServer.category.vo.response;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +20,7 @@ public class MiddleCategoryResponseVo {
 	//private String middleCategoryCode;
 	private String middleCategoryName;
 	private Integer id;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<BottomCategoryResponseDto> bottomCategories;
 
 	//private String middleCategoryDescription;

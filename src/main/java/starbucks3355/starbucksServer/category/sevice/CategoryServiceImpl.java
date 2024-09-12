@@ -131,6 +131,7 @@ public class CategoryServiceImpl implements CategoryService {
 	// middle 전체 카테고리 조회
 	@Override
 	public List<MiddleCategoryResponseDto> getMiddleCategories() {
+
 		return middleCategoryRepository.findAll().stream().map(
 			middleCategory -> MiddleCategoryResponseDto.builder()
 				.id(middleCategory.getId())

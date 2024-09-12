@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountRateResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
@@ -71,12 +71,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductDetailsResponseDto getProductDetails(String productUuid) {
+	public ProductDetailsPriceResponseDto getProductPrice(String productUuid) {
 
 		ProductDetails productDetails = productDetailsRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
 
-		return ProductDetailsResponseDto.builder()
+		return ProductDetailsPriceResponseDto.builder()
 			.productUuid(productDetails.getProductUuid())
 			.price(productDetails.getProductPrice())
 			.build();
@@ -119,11 +119,11 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void updateProduct(ProductRequestDto productRequestDto) {
-
+		// 관리자 역할
 	}
 
 	@Override
 	public void deleteProduct(String uuid) {
-
+		// 관리자 역할
 	}
 }

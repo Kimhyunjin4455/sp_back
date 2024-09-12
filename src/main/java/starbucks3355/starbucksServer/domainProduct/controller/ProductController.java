@@ -20,10 +20,10 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountRateResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.service.ProductService;
-import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsPriceResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductResponseVo;
 
 @Slf4j
@@ -48,10 +48,10 @@ public class ProductController {
 	}
 
 	@GetMapping("/productDetails/{productUuid}")
-	@Operation(summary = "상품 상세정보 조회")
-	public CommonResponseEntity<ProductDetailsResponseVo> getProductDetails(
+	@Operation(summary = "상품 가격만 조회")
+	public CommonResponseEntity<ProductDetailsPriceResponseVo> getProductDetails(
 		@PathVariable String productUuid) {
-		ProductDetailsResponseDto productDetails = productService.getProductDetails(productUuid);
+		ProductDetailsPriceResponseDto productDetails = productService.getProductPrice(productUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

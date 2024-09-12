@@ -112,7 +112,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/search/{searchInfo}")
-	@Operation(summary = "상품 검색을 통힌 정보 조회")
+	@Operation(summary = "상품 검색(상품명, 태그)을 통힌 정보 조회")
 	public CommonResponseEntity<List<ProductInfoResponseVo>> getProductSearchInfo(
 		@PathVariable String searchInfo
 	) {

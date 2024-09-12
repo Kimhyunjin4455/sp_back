@@ -17,7 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductTag { //out -> etc등의 도메인으로
+public class ProductTag { //out -> etc등의 도메인으로 -> 스타벅스 온라인 스토어를 살펴보니 상품에만 태그가 존재하는것으로 확인됨
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

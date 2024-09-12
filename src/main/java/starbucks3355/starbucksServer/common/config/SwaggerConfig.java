@@ -90,4 +90,12 @@ public class SwaggerConfig {
 			.build();
 	}
 
+	@Bean
+	GroupedOpenApi DeliveryAPI() {
+		return GroupedOpenApi.builder()
+			.group("배송지")
+			.pathsToMatch("/api/v1/delivery/**")
+			.build();
+	}
+
 }

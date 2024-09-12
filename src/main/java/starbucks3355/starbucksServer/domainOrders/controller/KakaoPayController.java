@@ -52,6 +52,7 @@ public class KakaoPayController {
 	@PostMapping("/success")
 	@Operation(summary = "카카오페이 결제 승인", description = "카카오페이 결제 승인 API를 호출합니다.")
 	public CommonResponseEntity<KakaoResponseApproveDto> getPgToken(
+		// 결제 승인할 때 필수적으로 확인이 필요한 파라미터들
 		@RequestParam("pg_token") String pgToken,
 		@RequestParam("tid") String tid,
 		@RequestParam("partner_order_id") String partnerOrderId,

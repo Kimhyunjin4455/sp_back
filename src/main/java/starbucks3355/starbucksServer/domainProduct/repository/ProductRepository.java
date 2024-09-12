@@ -1,5 +1,6 @@
 package starbucks3355.starbucksServer.domainProduct.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
@@ -14,5 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	Optional<Product> findByProductUuid(String ProductUuid);
 
 	Slice<Product> findPageByProductUuid(String ProductUuid, Pageable pageable);
+
+	List<Product> findByProductNameContaining(String searchName);
 
 }

@@ -6,15 +6,15 @@ import org.springframework.data.domain.Slice;
 
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.ProductReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 
 public interface ReviewService {
 	public List<MyReviewResponseDto> getMyReviews(String memberUuid);
 
-	public Slice<ProductReviewResponseDto> getProductReviews(String productUuid, int page, int size);
+	public Slice<ReviewProductResponseDto> getProductReviews(String productUuid, int page, int size);
 
-	public List<ProductReviewResponseDto> getProductReviewsHaveMedia(String productUuid);
+	public List<ReviewProductResponseDto> getProductReviewsHaveMedia(String productUuid);
 
 	public ReviewResponseDto getReview(String reviewUuid);
 

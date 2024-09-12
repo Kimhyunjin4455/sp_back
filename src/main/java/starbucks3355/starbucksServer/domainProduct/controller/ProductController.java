@@ -18,17 +18,17 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
-import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountPriceResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountRateResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductInfoResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.service.ProductService;
-import starbucks3355.starbucksServer.domainProduct.vo.response.DiscountPriceResponseVo;
-import starbucks3355.starbucksServer.domainProduct.vo.response.DiscountRateResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.DiscountResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsPriceResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductInfoResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.ProductsResponseVo;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -66,15 +66,15 @@ public class ProductController {
 
 	@GetMapping
 	@Operation(summary = "상품 목록 조회 (무한 스크롤 페이지 처리)")
-	public CommonResponseSliceEntity<List<ProductResponseVo>> getProducts(
+	public CommonResponseSliceEntity<List<ProductsResponseVo>> getProducts(
 
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "20") int size
 	) {
-		Slice<ProductResponseDto> productResponseDtos = productService.getProducts(page, size);
+		Slice<ProductsResponseDto> productResponseDtos = productService.getProducts(page, size);
 
-		List<ProductResponseVo> productResponseVos = productResponseDtos.stream()
-			.map(ProductResponseDto::dtoToResponseVo)
+		List<ProductsResponseVo> productResponseVos = productResponseDtos.stream()
+			.map(ProductsResponseDto::dtoToResponseVo)
 			.collect(Collectors.toList());
 
 		return new CommonResponseSliceEntity<>(
@@ -85,29 +85,16 @@ public class ProductController {
 		);
 	}
 
-	@GetMapping("/productDiscountRateInfo/{productUuid}")
-	@Operation(summary = "상품 할인률 정보 조회")
-	public CommonResponseEntity<DiscountRateResponseVo> getProductRateDiscountInfo(
+	@GetMapping("/productDiscountInfo/{productUuid}")
+	@Operation(summary = "상품 할인 정보 조회")
+	public CommonResponseEntity<DiscountResponseVo> getProductRateDiscountInfo(
 		@PathVariable String productUuid) {
-		DiscountRateResponseDto discountRateResponseDto = productService.getDiscountRateInfo(productUuid);
+		DiscountResponseDto discountRateResponseDto = productService.getDiscountInfo(productUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			discountRateResponseDto.dtoToResponseVo()
-		);
-	}
-
-	@GetMapping("/productDiscountPriceInfo/{productUuid}")
-	@Operation(summary = "상품 할인금액 정보 조회")
-	public CommonResponseEntity<DiscountPriceResponseVo> getProductPriceDiscountInfo(
-		@PathVariable String productUuid) {
-		DiscountPriceResponseDto discountPriceResponseDto = productService.getDiscountPriceInfo(productUuid);
-
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			discountPriceResponseDto.dtoToResponseVo()
 		);
 	}
 

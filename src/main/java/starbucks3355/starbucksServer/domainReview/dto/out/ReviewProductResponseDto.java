@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import starbucks3355.starbucksServer.domainReview.vo.out.ProductReviewResponseVo;
+import starbucks3355.starbucksServer.domainReview.vo.out.ReviewProductResponseVo;
 
 @Getter
 @Builder
 @AllArgsConstructor
-public class ProductReviewResponseDto {
+public class ReviewProductResponseDto {
 	private String content;
 	private String reviewUuid;
 	private Integer reviewScore;
@@ -19,8 +19,8 @@ public class ProductReviewResponseDto {
 	private String userId;
 	private LocalDateTime regDate, modDate;
 
-	public ProductReviewResponseVo dtoToResponseVo() {
-		return ProductReviewResponseVo.builder()
+	public ReviewProductResponseVo dtoToResponseVo() {
+		return ReviewProductResponseVo.builder()
 			.content(content)
 			.reviewScore(reviewScore)
 			.reviewUuid(reviewUuid)

@@ -14,7 +14,7 @@ import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.ProductReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.entity.Review;
 import starbucks3355.starbucksServer.domainReview.repository.ReviewRepository;
@@ -49,11 +49,11 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Slice<ProductReviewResponseDto> getProductReviews(String productUuid, int page, int size) {
+	public Slice<ReviewProductResponseDto> getProductReviews(String productUuid, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Slice<Review> productReviews = reviewRepository.findPageByProductUuid(productUuid, pageable);
 
-		return productReviews.map(review -> ProductReviewResponseDto.builder()
+		return productReviews.map(review -> ReviewProductResponseDto.builder()
 			.content(review.getContent())
 			.reviewScore(review.getReviewScore())
 			.reviewUuid(review.getReviewUuid())
@@ -67,14 +67,14 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<ProductReviewResponseDto> getProductReviewsHaveMedia(String productUuid) {
+	public List<ReviewProductResponseDto> getProductReviewsHaveMedia(String productUuid) {
 		List<Review> productReviews = reviewRepository.findByProductUuid(productUuid);
 
 		if (productReviews != null) {
 			// 상품의 리뷰들에 대해 리뷰에 대한 이미지가 한개라도 있으면 리뷰들을 반환
 			return productReviews.stream()
 				.filter(productReview -> imageRepository.findByOtherUuid(productReview.getReviewUuid()).size() > 0)
-				.map(productReview -> ProductReviewResponseDto.builder()
+				.map(productReview -> ReviewProductResponseDto.builder()
 					.content(productReview.getContent())
 					.reviewScore(productReview.getReviewScore())
 					.reviewUuid(productReview.getReviewUuid())

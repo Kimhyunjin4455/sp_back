@@ -6,7 +6,7 @@ import starbucks3355.starbucksServer.domainProduct.entity.DiscountType;
 
 @Getter
 @Builder
-public class DiscountResponseDto {
+public class DiscountRateResponseDto {
 	private DiscountType discountType;
-	private Integer value;
+	private Integer discountRate;
 }

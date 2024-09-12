@@ -108,7 +108,7 @@ public class ReviewController {
 	@PostMapping("/{reviewUuid}")
 	@Operation(summary = "리뷰 한개 등록")
 	public CommonResponseEntity<Void> addReview(
-		@RequestBody ReviewRequestVo reviewRequestVo) {
+		@RequestBody ReviewRequestVo reviewRequestVo) { // Service 로직에서 UUID 생성하여 저장하므로 vo에서 관련정보를 뺴거나, 서비스 로직에서 제거하기
 
 		ReviewRequestDto reviewRequestDto = ReviewRequestDto.builder()
 			.content(reviewRequestVo.getContent())

@@ -3,8 +3,9 @@ package starbucks3355.starbucksServer.domainProduct.service;
 import org.springframework.data.domain.Slice;
 
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountPriceResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountRateResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 
@@ -17,11 +18,13 @@ public interface ProductService {
 
 	public ProductResponseDto getProduct(String productUuid);
 
-	public ProductDetailsResponseDto getProductDetails(String productUuid);
+	public ProductDetailsPriceResponseDto getProductPrice(String productUuid);
 
 	public ProductFlagsResponseDto getProductFlags(String productUuid);
 
-	public DiscountResponseDto getDiscountInfo(Long productCode);
+	public DiscountRateResponseDto getDiscountRateInfo(String productUuid);
+
+	public DiscountPriceResponseDto getDiscountPriceInfo(String productUuid);
 
 	public void updateProduct(ProductRequestDto productRequestDto);
 

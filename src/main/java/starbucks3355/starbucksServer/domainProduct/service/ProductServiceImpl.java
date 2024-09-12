@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountPriceResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountRateResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
@@ -70,12 +71,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductDetailsResponseDto getProductDetails(String productUuid) {
+	public ProductDetailsPriceResponseDto getProductPrice(String productUuid) {
 
 		ProductDetails productDetails = productDetailsRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
 
-		return ProductDetailsResponseDto.builder()
+		return ProductDetailsPriceResponseDto.builder()
 			.productUuid(productDetails.getProductUuid())
 			.price(productDetails.getProductPrice())
 			.build();
@@ -96,22 +97,33 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public DiscountResponseDto getDiscountInfo(Long productCode) {
-		ProductDefaultDisCount productDefaultDisCount = discountRepository.findById(productCode)
+	public DiscountRateResponseDto getDiscountRateInfo(String productUuid) {
+		ProductDefaultDisCount productDefaultDisCount = discountRepository.findByProductUuid(productUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
-		return DiscountResponseDto.builder()
-			.discountType(productDefaultDisCount.getDiscountType()) // Q3. enum 타입인데 알아서 DB에서 가져와 입력되는지?
-			.value(productDefaultDisCount.getValue())
+
+		return DiscountRateResponseDto.builder()
+			.discountType(productDefaultDisCount.getDiscountType())
+			.discountRate(productDefaultDisCount.getDiscountRate())
+			.build();
+	}
+
+	@Override
+	public DiscountPriceResponseDto getDiscountPriceInfo(String productUuid) {
+		ProductDefaultDisCount productDefaultDisCount = discountRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
+		return DiscountPriceResponseDto.builder()
+			.discountType(productDefaultDisCount.getDiscountType())
+			.discountPrice(productDefaultDisCount.getDiscountPrice())
 			.build();
 	}
 
 	@Override
 	public void updateProduct(ProductRequestDto productRequestDto) {
-
+		// 관리자 역할
 	}
 
 	@Override
 	public void deleteProduct(String uuid) {
-
+		// 관리자 역할
 	}
 }

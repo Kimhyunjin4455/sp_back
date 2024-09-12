@@ -26,6 +26,6 @@ public class ProductDefaultDisCount {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private DiscountType discountType;
-	@Column(nullable = false)
-	private int value;
+	private int discountRate;
+	private int discountPrice;
 }

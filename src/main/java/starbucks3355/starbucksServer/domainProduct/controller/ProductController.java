@@ -18,10 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
-import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountPriceResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountRateResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.service.ProductService;
-import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsPriceResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductResponseVo;
 
 @Slf4j
@@ -46,10 +48,10 @@ public class ProductController {
 	}
 
 	@GetMapping("/productDetails/{productUuid}")
-	@Operation(summary = "상품 상세정보 조회")
-	public CommonResponseEntity<ProductDetailsResponseVo> getProductDetails(
+	@Operation(summary = "상품 가격만 조회")
+	public CommonResponseEntity<ProductDetailsPriceResponseVo> getProductDetails(
 		@PathVariable String productUuid) {
-		ProductDetailsResponseDto productDetails = productService.getProductDetails(productUuid);
+		ProductDetailsPriceResponseDto productDetails = productService.getProductPrice(productUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
@@ -76,6 +78,32 @@ public class ProductController {
 			CommonResponseMessage.SUCCESS.getMessage(),
 			productResponseVos,
 			productResponseDtos.hasNext()
+		);
+	}
+
+	@GetMapping("/productDiscountRateInfo/{productUuid}")
+	@Operation(summary = "상품 할인률 정보 조회")
+	public CommonResponseEntity<DiscountRateResponseDto> getProductRateDiscountInfo(
+		@PathVariable String productUuid) {
+		DiscountRateResponseDto discountRateResponseDto = productService.getDiscountRateInfo(productUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			discountRateResponseDto
+		);
+	}
+
+	@GetMapping("/productDiscountPriceInfo/{productUuid}")
+	@Operation(summary = "상품 할인금액 정보 조회")
+	public CommonResponseEntity<DiscountPriceResponseDto> getProductPriceDiscountInfo(
+		@PathVariable String productUuid) {
+		DiscountPriceResponseDto discountPriceResponseDto = productService.getDiscountPriceInfo(productUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			discountPriceResponseDto
 		);
 	}
 

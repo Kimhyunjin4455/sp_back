@@ -1,5 +1,6 @@
 package starbucks3355.starbucksServer.domainMember.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,8 +18,10 @@ import starbucks3355.starbucksServer.domainMember.dto.LikesProductResponseDto;
 import starbucks3355.starbucksServer.domainMember.dto.MemberInfoResponseDto;
 import starbucks3355.starbucksServer.domainMember.dto.MemberReviewResponseDto;
 import starbucks3355.starbucksServer.domainMember.entity.Likes;
+import starbucks3355.starbucksServer.domainMember.entity.LikesHistory;
 import starbucks3355.starbucksServer.domainMember.entity.Member;
 import starbucks3355.starbucksServer.domainMember.repository.LikeProductRepository;
+import starbucks3355.starbucksServer.domainMember.repository.LikesHistoryRepository;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 
 @Service
@@ -28,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
 
 	private final MemberRepository memberRepository;
 	private final LikeProductRepository likeProductRepository;
+	private final LikesHistoryRepository likesHistoryRepository;
 
 	@Override
 	public MemberInfoResponseDto getMemberInfo(String userUuid) {
@@ -81,6 +85,15 @@ public class MemberServiceImpl implements MemberService {
 			// 찜이 되어 있는 경우, 찜 취소
 			Likes like = optionalLikes.get();
 			likeProductRepository.delete(like);
+
+			// 찜 취소 이력 저장
+			LikesHistory history = LikesHistory.builder()
+				.uuid(uuid)
+				.productUuid(productUuid)
+				.isLiked(false)
+				.timestamp(LocalDateTime.now())
+				.build();
+			likesHistoryRepository.save(history);
 			return LikesProductResponseDto.builder()
 				.id(like.getId())
 				.uuid(like.getUuid())
@@ -96,6 +109,14 @@ public class MemberServiceImpl implements MemberService {
 				.build();
 			likeProductRepository.save(newLike);
 
+			// 찜 추가 이력 저장
+			LikesHistory history = LikesHistory.builder()
+				.uuid(uuid)
+				.productUuid(productUuid)
+				.isLiked(true)
+				.timestamp(LocalDateTime.now())
+				.build();
+			likesHistoryRepository.save(history);
 			return LikesProductResponseDto.builder()
 				.id(newLike.getId())
 				.uuid(newLike.getUuid())

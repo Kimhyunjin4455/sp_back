@@ -23,6 +23,7 @@ import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
+import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
 import starbucks3355.starbucksServer.domainMember.dto.LikesProductResponseDto;
 import starbucks3355.starbucksServer.domainMember.dto.MemberReviewResponseDto;
@@ -98,27 +99,28 @@ public class MemberController {
 		return ResponseEntity.ok(response);
 	}
 
-	// @GetMapping("/likeslist")
-	// @Operation(summary = "찜한 상품 목록 조회")
-	// public CommonResponseEntity<List<LikesProductResponseDto>> getLikesListByUuid(
-	// 	@RequestHeader("Authorization") String accessToken,
-	// 	@RequestParam(defaultValue = "0") int page,
-	// 	@RequestParam(defaultValue = "20") int size
-	// ) {
-	// 	log.info("accesstoken : {}",accessToken);
-	// 	String uuid = provider.parseUuid(accessToken);
-	//
-	// 	Slice<LikesProductResponseDto> likesProductResponseDtos = memberService.getLikesListByUuid(page, size);
-	//
-	// 	List<LikesProductResponseVo> likesProductResponseVos = likesProductResponseDtos.stream()
-	// 		.map(LikesProductResponseDto::dtoToResponseVo)
-	// 		.collect(Collectors.toList());
-	//
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		likesProductResponseVos,
-	// 		likesProductResponseDtos.hasNext()
-	// 	);
-	//
+	@GetMapping("/likeslist")
+	@Operation(summary = "찜한 상품 목록 조회")
+	public CommonResponseSliceEntity<List<LikesProductResponseVo>> getLikesListByUuid(
+		@RequestHeader("Authorization") String accessToken, String productUuid,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "20") int size
+	) {
+		log.info("accesstoken : {}", accessToken);
+		String uuid = provider.parseUuid(accessToken);
+
+		Slice<LikesProductResponseDto> likesProductResponseDtos = memberService.getLikesListByUuid(page, size);
+
+		List<LikesProductResponseVo> likesProductResponseVos = likesProductResponseDtos.stream()
+			.map(LikesProductResponseDto::toVo)
+			.collect(Collectors.toList());
+
+		return new CommonResponseSliceEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			likesProductResponseVos,
+			likesProductResponseDtos.hasNext()
+		);
+
+	}
 }

@@ -31,18 +31,18 @@ public class Likes {
 	@Column(nullable = false)
 	private String productUuid;
 	@Column(nullable = false)
-	private boolean isLikes = false;
+	private boolean isLiked = false;
 
 	@Builder
-	public Likes(
+	public Likes (
 		Long id,
 		String uuid,
 		String productUuid,
-		Boolean isLikes
+		Boolean isLiked
 	) {
 		this.id = id;
 		this.uuid = uuid;
 		this.productUuid = productUuid;
-		this.isLikes = isLikes;
+		this.isLiked = isLiked;
 	}
 }

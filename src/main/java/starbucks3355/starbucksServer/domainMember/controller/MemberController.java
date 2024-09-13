@@ -1,14 +1,18 @@
 package starbucks3355.starbucksServer.domainMember.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,13 +20,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
-import starbucks3355.starbucksServer.auth.service.AuthService;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
+import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
 import starbucks3355.starbucksServer.domainMember.dto.LikesProductResponseDto;
 import starbucks3355.starbucksServer.domainMember.dto.MemberReviewResponseDto;
 import starbucks3355.starbucksServer.domainMember.service.MemberService;
+import starbucks3355.starbucksServer.domainMember.vo.LikesProductResponseVo;
 import starbucks3355.starbucksServer.domainMember.vo.MemberInfoResponseVo;
 import starbucks3355.starbucksServer.domainMember.vo.MemberReviewResponseVo;
 
@@ -33,8 +38,7 @@ import starbucks3355.starbucksServer.domainMember.vo.MemberReviewResponseVo;
 public class MemberController {
 
 	private final MemberService memberService;
-	private final AuthService authService;
-
+	private final JwtTokenProvider provider;
 
 	/**
 	 * api/v1/member
@@ -42,7 +46,6 @@ public class MemberController {
 	 * 2. 회원 정보 수정
 	 * 3. 회원 탈퇴
 	 */
-
 
 	/**
 	 * 회원 정보 조회
@@ -81,33 +84,41 @@ public class MemberController {
 		);
 	}
 
+	@PostMapping("/likes")
+	@Operation(summary = "찜하기, 찜하기 취소")
+	public ResponseEntity<LikesProductResponseDto> likeProduct(@RequestHeader("Authorization") String accessToken,
+		String productUuid) {
+		String uuid = provider.parseUuid(accessToken);
 
-	@GetMapping("/likes")
-	@Operation(summary = "회원 좋아요 목록 조회")
-	public CommonResponseEntity<List<LikesProductResponseDto>> getLikesByUserUuid(@RequestHeader("Authorization") String accessToken) {
-		log.info("accesstoken : {}",accessToken);
-		// String uuid = getuuid(accessToken);
-
-		try {
-			List<LikesProductResponseDto> likes = memberService.getLikesByUserUuid("uuid");
-			return new CommonResponseEntity<>(
-				HttpStatus.OK,
-				CommonResponseMessage.SUCCESS.getMessage(),
-				likes
-			);
-		} catch (IllegalArgumentException e) {
-			return new CommonResponseEntity<>(
-				HttpStatus.BAD_REQUEST,
-				"잘못된 UUID입니다.",
-				null
-			);
-		} catch (RuntimeException e) {
-			return new CommonResponseEntity<>(
-				HttpStatus.INTERNAL_SERVER_ERROR,
-				"서버 오류가 발생했습니다.",
-				null
-			);
+		if (uuid == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // UUID가 없을 경우
 		}
-	}
-}
 
+		LikesProductResponseDto response = memberService.LikeStatus(uuid, productUuid);
+		return ResponseEntity.ok(response);
+	}
+
+	// @GetMapping("/likeslist")
+	// @Operation(summary = "찜한 상품 목록 조회")
+	// public CommonResponseEntity<List<LikesProductResponseDto>> getLikesListByUuid(
+	// 	@RequestHeader("Authorization") String accessToken,
+	// 	@RequestParam(defaultValue = "0") int page,
+	// 	@RequestParam(defaultValue = "20") int size
+	// ) {
+	// 	log.info("accesstoken : {}",accessToken);
+	// 	String uuid = provider.parseUuid(accessToken);
+	//
+	// 	Slice<LikesProductResponseDto> likesProductResponseDtos = memberService.getLikesListByUuid(page, size);
+	//
+	// 	List<LikesProductResponseVo> likesProductResponseVos = likesProductResponseDtos.stream()
+	// 		.map(LikesProductResponseDto::dtoToResponseVo)
+	// 		.collect(Collectors.toList());
+	//
+	// 	return new CommonResponseEntity<>(
+	// 		HttpStatus.OK,
+	// 		CommonResponseMessage.SUCCESS.getMessage(),
+	// 		likesProductResponseVos,
+	// 		likesProductResponseDtos.hasNext()
+	// 	);
+	//
+}

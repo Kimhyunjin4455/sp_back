@@ -13,20 +13,20 @@ public class LikesProductRequestDto {
 
 	private String uuid;
 	private String productUuid;
-	private boolean isLikes;
+	private boolean isLiked;
 
 
 	@Builder
-	public LikesProductRequestDto(String uuid, String productUuid, boolean isLikes) {
+	public LikesProductRequestDto(String uuid, String productUuid, boolean isLiked) {
 		this.uuid = uuid;
 		this.productUuid = productUuid;
-		this.isLikes = isLikes;
+		this.isLiked = isLiked;
 	}
 	public static LikesProductRequestDto from(LikesProductRequestVo likesProductRequestVo) {
 		return LikesProductRequestDto.builder()
 			.uuid(likesProductRequestVo.getUuid())
 			.productUuid(likesProductRequestVo.getProductUuid())
-			.isLikes(likesProductRequestVo.isLikes())
+			.isLiked(likesProductRequestVo.isLiked())
 			.build();
 	}
 }

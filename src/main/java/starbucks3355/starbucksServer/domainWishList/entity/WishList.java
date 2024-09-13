@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import starbucks3355.starbucksServer.common.entity.BaseEntity;
 
 @Entity
 @Getter
@@ -17,15 +18,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class WishList {
+public class WishList extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
-	private int quantity;
+	private int limitQuantity;
 	private String memberUuid;
 	@Builder.Default
-	private Boolean isChecked = false;
+	private Boolean isChecked = true;
 	@Column(length = 100)
 	private String productUuid;
 	private Integer currentQuantity;

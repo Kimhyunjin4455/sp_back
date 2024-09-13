@@ -1,7 +1,14 @@
 package starbucks3355.starbucksServer.domainWishList.service;
 
+import org.springframework.data.domain.Slice;
+
+import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
+import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
+
 public interface WishListService {
-	void addWishList(String userId, String productUuid);
+	Slice<WishListResponseDto> getMyWishListItems(String memberUuid);
+
+	void addWishList(WishListRequestDto wishListRequestDto);
 
 	void deleteWishList(String userId, String productUuid);
 

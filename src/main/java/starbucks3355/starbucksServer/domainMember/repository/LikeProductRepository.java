@@ -11,7 +11,5 @@ import starbucks3355.starbucksServer.domainMember.entity.Member;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
 
 public interface LikeProductRepository extends JpaRepository<Likes, Long> {
-	List<Likes> findByUuid(String uuid);
-	List<Likes> findByProductUuid(String productUuid);
 	Optional<Likes> findByUuidAndProductUuid(String uuid, String productUuid);
 }

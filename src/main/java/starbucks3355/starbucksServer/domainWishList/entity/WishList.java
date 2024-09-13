@@ -30,4 +30,8 @@ public class WishList extends BaseEntity {
 	@Column(length = 100)
 	private String productUuid;
 	private Integer currentQuantity;
+
+	public void updateCurrentQuantity(int currentQuantity) {
+		this.currentQuantity = currentQuantity;
+	}
 }

@@ -52,16 +52,14 @@ public class WishListController {
 		@RequestBody WishListRequestVo wishListRequestVo) {
 
 		WishListRequestDto wishListRequestDto = WishListRequestDto.builder()
-			.isChecked(wishListRequestVo.isChecked())
-			.currentQuantity(wishListRequestVo.getCurrentQuantity())
-			.limitQuantity(wishListRequestVo.getLimitQuantity())
 			.productUuid(wishListRequestVo.getProductUuid())
 			.memberUuid(wishListRequestVo.getMemberUuid())
-			.regDate(wishListRequestVo.getRegDate())
-			.modDate(wishListRequestVo.getModDate())
+			.isChecked(wishListRequestVo.isChecked())
+			.limitQuantity(wishListRequestVo.getLimitQuantity())
+			.currentQuantity(wishListRequestVo.getCurrentQuantity())
 			.build();
 
-		wishListService.addWishList(wishListRequestDto);
+		wishListService.isExistProductInWishList(wishListRequestDto);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

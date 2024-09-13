@@ -3,7 +3,6 @@ package starbucks3355.starbucksServer.common.config;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -41,6 +40,7 @@ public class SwaggerConfig {
 						.bearerFormat("JWT")))
 			.addSecurityItem(new io.swagger.v3.oas.models.security.SecurityRequirement().addList("bearerAuth"));
 	}
+
 	@Bean
 	public GroupedOpenApi MemberAPI() {
 		return GroupedOpenApi.builder()
@@ -102,6 +102,15 @@ public class SwaggerConfig {
 		return GroupedOpenApi.builder()
 			.group("카카오페이")
 			.pathsToMatch("/api/v1/kakao/**")
+			.build();
+	}
+
+	//
+	@Bean
+	GroupedOpenApi WishListAPI() {
+		return GroupedOpenApi.builder()
+			.group("장바구니")
+			.pathsToMatch("/api/v1/wishList/**")
 			.build();
 	}
 

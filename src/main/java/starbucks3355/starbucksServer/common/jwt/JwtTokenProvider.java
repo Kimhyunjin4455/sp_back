@@ -126,5 +126,10 @@ public class JwtTokenProvider {
 		return Keys.hmacShaKeyFor( env.getProperty("jwt.secret-key").getBytes() );
 	}
 
+	public String parseUuid(String accessToken) {
+		return Jwts.parser().verifyWith((SecretKey) getSignKey())
+			.build().parseSignedClaims(accessToken.substring(7)).getPayload().get("uuid", String.class);
+
+	}
 
 }

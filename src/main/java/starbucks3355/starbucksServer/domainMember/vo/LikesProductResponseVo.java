@@ -10,13 +10,13 @@ public class LikesProductResponseVo {
 	private Long id;
 	private String uuid;
 	private String productUuid;
-	private boolean isLikes;
+	private boolean isLiked;
 
 	@Builder
-	public LikesProductResponseVo(Long id, String uuid, String productUuid, boolean isLikes) {
+	public LikesProductResponseVo(Long id, String uuid, String productUuid, boolean isLiked) {
 		this.id = id;
 		this.uuid = uuid;
 		this.productUuid = productUuid;
-		this.isLikes = isLikes;
+		this.isLiked = isLiked;
 	}
 }

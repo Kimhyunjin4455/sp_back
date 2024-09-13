@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -56,44 +59,55 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public LikesProductResponseDto addLike(String uuid, String productUuid) {
-		Likes like = Likes.builder()
-			.uuid(uuid)
-			.productUuid(productUuid)
-			.isLikes(true) // 기본적으로 좋아요 추가할 때 true로 설정함
-			.build();
-
-		// 데이터베이스에 저장
-		Likes savedLike = likeProductRepository.save(like);
-
-		// LikesproductResponseDto로 변환하여 반환
-		return LikesProductResponseDto.builder()
-			.id(savedLike.getId())
-			.uuid(savedLike.getUuid())
-			.productUuid(savedLike.getProductUuid())
-			.isLikes(savedLike.isLikes())
-			.build();
+	public Slice<LikesProductResponseDto> getLikesListByUuid(int page, int size) {
+		return null;
 	}
 
+	// 찜한 상품 목록 조회
+	// @Override
+	// public Slice<LikesProductResponseDto> getLikesListByUuid(int page, int size) {
+	// 	Pageable pageable = PageRequest.of(page, size);
+	// 	Slice<Likes> likes = likeProductRepository.findAll(pageable);
+	//
+	// 	return likesList.map(likes -> LikesProductResponseDto.builder())
+	// 			.id(likes.getId())
+	// 			.uuid(likes.getUuid())
+	// 			.productUuid(likes.getProductUuid())
+	// 			.isLiked(likes.isLiked())
+	// 			.build());
+	// }
 
+	// 찜하기 여부
 	@Override
-	public List<LikesProductResponseDto> getLikesByUserUuid(String uuid) {
+	public LikesProductResponseDto LikeStatus(String uuid, String productUuid) {
+		Optional<Likes> optionalLikes = likeProductRepository.findByUuidAndProductUuid(uuid, productUuid);
 
-		List<Likes> likesList;
-		try {
-			likesList = likeProductRepository.findByUuid(uuid);
-		} catch (Exception e) {
-			throw new RuntimeException("데이터베이스 오류가 발생했습니다", e);
-		}
-
-		return likesList.stream()
-			.map(like -> LikesProductResponseDto.builder()
+		if(optionalLikes.isPresent()) {
+			// 찜이 되어 있는 경우, 찜 취소
+			Likes like = optionalLikes.get();
+			likeProductRepository.delete(like);
+			return LikesProductResponseDto.builder()
 				.id(like.getId())
 				.uuid(like.getUuid())
 				.productUuid(like.getProductUuid())
-				.isLikes(like.isLikes())
-				.build())
-			.collect(Collectors.toList());
+				.isLiked(false) // 취소된 경우 false
+				.build();
+		} else {
+			// 찜이 되어 있지 않은 경우, 찜 추가
+			Likes newLike = Likes.builder()
+				.uuid(uuid)
+				.productUuid(productUuid)
+				.isLiked(true)
+				.build();
+			likeProductRepository.save(newLike);
+
+			return LikesProductResponseDto.builder()
+				.id(newLike.getId())
+				.uuid(newLike.getUuid())
+				.productUuid(newLike.getProductUuid())
+				.isLiked(true) // 추가된 경우 true
+				.build();
+		}
 	}
 
 }

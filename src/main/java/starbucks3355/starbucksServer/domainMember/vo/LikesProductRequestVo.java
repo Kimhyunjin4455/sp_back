@@ -8,5 +8,5 @@ import lombok.ToString;
 public class LikesProductRequestVo {
 	private String uuid;
 	private String productUuid;
-	private boolean isLikes;
+	private boolean isLiked;
 }

@@ -58,24 +58,19 @@ public class MemberServiceImpl implements MemberService {
 			.build();
 	}
 
+	// 찜한 상품 목록 조회
 	@Override
 	public Slice<LikesProductResponseDto> getLikesListByUuid(int page, int size) {
-		return null;
-	}
+		Pageable pageable = PageRequest.of(page, size);
+		Slice<Likes> likes = likeProductRepository.findAll(pageable);
 
-	// 찜한 상품 목록 조회
-	// @Override
-	// public Slice<LikesProductResponseDto> getLikesListByUuid(int page, int size) {
-	// 	Pageable pageable = PageRequest.of(page, size);
-	// 	Slice<Likes> likes = likeProductRepository.findAll(pageable);
-	//
-	// 	return likesList.map(likes -> LikesProductResponseDto.builder())
-	// 			.id(likes.getId())
-	// 			.uuid(likes.getUuid())
-	// 			.productUuid(likes.getProductUuid())
-	// 			.isLiked(likes.isLiked())
-	// 			.build());
-	// }
+		return likes.map(like -> LikesProductResponseDto.builder()
+				.id(like.getId())
+				.uuid(like.getUuid())
+				.productUuid(like.getProductUuid())
+				.isLiked(like.isLiked())
+				.build());
+	}
 
 	// 찜하기 여부
 	@Override

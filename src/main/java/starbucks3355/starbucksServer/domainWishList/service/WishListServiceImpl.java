@@ -1,11 +1,13 @@
 package starbucks3355.starbucksServer.domainWishList.service;
 
-import org.springframework.data.domain.Slice;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
 import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
+import starbucks3355.starbucksServer.domainWishList.entity.WishList;
 import starbucks3355.starbucksServer.domainWishList.repository.WishListRepository;
 
 @Service
@@ -14,8 +16,24 @@ public class WishListServiceImpl implements WishListService {
 	private final WishListRepository wishListRepository;
 
 	@Override
-	public Slice<WishListResponseDto> getMyWishListItems(String memberUuid) {
-		return null;
+	public List<WishListResponseDto> getMyWishListItems(String memberUuid) {
+		List<WishList> myWishList = wishListRepository.findByMemberUuid(memberUuid);
+
+		if (myWishList != null) {
+			return myWishList.stream()
+				.map(myWishListItem -> WishListResponseDto.builder()
+					.productUuid(myWishListItem.getProductUuid())
+					.memberUuid(myWishListItem.getMemberUuid())
+					.isChecked(
+						myWishListItem.isChecked()) // Java의 Bean 규약에 따르면, boolean 타입 필드는 is 접두사를 사용하여 getter 메서드가 생성됨
+					.limitQuantity(myWishListItem.getLimitQuantity())
+					.currentQuantity(myWishListItem.getCurrentQuantity())
+					.regDate(myWishListItem.getRegDate())
+					.modDate(myWishListItem.getModDate())
+					.build()).toList();
+		}
+
+		return List.of();
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class WishList extends BaseEntity {
 	private int limitQuantity;
 	private String memberUuid;
 	@Builder.Default
-	private Boolean isChecked = true;
+	private boolean isChecked = true;
 	@Column(length = 100)
 	private String productUuid;
 	private Integer currentQuantity;

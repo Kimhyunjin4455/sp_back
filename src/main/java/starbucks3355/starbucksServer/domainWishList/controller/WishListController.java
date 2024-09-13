@@ -1,6 +1,10 @@
 package starbucks3355.starbucksServer.domainWishList.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
+import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
 import starbucks3355.starbucksServer.domainWishList.service.WishListService;
 import starbucks3355.starbucksServer.domainWishList.vo.in.WishListRequestVo;
+import starbucks3355.starbucksServer.domainWishList.vo.out.WishListResponseVo;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +29,21 @@ import starbucks3355.starbucksServer.domainWishList.vo.in.WishListRequestVo;
 @Tag(name = "WishList", description = "장바구니 API")
 public class WishListController {
 	private final WishListService wishListService;
+
+	@GetMapping("/wishlist/{memberUuid}")
+	@Operation(summary = " 나의 상품 장바구니 조회")
+	public CommonResponseEntity<List<WishListResponseVo>> getMyWishList(
+		@PathVariable String memberUuid) {
+		List<WishListResponseDto> wishListRequestDtoList = wishListService.getMyWishListItems(memberUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			wishListRequestDtoList.stream()
+				.map(WishListResponseDto::dtoToResponseVo)
+				.toList());
+
+	}
 
 	@PostMapping("/wishlist/{productUuid}/{memberUuid}/add")
 	@Operation(summary = "상품 장바구니 추가")

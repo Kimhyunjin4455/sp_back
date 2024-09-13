@@ -59,7 +59,7 @@ public class WishListServiceImpl implements WishListService {
 
 	@Override
 	public void deleteWishListChecked(String memberUuid) {
-		
+
 	}
 
 	@Override
@@ -82,8 +82,36 @@ public class WishListServiceImpl implements WishListService {
 
 	}
 
+	// @Override
+	// public void addWishListIsExistProductInWishList(WishListRequestDto wishListRequestDto) {
+	// 	List<WishList> wishLists = wishListRepository.findByMemberUuid(wishListRequestDto.getMemberUuid());
+	//
+	// 	// memberUuid에 대해 productUuid는 최대 20개까지 추가 가능
+	// 	if (wishLists.size() >= 20) {
+	// 		throw new RuntimeException("하나의 memberUuid에 대해 최대 20개까지 상품을 추가할 수 있습니다.");
+	// 	}
+	//
+	// 	Optional<WishList> existingWishList = wishListRepository.findByMemberUuidAndProductUuid(
+	// 		wishListRequestDto.getMemberUuid(),
+	// 		wishListRequestDto.getProductUuid());
+	//
+	// 	if (existingWishList.isPresent()) {
+	// 		WishList wishList = existingWishList.get();
+	// 		if (wishList.getCurrentQuantity() < wishList.getLimitQuantity()) {
+	// 			wishList.updateCurrentQuantity(wishList.getCurrentQuantity() + 1);
+	// 			wishListRepository.save(wishList);
+	// 		} else {
+	// 			throw new RuntimeException("상품의 최대 수량을 초과할 수 없습니다.");
+	// 		}
+	// 	} else {
+	// 		wishListRepository.save(
+	// 			wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid()));
+	// 	}
+	// }
+
 	@Override
-	public void isExistProductInWishList(WishListRequestDto wishListRequestDto) {
+	public void addWishListAtProductPage(WishListRequestDto wishListRequestDto, int quantity) {
+
 		List<WishList> wishLists = wishListRepository.findByMemberUuid(wishListRequestDto.getMemberUuid());
 
 		// memberUuid에 대해 productUuid는 최대 20개까지 추가 가능
@@ -97,13 +125,14 @@ public class WishListServiceImpl implements WishListService {
 
 		if (existingWishList.isPresent()) {
 			WishList wishList = existingWishList.get();
-			if (wishList.getCurrentQuantity() < wishList.getLimitQuantity()) {
-				wishList.updateCurrentQuantity(wishList.getCurrentQuantity() + 1);
+			if (wishList.getCurrentQuantity() + quantity <= wishList.getLimitQuantity()) {
+				wishList.updateCurrentQuantity(wishList.getCurrentQuantity() + quantity);
 				wishListRepository.save(wishList);
 			} else {
 				throw new RuntimeException("상품의 최대 수량을 초과할 수 없습니다.");
 			}
 		} else {
+			wishListRequestDto.updateCurrentQuantity(quantity);
 			wishListRepository.save(
 				wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid()));
 		}

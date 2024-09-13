@@ -30,6 +30,9 @@ public interface WishListService {
 	void updateWishListAllUnCheck(String memberUuid);
 
 	// 장바구니내에 memberUuid와 productUuid에 대해 둘 다 같은 값이 존재하지 않는 상품이면 추가, memberUuid와 productUuid 둘 다 같은 상품이 존재하면 그 상품의 currentQuantity를 증가시킴 (limitQuantity 이하까지 증가 가능), memberUuid에 대해 productUuid는 최대 20개까지 추가 가능
-	void isExistProductInWishList(WishListRequestDto wishListRequestDto);
+	// void addWishListIsExistProductInWishList(WishListRequestDto wishListRequestDto);
+
+	// 상품 상세 페이지에서 선택한 어떤 상품 대해 그 상품 N개를 장바구니에 넣을때 상품이 존재하지 않으면 0+n이 limitQuantity 이하 까지 가능, 장바구니에 존재하면 currentQuantity를 n만큼 증가시킴 (limitQuantity 이하까지 증가 가능)
+	void addWishListAtProductPage(WishListRequestDto wishListRequestDto, int quantity);
 
 }

@@ -46,10 +46,34 @@ public class WishListController {
 
 	}
 
-	@PostMapping("/wishlist/{productUuid}/{memberUuid}/add")
-	@Operation(summary = "상품 장바구니 추가")
-	public CommonResponseEntity<Void> addProductToWishList(
-		@RequestBody WishListRequestVo wishListRequestVo) {
+	// 상품 품목의 갯수를 response data로 반환할 Get api
+
+	// @PostMapping("/wishlist/{productUuid}/{memberUuid}/add")
+	// @Operation(summary = "상품 장바구니 추가")
+	// public CommonResponseEntity<Void> addProductToWishList(
+	// 	@RequestBody WishListRequestVo wishListRequestVo) {
+	//
+	// 	WishListRequestDto wishListRequestDto = WishListRequestDto.builder()
+	// 		.productUuid(wishListRequestVo.getProductUuid())
+	// 		.memberUuid(wishListRequestVo.getMemberUuid())
+	// 		.isChecked(wishListRequestVo.isChecked())
+	// 		.limitQuantity(wishListRequestVo.getLimitQuantity())
+	// 		.currentQuantity(wishListRequestVo.getCurrentQuantity())
+	// 		.build();
+	//
+	// 	wishListService.addWishListIsExistProductInWishList(wishListRequestDto);
+	//
+	// 	return new CommonResponseEntity<>(
+	// 		HttpStatus.OK,
+	// 		CommonResponseMessage.SUCCESS.getMessage(),
+	// 		null);
+	// }
+
+	@PostMapping("/fromProductDetailsPage/wishlist/{productUuid}/{memberUuid}/add/{quantity}")
+	@Operation(summary = "상품 상세페이지에서 장바구니에 n개 추가")
+	public CommonResponseEntity<Void> addProductToWishListFromProductDetailsPage(
+		@RequestBody WishListRequestVo wishListRequestVo,
+		@PathVariable int quantity) {
 
 		WishListRequestDto wishListRequestDto = WishListRequestDto.builder()
 			.productUuid(wishListRequestVo.getProductUuid())
@@ -59,7 +83,7 @@ public class WishListController {
 			.currentQuantity(wishListRequestVo.getCurrentQuantity())
 			.build();
 
-		wishListService.isExistProductInWishList(wishListRequestDto);
+		wishListService.addWishListAtProductPage(wishListRequestDto, quantity);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

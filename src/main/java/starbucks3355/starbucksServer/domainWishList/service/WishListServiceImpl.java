@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
 import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
@@ -43,12 +44,15 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteWishList(String userId, String productUuid) {
-
+		wishListRepository.deleteByMemberUuidAndProductUuid(userId, productUuid);
 	}
 
 	@Override
+	@Transactional
 	public void deleteWishListAll(String userId) {
+		wishListRepository.deleteByMemberUuid(userId);
 
 	}
 

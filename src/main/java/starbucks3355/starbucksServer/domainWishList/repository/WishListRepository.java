@@ -10,4 +10,8 @@ import starbucks3355.starbucksServer.domainWishList.entity.WishList;
 @Repository
 public interface WishListRepository extends JpaRepository<WishList, Long> {
 	List<WishList> findByMemberUuid(String memberUuid);
+
+	void deleteByMemberUuidAndProductUuid(String memberUuid, String productUuid);
+
+	void deleteByMemberUuid(String memberUuid);
 }

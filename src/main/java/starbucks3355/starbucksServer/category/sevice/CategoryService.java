@@ -6,6 +6,7 @@ import starbucks3355.starbucksServer.category.dto.request.BottomCategoryRequestD
 import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
+import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryListResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
 
@@ -52,6 +53,6 @@ public interface CategoryService {
 
 	//List<FullTopCategoryResponseDto> getAllCategories();
 
-	List<MiddleCategoryResponseDto> getMiddleCategoryByNameAndTopCategoryId(Integer topCategoryId,
+	MiddleCategoryListResponseDto getMiddleCategoryByNameAndTopCategoryId(Integer topCategoryId,
 		String middleCategoryName);
 }

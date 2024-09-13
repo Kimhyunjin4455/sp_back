@@ -18,6 +18,7 @@ import starbucks3355.starbucksServer.category.dto.request.BottomCategoryRequestD
 import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
+import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryListResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
 import starbucks3355.starbucksServer.category.repository.TopCategoryRepository;
@@ -146,10 +147,10 @@ public class CategoryController {
 
 	@GetMapping("/top-categories/{topCategoryId}/middle-categories")
 	@Operation(summary = " Top 카테고리 id에 '카테고리' 이름을 가진 Middle 카테고리")
-	public CommonResponseEntity<List<MiddleCategoryResponseDto>> getMiddleCategoryByNameAndTopCategoryId(
+	public CommonResponseEntity<MiddleCategoryListResponseDto> getMiddleCategoryByNameAndTopCategoryId(
 		@PathVariable Integer topCategoryId) {
 		String middleCategoryName = "카테고리";
-		List<MiddleCategoryResponseDto> response = categoryService.getMiddleCategoryByNameAndTopCategoryId(
+		MiddleCategoryListResponseDto response = categoryService.getMiddleCategoryByNameAndTopCategoryId(
 			topCategoryId,
 			middleCategoryName);
 

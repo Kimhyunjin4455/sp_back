@@ -13,6 +13,7 @@ import starbucks3355.starbucksServer.category.dto.request.BottomCategoryRequestD
 import starbucks3355.starbucksServer.category.dto.request.MiddleCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.request.TopCategoryRequestDto;
 import starbucks3355.starbucksServer.category.dto.response.BottomCategoryResponseDto;
+import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryListResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.MiddleCategoryResponseDto;
 import starbucks3355.starbucksServer.category.dto.response.TopCategoryResponseDto;
 import starbucks3355.starbucksServer.category.entity.BottomCategory;
@@ -156,7 +157,7 @@ public class CategoryServiceImpl implements CategoryService {
 	// 미들 카테고리 Name = '카테고리' 목록 조회
 	@Override
 	@Transactional(readOnly = true)
-	public List<MiddleCategoryResponseDto> getMiddleCategoryByNameAndTopCategoryId(Integer topCategoryId,
+	public MiddleCategoryListResponseDto getMiddleCategoryByNameAndTopCategoryId(Integer topCategoryId,
 		String middleCategoryName) {
 		// try {
 		// top 카테고리 id로 middle 카테고리 조회
@@ -164,10 +165,10 @@ public class CategoryServiceImpl implements CategoryService {
 			topCategoryId, middleCategoryName);
 
 		if (middleCategories.isEmpty()) {
-			return Collections.emptyList();
+			return new MiddleCategoryListResponseDto(Collections.emptyList());
 		}
 		// 각 MiddleCategory에 속한 BottomCategory 목록 조회 및 반환
-		return middleCategories.stream().map(
+		List<MiddleCategoryResponseDto> middleCategoryResponseDtos = middleCategories.stream().map(
 			middleCategory -> {
 				List<BottomCategory> bottomCategories = bottomCategoryRepository.findByMiddleCategoryId(
 					middleCategory.getId());
@@ -186,6 +187,8 @@ public class CategoryServiceImpl implements CategoryService {
 					.build();
 
 			}).toList();
+
+		return new MiddleCategoryListResponseDto(middleCategoryResponseDtos);
 		// BottomCategory 목록 조회
 		// List<BottomCategory> bottomCategories = bottomCategoryRepository.findByMiddleCategoryId(
 		// 	middleCategories.getId());

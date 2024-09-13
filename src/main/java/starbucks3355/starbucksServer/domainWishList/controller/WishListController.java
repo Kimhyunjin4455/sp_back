@@ -89,10 +89,12 @@ public class WishListController {
 		WishListRequestDto wishListRequestDto = WishListRequestDto.builder()
 			.productUuid(wishListRequestVo.getProductUuid())
 			.memberUuid(wishListRequestVo.getMemberUuid())
-			.isChecked(wishListRequestVo.isChecked())
+			.isChecked(true)
 			.limitQuantity(wishListRequestVo.getLimitQuantity())
 			.currentQuantity(wishListRequestVo.getCurrentQuantity())
 			.build();
+
+		log.info("check: {}", wishListRequestDto.isChecked());
 
 		wishListService.addWishListAtProductPage(wishListRequestDto, quantity);
 
@@ -122,6 +124,19 @@ public class WishListController {
 		@PathVariable String memberUuid) {
 
 		wishListService.deleteWishListAll(memberUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
+
+	@DeleteMapping("/wishlist/{memberUuid}/deleteChecked")
+	@Operation(summary = "장바구니 체크된 품목 삭제")
+	public CommonResponseEntity<Void> deleteCheckedProductFromWishList(
+		@PathVariable String memberUuid) {
+
+		wishListService.deleteWishListChecked(memberUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

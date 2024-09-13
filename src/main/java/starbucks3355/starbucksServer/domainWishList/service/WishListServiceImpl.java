@@ -58,13 +58,20 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteWishListChecked(String memberUuid) {
+		List<WishList> wishLists = wishListRepository.findByMemberUuid(memberUuid);
+
+		wishLists.stream()
+			.filter(WishList::isChecked)
+			.forEach(
+				wishList -> wishListRepository.deleteByMemberUuidAndProductUuid(memberUuid, wishList.getProductUuid()));
 
 	}
 
 	@Override
 	public void updateWishList(String userId, String productUuid, int quantity) {
-		
+
 	}
 
 	@Override

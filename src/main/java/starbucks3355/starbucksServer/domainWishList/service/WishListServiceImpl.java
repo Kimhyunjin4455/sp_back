@@ -64,7 +64,7 @@ public class WishListServiceImpl implements WishListService {
 
 	@Override
 	public void updateWishList(String userId, String productUuid, int quantity) {
-
+		
 	}
 
 	@Override

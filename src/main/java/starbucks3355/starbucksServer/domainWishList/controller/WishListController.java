@@ -47,6 +47,17 @@ public class WishListController {
 	}
 
 	// 상품 품목의 갯수를 response data로 반환할 Get api
+	@GetMapping("/wishlist/{memberUuid}/count")
+	@Operation(summary = "나의 상품 장바구니 품목 갯수 조회")
+	public CommonResponseEntity<Integer> getMyWishListCount(
+		@PathVariable String memberUuid) {
+		int count = wishListService.getMyWishListItems(memberUuid).size();
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			count);
+	}
 
 	// @PostMapping("/wishlist/{productUuid}/{memberUuid}/add")
 	// @Operation(summary = "상품 장바구니 추가")

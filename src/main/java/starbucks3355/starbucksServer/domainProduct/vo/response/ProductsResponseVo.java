@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductsResponseVo {
 	private String productUuid;
-	private String productName;
-	private String productDescription;
-	private String productInfo;
+	// private String productName;
+	// private String productDescription;
+	// private String productInfo;
 
 }

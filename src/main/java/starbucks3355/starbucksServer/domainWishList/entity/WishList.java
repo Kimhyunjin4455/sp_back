@@ -1,19 +1,16 @@
-package starbucks3355.starbucksServer.domainProduct.entity;
+package starbucks3355.starbucksServer.domainWishList.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import starbucks3355.starbucksServer.common.entity.BaseEntity;
 
 @Entity
 @Getter
@@ -21,16 +18,24 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class WishList { //out
+public class WishList extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
-	private int quantity;
+	private int limitQuantity;
 	private String memberUuid;
 	@Builder.Default
-	private Boolean isChecked = false;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "option_id", nullable = false)
-	private ProductDetails productOptions;
+	private boolean isChecked = true;
+	@Column(length = 100)
+	private String productUuid;
+	private Integer currentQuantity;
+
+	public void updateCurrentQuantity(int currentQuantity) {
+		this.currentQuantity = currentQuantity;
+	}
+
+	public void updateChecked(boolean isChecked) {
+		this.isChecked = isChecked;
+	}
 }

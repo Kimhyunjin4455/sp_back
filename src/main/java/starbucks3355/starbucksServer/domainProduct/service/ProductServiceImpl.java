@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 		productRepository.save(productRequestDto.dtoToEntity(productUuid));
 	}
 
-	@Override // 수정 필요
+	@Override
 	public Slice<ProductsResponseDto> getProducts(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Slice<Product> products = productRepository.findAll(pageable);

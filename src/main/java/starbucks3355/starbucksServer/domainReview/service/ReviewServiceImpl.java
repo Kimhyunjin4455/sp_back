@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
@@ -115,6 +116,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
+	@Transactional
 	public void modifyReview(ReviewRequestDto reviewRequestDto, String reviewUuid) {
 		// String reviewUuid = UUID.randomUUID().toString();
 		Optional<Review> result = reviewRepository.findByReviewUuid(reviewUuid);
@@ -129,6 +131,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteReview(Long reviewId) {
 		reviewRepository.deleteById(reviewId);
 	}

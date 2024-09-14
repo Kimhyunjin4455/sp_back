@@ -28,9 +28,9 @@ public class ProductsResponseDto {
 	public ProductsResponseVo dtoToResponseVo() {
 		return ProductsResponseVo.builder()
 			.productUuid(productUuid)
-			.productName(productName)
-			.productDescription(productDescription)
-			.productInfo(productInfo)
+			// .productName(productName)
+			// .productDescription(productDescription)
+			// .productInfo(productInfo)
 			.build();
 	}
 

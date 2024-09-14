@@ -34,4 +34,8 @@ public class WishList extends BaseEntity {
 	public void updateCurrentQuantity(int currentQuantity) {
 		this.currentQuantity = currentQuantity;
 	}
+
+	public void updateChecked(boolean isChecked) {
+		this.isChecked = isChecked;
+	}
 }

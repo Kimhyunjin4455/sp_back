@@ -17,14 +17,17 @@ public interface WishListService {
 	// 선택된 것들에 대한 삭제
 	void deleteWishListChecked(String memberUuid);
 
-	// 수량 업데이트
-	void updateWishList(String memberUuid, String productUuid, int quantity);
+	// 수량 1 더하기
+	void modifyAddWishList(String memberUuid, String productUuid);
+
+	// 수량 1 빼기
+	void modifySubtractWishList(String memberUuid, String productUuid);
 
 	// 한 상품에 대한 체크 여부 변경
-	void updateWishListCheck(String memberUuid, String productUuid, boolean isChecked);
+	void modifyWishListCheck(String memberUuid, String productUuid);
 
 	//모두 체크 여부 설정
-	void updateWishListAllCheck(String memberUuid, boolean isChecked);
+	void modifyWishListAllCheck(String memberUuid);
 
 	//모두 체크 여부 해제
 	void updateWishListAllUnCheck(String memberUuid);

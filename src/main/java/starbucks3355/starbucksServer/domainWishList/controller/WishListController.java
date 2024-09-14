@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,6 +98,74 @@ public class WishListController {
 		log.info("check: {}", wishListRequestDto.isChecked());
 
 		wishListService.addWishListAtProductPage(wishListRequestDto, quantity);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
+
+	@PutMapping("/wishlist/{memberUuid}/{productUuid}/add")
+	@Operation(summary = "장바구니의 특정 품목 수량 1 증가")
+	public CommonResponseEntity<Void> addProductToWishList(
+		@PathVariable String memberUuid,
+		@PathVariable String productUuid) {
+
+		wishListService.modifyAddWishList(memberUuid, productUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
+
+	@PutMapping("/wishlist/{memberUuid}/{productUuid}/subtract")
+	@Operation(summary = "장바구니의 특정 품목 수량 1 감소")
+	public CommonResponseEntity<Void> subtractProductFromWishList(
+		@PathVariable String memberUuid,
+		@PathVariable String productUuid) {
+
+		wishListService.modifySubtractWishList(memberUuid, productUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
+
+	@PutMapping("/wishlist/{memberUuid}/{productUuid}/check")
+	@Operation(summary = "장바구니의 특정 품목 체크")
+	public CommonResponseEntity<Void> checkProductFromWishList(
+		@PathVariable String memberUuid,
+		@PathVariable String productUuid) {
+
+		wishListService.modifyWishListCheck(memberUuid, productUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
+
+	@PutMapping("/wishlist/{memberUuid}/checkAll")
+	@Operation(summary = "장바구니 전체 체크")
+	public CommonResponseEntity<Void> checkAllProductFromWishList(
+		@PathVariable String memberUuid) {
+
+		wishListService.modifyWishListAllCheck(memberUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
+
+	@PutMapping("/wishlist/{memberUuid}/unCheckAll")
+	@Operation(summary = "장바구니 전체 체크 해제")
+	public CommonResponseEntity<Void> unCheckAllProductFromWishList(
+		@PathVariable String memberUuid) {
+
+		wishListService.updateWishListAllUnCheck(memberUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

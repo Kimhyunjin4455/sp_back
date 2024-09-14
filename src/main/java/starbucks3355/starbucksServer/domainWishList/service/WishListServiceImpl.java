@@ -1,5 +1,6 @@
 package starbucks3355.starbucksServer.domainWishList.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class WishListServiceImpl implements WishListService {
 
 		if (myWishList != null) {
 			return myWishList.stream()
+				.sorted(Comparator.comparing(WishList::getModDate).reversed())
 				.map(myWishListItem -> WishListResponseDto.builder()
 					.productUuid(myWishListItem.getProductUuid())
 					.memberUuid(myWishListItem.getMemberUuid())
@@ -70,23 +72,57 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
-	public void updateWishList(String userId, String productUuid, int quantity) {
+	public void modifyAddWishList(String memberUuid, String productUuid) {
+		wishListRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid)
+			.ifPresent(wishList -> {
+				if (wishList.getCurrentQuantity() < wishList.getLimitQuantity()) {
+					wishList.updateCurrentQuantity(wishList.getCurrentQuantity() + 1);
+					wishListRepository.save(wishList);
+				} else {
+					throw new RuntimeException("상품의 최대 수량을 초과할 수 없습니다.");
+				}
+			});
+	}
+
+	@Override
+	public void modifySubtractWishList(String memberUuid, String productUuid) {
+		wishListRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid)
+			.ifPresent(wishList -> {
+				if (wishList.getCurrentQuantity() > 1) {
+					wishList.updateCurrentQuantity(wishList.getCurrentQuantity() - 1);
+					wishListRepository.save(wishList);
+				} else {
+					throw new RuntimeException("상품의 최소 수량은 1개입니다.");
+				}
+			});
+	}
+
+	@Override
+	public void modifyWishListCheck(String memberUuid, String productUuid) {
+		Optional<WishList> result = wishListRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid);
+
+		WishList wishList = result.get();
+
+		wishList.updateChecked(!wishList.isChecked());
+	}
+
+	@Override
+	public void modifyWishListAllCheck(String memberUuid) {
+		List<WishList> wishLists = wishListRepository.findByMemberUuid(memberUuid);
+
+		wishLists.forEach(wishList -> {
+			wishList.updateChecked(true);
+		});
 
 	}
 
 	@Override
-	public void updateWishListCheck(String userId, String productUuid, boolean isChecked) {
+	public void updateWishListAllUnCheck(String memberUuid) {
+		List<WishList> wishLists = wishListRepository.findByMemberUuid(memberUuid);
 
-	}
-
-	@Override
-	public void updateWishListAllCheck(String userId, boolean isChecked) {
-
-	}
-
-	@Override
-	public void updateWishListAllUnCheck(String userId) {
-
+		wishLists.forEach(wishList -> {
+			wishList.updateChecked(false);
+		});
 	}
 
 	// @Override

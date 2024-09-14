@@ -5,15 +5,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
 import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
 import starbucks3355.starbucksServer.domainWishList.entity.WishList;
 import starbucks3355.starbucksServer.domainWishList.repository.WishListRepository;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class WishListServiceImpl implements WishListService {
 	private final WishListRepository wishListRepository;
@@ -72,6 +74,7 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
+	@Transactional
 	public void modifyAddWishList(String memberUuid, String productUuid) {
 		wishListRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid)
 			.ifPresent(wishList -> {
@@ -85,6 +88,7 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
+	@Transactional
 	public void modifySubtractWishList(String memberUuid, String productUuid) {
 		wishListRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid)
 			.ifPresent(wishList -> {
@@ -98,15 +102,18 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
+	@Transactional
 	public void modifyWishListCheck(String memberUuid, String productUuid) {
 		Optional<WishList> result = wishListRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid);
 
 		WishList wishList = result.get();
 
 		wishList.updateChecked(!wishList.isChecked());
+		
 	}
 
 	@Override
+	@Transactional
 	public void modifyWishListAllCheck(String memberUuid) {
 		List<WishList> wishLists = wishListRepository.findByMemberUuid(memberUuid);
 
@@ -117,6 +124,7 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
+	@Transactional
 	public void updateWishListAllUnCheck(String memberUuid) {
 		List<WishList> wishLists = wishListRepository.findByMemberUuid(memberUuid);
 

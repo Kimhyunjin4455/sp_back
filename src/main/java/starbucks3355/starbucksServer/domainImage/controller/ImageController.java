@@ -91,7 +91,7 @@ public class ImageController {
 		);
 	}
 
-	@DeleteMapping("/deleteAllMedia/{otherUuid}")
+	@DeleteMapping("/")
 	// 개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제(수정의 경우 기존 등록된 모든 이미지리스트를 삭제하고 새 리스트을 입력할 것)
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제")
 	public CommonResponseEntity<Void> deleteAllImage(

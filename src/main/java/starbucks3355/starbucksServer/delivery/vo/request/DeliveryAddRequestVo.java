@@ -16,11 +16,11 @@ public class DeliveryAddRequestVo {
 	private String phone1;
 	private String phone2;
 	private String message;
-	private boolean isBase;
+	private boolean baseAddress;
 
 	@Builder
 	public DeliveryAddRequestVo(String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean isBase) {
+		String phone1, String phone2, String message, boolean baseAddress) {
 		this.nickname = nickname;
 		this.postNumber = postNumber;
 		this.address = address;
@@ -28,6 +28,6 @@ public class DeliveryAddRequestVo {
 		this.phone1 = phone1;
 		this.phone2 = phone2;
 		this.message = message;
-		this.isBase = isBase;
+		this.baseAddress = baseAddress;
 	}
 }

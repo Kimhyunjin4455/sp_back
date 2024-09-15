@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.delivery.entity;
+package starbucks3355.starbucksServer.shipping.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Getter
-public class Delivery {
+public class ShippingAddress {
 	@Id
 	@GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
 	private Long deliveryId;
@@ -37,7 +37,7 @@ public class Delivery {
 	private String uuid; // 회원의 uuid 값 받아오기
 
 	@Builder
-	public Delivery(Long deliveryId, String nickname, String postNumber, String address, String detailAddress,
+	public ShippingAddress(Long deliveryId, String nickname, String postNumber, String address, String detailAddress,
 		String phone1, String phone2, String message, boolean baseAddress, String uuid) {
 		this.deliveryId = deliveryId;
 		this.nickname = nickname;

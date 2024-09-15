@@ -1,6 +1,4 @@
-package starbucks3355.starbucksServer.domainMember.entity;
-
-import java.util.UUID;
+package starbucks3355.starbucksServer.shipping.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MemberAddresses {
+public class ShippingMemberAddress {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)

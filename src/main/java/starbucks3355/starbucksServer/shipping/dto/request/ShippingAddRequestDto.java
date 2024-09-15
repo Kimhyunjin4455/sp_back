@@ -1,15 +1,15 @@
-package starbucks3355.starbucksServer.delivery.dto.request;
+package starbucks3355.starbucksServer.shipping.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import starbucks3355.starbucksServer.delivery.entity.Delivery;
+import starbucks3355.starbucksServer.shipping.entity.ShippingAddress;
 
 @Getter
 @NoArgsConstructor
 @ToString
-public class DeliveryAddRequestDto {
+public class ShippingAddRequestDto {
 	private String nickname;
 	private String postNumber;
 	private String address;
@@ -21,7 +21,7 @@ public class DeliveryAddRequestDto {
 	private String uuid;
 
 	@Builder
-	public DeliveryAddRequestDto(String nickname, String postNumber, String address, String detailAddress,
+	public ShippingAddRequestDto(String nickname, String postNumber, String address, String detailAddress,
 		String phone1, String phone2, String message, boolean baseAddress, String uuid) {
 		this.nickname = nickname;
 		this.postNumber = postNumber;
@@ -34,8 +34,8 @@ public class DeliveryAddRequestDto {
 		this.uuid = uuid;
 	}
 
-	public Delivery toEntity(String memberUuid, DeliveryAddRequestDto deliveryAddRequestDto) {
-		return Delivery.builder()
+	public ShippingAddress toEntity(String memberUuid, ShippingAddRequestDto shippingAddRequestDto) {
+		return ShippingAddress.builder()
 			.nickname(nickname)
 			.postNumber(postNumber)
 			.address(address)

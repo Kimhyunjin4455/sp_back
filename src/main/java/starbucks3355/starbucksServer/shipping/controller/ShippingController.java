@@ -1,13 +1,13 @@
-package starbucks3355.starbucksServer.delivery.controller;
+package starbucks3355.starbucksServer.shipping.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,24 +16,27 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
-import starbucks3355.starbucksServer.delivery.dto.request.DeliveryAddRequestDto;
-import starbucks3355.starbucksServer.delivery.dto.response.DeliveryAllResponseDto;
-import starbucks3355.starbucksServer.delivery.dto.response.DeliveryBaseResponseDto;
-import starbucks3355.starbucksServer.delivery.service.DeliveryService;
-import starbucks3355.starbucksServer.delivery.vo.request.DeliveryAddRequestVo;
-import starbucks3355.starbucksServer.delivery.vo.response.DeliveryAllResponseVo;
-import starbucks3355.starbucksServer.delivery.vo.response.DeliveryBaseResponseVo;
+import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingAllResponseDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
+import starbucks3355.starbucksServer.shipping.service.ShippingService;
+import starbucks3355.starbucksServer.shipping.vo.request.ShippingAddRequestVo;
+import starbucks3355.starbucksServer.shipping.vo.response.ShippingAllResponseVo;
+import starbucks3355.starbucksServer.shipping.vo.response.ShippingBaseResponseVo;
 
 @RestController
-@RequestMapping("/api/v1/delivery")
+@RequestMapping("/api/v1/shipping")
 @Tag(name = "배송지 API", description = "배송지 API")
 @RequiredArgsConstructor
 @Slf4j
-public class DeliveryController {
-	private final DeliveryService deliveryService;
+//@AuthenticationPrincipal
+
+public class ShippingController {
+	private final ShippingService shippingService;
 	private final JwtTokenProvider jwtTokenProvider;
 
 	//
@@ -42,20 +45,20 @@ public class DeliveryController {
 	@Operation(summary = "배송지 추가", description = "배송지를 추가합니다.")
 	public CommonResponseEntity<Void> addDelivery(
 		@RequestParam String memberUuid,
-		@RequestBody DeliveryAddRequestVo deliveryAddRequestVo) {
+		@RequestBody ShippingAddRequestVo shippingAddRequestVo) {
 
-		DeliveryAddRequestDto deliveryAddRequestDto = DeliveryAddRequestDto.builder()
-			.nickname(deliveryAddRequestVo.getNickname())
-			.postNumber(deliveryAddRequestVo.getPostNumber())
-			.address(deliveryAddRequestVo.getAddress())
-			.detailAddress(deliveryAddRequestVo.getDetailAddress())
-			.phone1(deliveryAddRequestVo.getPhone1())
-			.phone2(deliveryAddRequestVo.getPhone2())
-			.message(deliveryAddRequestVo.getMessage())
-			.baseAddress(deliveryAddRequestVo.isBaseAddress())
+		ShippingAddRequestDto shippingAddRequestDto = ShippingAddRequestDto.builder()
+			.nickname(shippingAddRequestVo.getNickname())
+			.postNumber(shippingAddRequestVo.getPostNumber())
+			.address(shippingAddRequestVo.getAddress())
+			.detailAddress(shippingAddRequestVo.getDetailAddress())
+			.phone1(shippingAddRequestVo.getPhone1())
+			.phone2(shippingAddRequestVo.getPhone2())
+			.message(shippingAddRequestVo.getMessage())
+			.baseAddress(shippingAddRequestVo.isBaseAddress())
 			.build();
 
-		deliveryService.createDelivery(memberUuid, deliveryAddRequestDto);
+		shippingService.createDelivery(memberUuid, shippingAddRequestDto);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
@@ -65,31 +68,33 @@ public class DeliveryController {
 
 	@GetMapping("/all")
 	@Operation(summary = "배송지 전체 조회", description = "등록된 배송지를 전체 조회합니다.")
-	public CommonResponseEntity<List<DeliveryAllResponseVo>> getAllDelivery() {
+	public CommonResponseEntity<List<ShippingAllResponseVo>> getAllDelivery() {
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			deliveryService.getAllDelivery()
+			shippingService.getAllDelivery()
 				.stream()
-				.map(DeliveryAllResponseDto::toVo)
+				.map(ShippingAllResponseDto::toVo)
 				.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/base")
 	@Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
-	public CommonResponseEntity<DeliveryBaseResponseVo> getBaseDelivery(
-		@RequestHeader("Authorization") String accessToken) {
+	public CommonResponseEntity<ShippingBaseResponseVo> getBaseDelivery(
+		//밑에 @쓰면 AuthUserDetail것을 가져와서 사용 가능
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
-		DeliveryBaseResponseDto deliveryBaseResponseDto = deliveryService.getBaseDelivery(
-			jwtTokenProvider.parseUuid(accessToken));
+		//인증된 사용자의 uuid를 가져와서 사용 가능
+		String userUuid = authUserDetail.getUuid();
+		ShippingBaseResponseDto shippingBaseResponseDto = shippingService.getBaseDelivery(userUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			DeliveryBaseResponseVo.builder()
-				.deliveryId(deliveryBaseResponseDto.getDeliveryId())
-				.address(deliveryBaseResponseDto.getAddress())
-				.detailAddress(deliveryBaseResponseDto.getDetailAddress())
+			ShippingBaseResponseVo.builder()
+				.deliveryId(shippingBaseResponseDto.getDeliveryId())
+				.address(shippingBaseResponseDto.getAddress())
+				.detailAddress(shippingBaseResponseDto.getDetailAddress())
 				.build()
 		);
 	}

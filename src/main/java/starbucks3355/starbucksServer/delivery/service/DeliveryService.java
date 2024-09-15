@@ -11,6 +11,6 @@ public interface DeliveryService {
 
 	List<DeliveryAllResponseDto> getAllDelivery();
 
-	DeliveryBaseResponseDto getBaseDelivery(Long deliveryId);
+	DeliveryBaseResponseDto getBaseDelivery(String uuid);
 
 }

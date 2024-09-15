@@ -19,4 +19,5 @@ public class DeliveryBaseResponseVo {
 		this.address = address;
 		this.detailAddress = detailAddress;
 	}
+
 }

@@ -17,11 +17,11 @@ public class DeliveryAddRequestDto {
 	private String phone1;
 	private String phone2;
 	private String message;
-	private boolean isBase;
+	private boolean baseAddress;
 
 	@Builder
 	public DeliveryAddRequestDto(String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean isBase) {
+		String phone1, String phone2, String message, boolean baseAddress) {
 		this.nickname = nickname;
 		this.postNumber = postNumber;
 		this.address = address;
@@ -29,7 +29,7 @@ public class DeliveryAddRequestDto {
 		this.phone1 = phone1;
 		this.phone2 = phone2;
 		this.message = message;
-		this.isBase = isBase;
+		this.baseAddress = baseAddress;
 	}
 
 	public Delivery toEntity() {
@@ -41,7 +41,7 @@ public class DeliveryAddRequestDto {
 			.phone1(phone1)
 			.phone2(phone2)
 			.message(message)
-			.isBase(isBase)
+			.baseAddress(baseAddress)
 			.build();
 	}
 }

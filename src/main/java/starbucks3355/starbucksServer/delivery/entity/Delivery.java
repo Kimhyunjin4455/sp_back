@@ -31,12 +31,14 @@ public class Delivery {
 	private String phone2; // 전화번호2
 	@Column(length = 20)
 	private String message;
-	@Column(name = "base", nullable = false)
-	private boolean isBase; // 기본 배송지 유무
+	@Column(nullable = false)
+	private boolean baseAddress; // 기본 배송지 유무
+	@Column(nullable = false)
+	private String uuid; // 회원의 uuid 값 받아오기
 
 	@Builder
 	public Delivery(Long deliveryId, String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean isBase) {
+		String phone1, String phone2, String message, boolean baseAddress, String uuid) {
 		this.deliveryId = deliveryId;
 		this.nickname = nickname;
 		this.postNumber = postNumber;
@@ -45,7 +47,8 @@ public class Delivery {
 		this.phone1 = phone1;
 		this.phone2 = phone2;
 		this.message = message;
-		this.isBase = isBase;
+		this.baseAddress = baseAddress;
+		this.uuid = uuid;
 	}
 }
 

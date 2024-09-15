@@ -16,18 +16,19 @@ import starbucks3355.starbucksServer.delivery.repository.DeliveryRepository;
 @RequiredArgsConstructor
 public class DeliveryServiceImpl implements DeliveryService {
 
-	private final DeliveryRepository DeliveryRepository;
+	private final DeliveryRepository deliveryRepository;
 
+	// 배송지 추가 생성
 	@Override
 	public void createAddDelivery(DeliveryAddRequestDto deliveryAddRequestDto) {
 
-		if (DeliveryRepository.existsByAddress(deliveryAddRequestDto.getAddress())) {
+		if (deliveryRepository.existsByAddress(deliveryAddRequestDto.getAddress())) {
 			throw new IllegalArgumentException("이미 등록된 주소입니다.");
 		}
 		Delivery delivery = deliveryAddRequestDto.toEntity();
 
 		try {
-			DeliveryRepository.save(delivery);
+			deliveryRepository.save(delivery);
 		} catch (IllegalArgumentException e) {
 			throw e;
 		} catch (Exception e) {
@@ -35,9 +36,10 @@ public class DeliveryServiceImpl implements DeliveryService {
 		}
 	}
 
+	// 모든 배송지 조회
 	@Override
 	public List<DeliveryAllResponseDto> getAllDelivery() {
-		return DeliveryRepository.findAll(
+		return deliveryRepository.findAll(
 				Sort.by(Sort.Direction.ASC, "deliveryId"))
 			.stream()
 			.map(
@@ -51,24 +53,19 @@ public class DeliveryServiceImpl implements DeliveryService {
 
 	}
 
+	// 기본 배송지 조회
 	@Override
-	public DeliveryBaseResponseDto getBaseDelivery(Long deliveryId) {
-		if (DeliveryRepository.findByDeliveryIdAndIsBase(null, true).isEmpty()) {
-			throw new IllegalArgumentException("기본 배송지가 없습니다.");
-		}
-		try {
-			Delivery delivery = DeliveryRepository.findByDeliveryId(deliveryId);
-			return DeliveryBaseResponseDto.builder()
-				.deliveryId(delivery.getDeliveryId())
-				.address(delivery.getAddress())
-				.detailAddress(delivery.getDetailAddress())
-				.build();
+	public DeliveryBaseResponseDto getBaseDelivery(String uuid) {
 
-		} catch (IllegalArgumentException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new IllegalArgumentException("기본 배송지 조회에 실패했습니다.");
-		}
+		Delivery delivery = deliveryRepository.findBaseDelivery(uuid)
+			.orElseThrow(() -> new IllegalArgumentException("기본 배송지가 없습니다. "));
+
+		return DeliveryBaseResponseDto.builder()
+			.deliveryId(delivery.getDeliveryId())
+			.address(delivery.getAddress())
+			.detailAddress(delivery.getDetailAddress())
+			.build();
+
 	}
 
 }

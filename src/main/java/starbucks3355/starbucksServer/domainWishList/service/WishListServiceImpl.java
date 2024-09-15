@@ -9,7 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.domainProduct.entity.ProductDefaultDisCount;
+import starbucks3355.starbucksServer.domainProduct.entity.ProductDetails;
+import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
+import starbucks3355.starbucksServer.domainProduct.repository.ProductDetailsRepository;
 import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
+import starbucks3355.starbucksServer.domainWishList.dto.out.TotalInfoResponseDto;
 import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
 import starbucks3355.starbucksServer.domainWishList.entity.WishList;
 import starbucks3355.starbucksServer.domainWishList.repository.WishListRepository;
@@ -19,6 +24,10 @@ import starbucks3355.starbucksServer.domainWishList.repository.WishListRepositor
 @RequiredArgsConstructor
 public class WishListServiceImpl implements WishListService {
 	private final WishListRepository wishListRepository;
+
+	private final ProductDetailsRepository productDetailsRepository;
+
+	private final DiscountRepository discountRepository;
 
 	@Override
 	public List<WishListResponseDto> getMyWishListItems(String memberUuid) {
@@ -184,6 +193,48 @@ public class WishListServiceImpl implements WishListService {
 			wishListRepository.save(
 				wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid()));
 		}
+	}
+
+	@Override
+	public TotalInfoResponseDto getWishListTotalPriceAndDiscount(String memberUuid) {
+		// 회원의 장바구니 레포지토리에서 is_checked가 true인 상품들을 가져와서 다른 레포지토리에 그 상품에 대한 가격과 할인값을 가져와서 총 계산
+		List<WishList> wishLists = wishListRepository.findByMemberUuid(memberUuid);
+
+		int totalPrice = 0;
+		int totalDiscount = 0;
+
+		for (WishList wishList : wishLists) {
+			if (wishList.isChecked() == true) {
+				ProductDetails details = productDetailsRepository.findByProductUuid(wishList.getProductUuid())
+					.orElseThrow(
+						() -> new RuntimeException("Product not found for UUID: " + wishList.getProductUuid()));
+
+				int productPrice = details.getProductPrice();
+
+				log.info("productPriceInfo: {}, {}개", productPrice, wishList.getCurrentQuantity());
+				totalPrice += productPrice * wishList.getCurrentQuantity();
+
+				if (discountRepository.findByProductUuid(
+					wishList.getProductUuid()).isPresent()) {
+					ProductDefaultDisCount productDefaultDisCount = discountRepository.findByProductUuid(
+						wishList.getProductUuid()).get();
+
+					int productDiscount = productDefaultDisCount.getDiscountValue();
+					log.info("할인률: {}", productDiscount);
+					log.info("할인금액: {}", (productPrice * (productDiscount * 0.01)));
+					totalDiscount += (productPrice * (productDiscount * 0.01)) * wishList.getCurrentQuantity();
+				}
+
+			}
+		}
+
+		log.info("totalPrice: {}", totalPrice);
+		log.info("totalDiscount: {}", totalDiscount);
+
+		return TotalInfoResponseDto.builder()
+			.totalPrice(totalPrice)
+			.totalDiscount(totalDiscount)
+			.build();
 	}
 
 }

@@ -32,7 +32,7 @@ public class Delivery {
 	@Column(length = 20)
 	private String message;
 	@Column(nullable = false)
-	private boolean baseAddress; // 기본 배송지 유무
+	private boolean baseAddress = true; // 기본 배송지 유무
 	@Column(nullable = false)
 	private String uuid; // 회원의 uuid 값 받아오기
 

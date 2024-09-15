@@ -19,13 +19,32 @@ public class DeliveryServiceImpl implements DeliveryService {
 	private final DeliveryRepository deliveryRepository;
 
 	// 배송지 추가 생성
+	// @Override
+	// public void createAddDelivery(DeliveryAddRequestDto deliveryAddRequestDto) {
+	//
+	// 	if (deliveryRepository.existsByAddress(deliveryAddRequestDto.getAddress())) {
+	// 		throw new IllegalArgumentException("이미 등록된 주소입니다.");
+	// 	}
+	// 	Delivery delivery = deliveryAddRequestDto.toEntity();
+	//
+	// 	try {
+	// 		deliveryRepository.save(delivery);
+	// 	} catch (IllegalArgumentException e) {
+	// 		throw e;
+	// 	} catch (Exception e) {
+	// 		throw new IllegalArgumentException("주소 등록에 실패했습니다.");
+	// 	}
+	// }
+
+	// 배송지 추가
 	@Override
-	public void createAddDelivery(DeliveryAddRequestDto deliveryAddRequestDto) {
+	public void createDelivery(String memberUuid, DeliveryAddRequestDto deliveryAddRequestDto) {
 
 		if (deliveryRepository.existsByAddress(deliveryAddRequestDto.getAddress())) {
 			throw new IllegalArgumentException("이미 등록된 주소입니다.");
 		}
-		Delivery delivery = deliveryAddRequestDto.toEntity();
+
+		Delivery delivery = deliveryAddRequestDto.toEntity(memberUuid, deliveryAddRequestDto);
 
 		try {
 			deliveryRepository.save(delivery);
@@ -57,7 +76,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@Override
 	public DeliveryBaseResponseDto getBaseDelivery(String uuid) {
 
-		Delivery delivery = deliveryRepository.findBaseDelivery(uuid)
+		Delivery delivery = deliveryRepository.findBaseDeliveryByUuid(uuid)
 			.orElseThrow(() -> new IllegalArgumentException("기본 배송지가 없습니다. "));
 
 		return DeliveryBaseResponseDto.builder()

@@ -18,10 +18,11 @@ public class DeliveryAddRequestDto {
 	private String phone2;
 	private String message;
 	private boolean baseAddress;
+	private String uuid;
 
 	@Builder
 	public DeliveryAddRequestDto(String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean baseAddress) {
+		String phone1, String phone2, String message, boolean baseAddress, String uuid) {
 		this.nickname = nickname;
 		this.postNumber = postNumber;
 		this.address = address;
@@ -30,9 +31,10 @@ public class DeliveryAddRequestDto {
 		this.phone2 = phone2;
 		this.message = message;
 		this.baseAddress = baseAddress;
+		this.uuid = uuid;
 	}
 
-	public Delivery toEntity() {
+	public Delivery toEntity(String memberUuid, DeliveryAddRequestDto deliveryAddRequestDto) {
 		return Delivery.builder()
 			.nickname(nickname)
 			.postNumber(postNumber)
@@ -42,6 +44,7 @@ public class DeliveryAddRequestDto {
 			.phone2(phone2)
 			.message(message)
 			.baseAddress(baseAddress)
+			.uuid(memberUuid)
 			.build();
 	}
 }

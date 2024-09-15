@@ -7,10 +7,12 @@ import starbucks3355.starbucksServer.delivery.dto.response.DeliveryAllResponseDt
 import starbucks3355.starbucksServer.delivery.dto.response.DeliveryBaseResponseDto;
 
 public interface DeliveryService {
-	void createAddDelivery(DeliveryAddRequestDto deliveryAddRequestDto);
+	//void createAddDelivery(DeliveryAddRequestDto deliveryAddRequestDto);
 
 	List<DeliveryAllResponseDto> getAllDelivery();
 
 	DeliveryBaseResponseDto getBaseDelivery(String uuid);
+
+	void createDelivery(String memberUuid, DeliveryAddRequestDto deliveryAddRequestDto);
 
 }

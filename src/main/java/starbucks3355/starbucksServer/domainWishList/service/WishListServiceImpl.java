@@ -109,28 +109,25 @@ public class WishListServiceImpl implements WishListService {
 		WishList wishList = result.get();
 
 		wishList.updateChecked(!wishList.isChecked());
-		
-	}
-
-	@Override
-	@Transactional
-	public void modifyWishListAllCheck(String memberUuid) {
-		List<WishList> wishLists = wishListRepository.findByMemberUuid(memberUuid);
-
-		wishLists.forEach(wishList -> {
-			wishList.updateChecked(true);
-		});
 
 	}
 
 	@Override
 	@Transactional
-	public void updateWishListAllUnCheck(String memberUuid) {
+	public void modifyWishListAllSelect(String memberUuid) {
 		List<WishList> wishLists = wishListRepository.findByMemberUuid(memberUuid);
 
-		wishLists.forEach(wishList -> {
-			wishList.updateChecked(false);
-		});
+		// wishLists에 대해 isChecked의 값이 false 인게 하나라도 존재한다면 모든 wishList의 isChecked를 true로 변경
+		if (wishLists.stream().anyMatch(wishList -> wishList.isChecked() == false)) {
+			wishLists.forEach(wishList -> {
+				wishList.updateChecked(true);
+			});
+		} else {
+			wishLists.forEach(wishList -> {
+				wishList.updateChecked(false);
+			});
+		}
+
 	}
 
 	// @Override

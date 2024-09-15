@@ -152,20 +152,7 @@ public class WishListController {
 	public CommonResponseEntity<Void> checkAllProductFromWishList(
 		@PathVariable String memberUuid) {
 
-		wishListService.modifyWishListAllCheck(memberUuid);
-
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			null);
-	}
-
-	@PutMapping("/wishlist/{memberUuid}/unCheckAll")
-	@Operation(summary = "장바구니 전체 체크 해제")
-	public CommonResponseEntity<Void> unCheckAllProductFromWishList(
-		@PathVariable String memberUuid) {
-
-		wishListService.updateWishListAllUnCheck(memberUuid);
+		wishListService.modifyWishListAllSelect(memberUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

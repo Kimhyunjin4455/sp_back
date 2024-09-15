@@ -113,4 +113,12 @@ public class SwaggerConfig {
 			.build();
 	}
 
+	@Bean
+	GroupedOpenApi WishListAPI() {
+		return GroupedOpenApi.builder()
+			.group("장바구니")
+			.pathsToMatch("/api/v1/wishList/**")
+			.build();
+	}
+
 }

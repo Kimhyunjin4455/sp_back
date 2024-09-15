@@ -19,9 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
+import starbucks3355.starbucksServer.domainWishList.dto.out.TotalInfoResponseDto;
 import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
 import starbucks3355.starbucksServer.domainWishList.service.WishListService;
 import starbucks3355.starbucksServer.domainWishList.vo.in.WishListRequestVo;
+import starbucks3355.starbucksServer.domainWishList.vo.out.TotalInfoResponseVo;
 import starbucks3355.starbucksServer.domainWishList.vo.out.WishListResponseVo;
 
 @Slf4j
@@ -58,6 +60,18 @@ public class WishListController {
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			count);
+	}
+
+	@GetMapping("/wishlist/{memberUuid}/totalInfo")
+	@Operation(summary = "나의 상품 장바구니 품목의 총 가격, 총 할인액 조회")
+	public CommonResponseEntity<TotalInfoResponseVo> getMyWishListTotalInfo(
+		@PathVariable String memberUuid) {
+		TotalInfoResponseDto totalInfoResponseDto = wishListService.getWishListTotalPriceAndDiscount(memberUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			totalInfoResponseDto.dtoToResponseVo());
 	}
 
 	// @PostMapping("/wishlist/{productUuid}/{memberUuid}/add")
@@ -152,20 +166,7 @@ public class WishListController {
 	public CommonResponseEntity<Void> checkAllProductFromWishList(
 		@PathVariable String memberUuid) {
 
-		wishListService.modifyWishListAllCheck(memberUuid);
-
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			null);
-	}
-
-	@PutMapping("/wishlist/{memberUuid}/unCheckAll")
-	@Operation(summary = "장바구니 전체 체크 해제")
-	public CommonResponseEntity<Void> unCheckAllProductFromWishList(
-		@PathVariable String memberUuid) {
-
-		wishListService.updateWishListAllUnCheck(memberUuid);
+		wishListService.modifyWishListAllSelect(memberUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

@@ -15,7 +15,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
 	// @Query("select d from Delivery d where d.uuid = :uuid and d.baseAddress = true")
 	// Optional<Delivery> findBaseDelivery(@Param("uuid") String uuid);
 
-	@Query("select d from Delivery d where d.uuid= :uuid and d.baseAddress = true ")
+	@Query("select d from Delivery d JOIN MemberAddresses m on d.uuid =m.uuid where d.uuid= :uuid and d.baseAddress =true and m.basicAddress =true ")
 	Optional<Delivery> findBaseDeliveryByUuid(@Param("uuid") String uuid);
 
 	Delivery findByDeliveryId(Long deliveryId);

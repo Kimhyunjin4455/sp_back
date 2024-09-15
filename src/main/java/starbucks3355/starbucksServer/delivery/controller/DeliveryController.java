@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,24 +75,24 @@ public class DeliveryController {
 				.collect(Collectors.toList()));
 	}
 
-	// @GetMapping("/base")
-	// @Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
-	// public CommonResponseEntity<DeliveryBaseResponseVo> getBaseDelivery(
-	// 	@RequestHeader("Authorization") String accessToken) {
-	//
-	// 	DeliveryBaseResponseDto deliveryBaseResponseDto = deliveryService.getBaseDelivery(
-	// 		jwtTokenProvider.validateAndGetUserUuid(accessToken));
-	//
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		DeliveryBaseResponseVo.builder()
-	// 			.deliveryId(deliveryBaseResponseDto.getDeliveryId())
-	// 			.address(deliveryBaseResponseDto.getAddress())
-	// 			.detailAddress(deliveryBaseResponseDto.getDetailAddress())
-	// 			.build()
-	// 	);
-	// }
+	@GetMapping("/base")
+	@Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
+	public CommonResponseEntity<DeliveryBaseResponseVo> getBaseDelivery(
+		@RequestHeader("Authorization") String accessToken) {
+
+		DeliveryBaseResponseDto deliveryBaseResponseDto = deliveryService.getBaseDelivery(
+			jwtTokenProvider.parseUuid(accessToken));
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			DeliveryBaseResponseVo.builder()
+				.deliveryId(deliveryBaseResponseDto.getDeliveryId())
+				.address(deliveryBaseResponseDto.getAddress())
+				.detailAddress(deliveryBaseResponseDto.getDetailAddress())
+				.build()
+		);
+	}
 
 	// @RequestHeader("Authorization") String authorizationHeader
 	// if (authorizationHeader == null) {
@@ -106,23 +106,23 @@ public class DeliveryController {
 	// // JWT 토큰을 검증하고 사용자 UUID 추출
 	// String userUuid = jwtTokenProvider.parseUuid(accessToken);
 
-	@GetMapping("/base/{uuid}")
-	@Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
-	public CommonResponseEntity<DeliveryBaseResponseVo> getBaseDelivery(
-		@PathVariable String uuid) {
-
-		// UUID로 기본 배송지 정보를 조회
-		DeliveryBaseResponseDto deliveryBaseResponseDto = deliveryService.getBaseDelivery(uuid);
-
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			DeliveryBaseResponseVo.builder()
-				.deliveryId(deliveryBaseResponseDto.getDeliveryId())
-				.detailAddress(deliveryBaseResponseDto.getDetailAddress())
-				.address(deliveryBaseResponseDto.getAddress())
-				.build()
-		);
-	}
+	// @GetMapping("/base/{uuid}")
+	// @Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
+	// public CommonResponseEntity<DeliveryBaseResponseVo> getBaseDelivery(
+	// 	@PathVariable String uuid) {
+	//
+	// 	// UUID로 기본 배송지 정보를 조회
+	// 	DeliveryBaseResponseDto deliveryBaseResponseDto = deliveryService.getBaseDelivery(uuid);
+	//
+	// 	return new CommonResponseEntity<>(
+	// 		HttpStatus.OK,
+	// 		CommonResponseMessage.SUCCESS.getMessage(),
+	// 		DeliveryBaseResponseVo.builder()
+	// 			.deliveryId(deliveryBaseResponseDto.getDeliveryId())
+	// 			.detailAddress(deliveryBaseResponseDto.getDetailAddress())
+	// 			.address(deliveryBaseResponseDto.getAddress())
+	// 			.build()
+	// 	);
+	// }
 
 }

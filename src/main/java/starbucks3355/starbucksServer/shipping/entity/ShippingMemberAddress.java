@@ -25,16 +25,17 @@ public class ShippingMemberAddress {
 	@Column(nullable = false, length = 255)
 	private String address;
 	@Column(nullable = false)
-	private Boolean basicAddress;
+	private boolean basicAddress;
 	@Column(length = 20)
 	private String nickname;
 	@Column(nullable = false, length = 30, unique = true)
 	private String receiver;
 	@Column(nullable = false, length = 30)
-	private String contact;
+	private String phone1;
 	@Column(length = 30)
-	private String extraContact;
-	@Column(length = 255)
-	private String deliveryMemo;
+	private String phone2;
+	@Column(length = 30)
+	private String message;
+	@Column(nullable = false)
 	private String uuid;
 }

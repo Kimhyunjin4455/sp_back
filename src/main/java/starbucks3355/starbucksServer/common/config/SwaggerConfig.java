@@ -121,4 +121,12 @@ public class SwaggerConfig {
 			.build();
 	}
 
+	@Bean
+	GroupedOpenApi CouponAPI() {
+		return GroupedOpenApi.builder()
+			.group("쿠폰")
+			.pathsToMatch("/api/v1/coupon/**")
+			.build();
+	}
+
 }

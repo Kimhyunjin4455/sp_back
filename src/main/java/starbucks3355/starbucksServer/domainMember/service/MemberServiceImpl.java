@@ -108,15 +108,6 @@ public class MemberServiceImpl implements MemberService {
 				.isLiked(true)
 				.build();
 			likeProductRepository.save(newLike);
-
-			// 찜 추가 이력 저장
-			LikesHistory history = LikesHistory.builder()
-				.uuid(uuid)
-				.productUuid(productUuid)
-				.isLiked(true)
-				.timestamp(LocalDateTime.now())
-				.build();
-			likesHistoryRepository.save(history);
 			return LikesProductResponseDto.builder()
 				.id(newLike.getId())
 				.uuid(newLike.getUuid())

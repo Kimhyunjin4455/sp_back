@@ -2,7 +2,6 @@ package starbucks3355.starbucksServer.domainReview.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
+import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
@@ -108,23 +108,25 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public void addReview(ReviewRequestDto reviewRequestDto) {
-		String reviewUuid = UUID.randomUUID().toString();
-		String productUuid = UUID.randomUUID().toString();
-		String memberUuid = UUID.randomUUID().toString();
+		// String reviewUuid = UUID.randomUUID().toString();
+		// String productUuid = UUID.randomUUID().toString();
+		// String memberUuid = UUID.randomUUID().toString();
 		// 스웨거랑 별개로 리뷰 등록 시에는 리뷰, 상품, 회원의 UUID를 생성하여 저장
-		reviewRepository.save(reviewRequestDto.toEntity(reviewUuid, productUuid, memberUuid));
+
+		reviewRepository.save(reviewRequestDto.toEntity(reviewRequestDto.getReviewUuid(),
+			reviewRequestDto.getProductUuid(), reviewRequestDto.getMemberUuid()));
 	}
 
 	@Override
 	@Transactional
-	public void modifyReview(ReviewRequestDto reviewRequestDto, String reviewUuid) {
+	public void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto, String reviewUuid) {
 		// String reviewUuid = UUID.randomUUID().toString();
 		Optional<Review> result = reviewRepository.findByReviewUuid(reviewUuid);
 
 		Review review = result.get();
 
-		review.modifyContent(reviewRequestDto.getContent());
-		review.modifyReviewScore(reviewRequestDto.getReviewScore());
+		review.modifyContent(reviewModifyRequestDto.getContent());
+		review.modifyReviewScore(reviewModifyRequestDto.getReviewScore());
 
 		reviewRepository.save(review);
 
@@ -132,7 +134,9 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	@Transactional
-	public void deleteReview(Long reviewId) {
+	public void deleteReview(
+		Long reviewId
+	) {
 		reviewRepository.deleteById(reviewId);
 	}
 }

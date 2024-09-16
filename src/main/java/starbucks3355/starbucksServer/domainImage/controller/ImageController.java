@@ -3,6 +3,7 @@ package starbucks3355.starbucksServer.domainImage.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainImage.dto.out.ImageResponseDto;
@@ -63,7 +65,8 @@ public class ImageController {
 	@PostMapping("/addMedia/{otherUuid}")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 추가")
 	public CommonResponseEntity<Void> addImages(
-		@RequestBody List<ImageRequestVo> imageRequestVoList
+		@RequestBody List<ImageRequestVo> imageRequestVoList,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
 		imageService.addImages(imageRequestVoList.stream()
 			.map(ImageRequestVo::voToDto)
@@ -80,7 +83,8 @@ public class ImageController {
 	@DeleteMapping("/deleteMedia/{id}/{otherUuid}")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 삭제")
 	public CommonResponseEntity<Void> deleteImage(
-		@PathVariable Long id, String otherUuid
+		@PathVariable Long id, String otherUuid,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
 		imageService.deleteImage(id, otherUuid);
 
@@ -95,7 +99,8 @@ public class ImageController {
 	// 개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제(수정의 경우 기존 등록된 모든 이미지리스트를 삭제하고 새 리스트을 입력할 것)
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제")
 	public CommonResponseEntity<Void> deleteAllImage(
-		@PathVariable String otherUuid
+		@PathVariable String otherUuid,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail햣
 	) {
 		imageService.deleteAllImages(otherUuid);
 

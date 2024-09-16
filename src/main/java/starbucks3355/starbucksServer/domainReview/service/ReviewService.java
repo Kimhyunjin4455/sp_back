@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Slice;
 
+import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
@@ -20,7 +21,7 @@ public interface ReviewService {
 
 	void addReview(ReviewRequestDto reviewRequestDto);
 
-	void modifyReview(ReviewRequestDto reviewRequestDto, String reviewUuid);
+	void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto, String reviewUuid);
 
 	void deleteReview(Long reviewId); // 베스트 등을 위해 soft delete로 갈지? -> 엔티티 부터 모든 관련된 곳에 필드 추가 요구됨
 

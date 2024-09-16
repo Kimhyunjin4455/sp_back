@@ -3,6 +3,7 @@ package starbucks3355.starbucksServer.domainWishList.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
@@ -34,10 +36,13 @@ import starbucks3355.starbucksServer.domainWishList.vo.out.WishListResponseVo;
 public class WishListController {
 	private final WishListService wishListService;
 
-	@GetMapping("/wishlist/{memberUuid}")
+	@GetMapping("/view")
 	@Operation(summary = " 나의 상품 장바구니 조회")
 	public CommonResponseEntity<List<WishListResponseVo>> getMyWishList(
-		@PathVariable String memberUuid) {
+		@AuthenticationPrincipal AuthUserDetail authUserDetail
+	) {
+		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
+
 		List<WishListResponseDto> wishListRequestDtoList = wishListService.getMyWishListItems(memberUuid);
 
 		return new CommonResponseEntity<>(
@@ -50,10 +55,13 @@ public class WishListController {
 	}
 
 	// 상품 품목의 갯수를 response data로 반환할 Get api
-	@GetMapping("/wishlist/{memberUuid}/count")
+	@GetMapping("/itemCount")
 	@Operation(summary = "나의 상품 장바구니 품목 갯수 조회")
 	public CommonResponseEntity<Integer> getMyWishListCount(
-		@PathVariable String memberUuid) {
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
+
 		int count = wishListService.getMyWishListItems(memberUuid).size();
 
 		return new CommonResponseEntity<>(
@@ -62,10 +70,13 @@ public class WishListController {
 			count);
 	}
 
-	@GetMapping("/wishlist/{memberUuid}/totalInfo")
+	@GetMapping("/totalPriceAndDiscount")
 	@Operation(summary = "나의 상품 장바구니 품목의 총 가격, 총 할인액 조회")
 	public CommonResponseEntity<TotalInfoResponseVo> getMyWishListTotalInfo(
-		@PathVariable String memberUuid) {
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
+
 		TotalInfoResponseDto totalInfoResponseDto = wishListService.getWishListTotalPriceAndDiscount(memberUuid);
 
 		return new CommonResponseEntity<>(
@@ -95,19 +106,26 @@ public class WishListController {
 	// 		null);
 	// }
 
-	@PostMapping("/fromProductDetailsPage/wishlist/{productUuid}/{memberUuid}/add/{quantity}")
+	@PostMapping("/fromProductDetailsPage/wishlist/{productUuid}/add/{quantity}")
 	@Operation(summary = "상품 상세페이지에서 장바구니에 n개 추가")
 	public CommonResponseEntity<Void> addProductToWishListFromProductDetailsPage(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody WishListRequestVo wishListRequestVo,
 		@PathVariable int quantity) {
 
+		String memberUuid = authUserDetail.getUuid();
+
 		WishListRequestDto wishListRequestDto = WishListRequestDto.builder()
 			.productUuid(wishListRequestVo.getProductUuid())
-			.memberUuid(wishListRequestVo.getMemberUuid())
+			.memberUuid(memberUuid)
 			.isChecked(true)
 			.limitQuantity(wishListRequestVo.getLimitQuantity())
-			.currentQuantity(wishListRequestVo.getCurrentQuantity())
 			.build();
+
+		// 문제 발생: quantity가 limitQuantity보다 커도 추가됨 -> 예외 발생 필요
+		if (quantity > wishListRequestVo.getLimitQuantity()) {
+			throw new IllegalArgumentException("quantity가 limitQuantity보다 큽니다.");
+		}
 
 		log.info("check: {}", wishListRequestDto.isChecked());
 
@@ -119,11 +137,13 @@ public class WishListController {
 			null);
 	}
 
-	@PutMapping("/wishlist/{memberUuid}/{productUuid}/add")
+	@PutMapping("/itemQuantity/{productUuid}/add")
 	@Operation(summary = "장바구니의 특정 품목 수량 1 증가")
 	public CommonResponseEntity<Void> addProductToWishList(
-		@PathVariable String memberUuid,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable String productUuid) {
+
+		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.modifyAddWishList(memberUuid, productUuid);
 
@@ -133,11 +153,13 @@ public class WishListController {
 			null);
 	}
 
-	@PutMapping("/wishlist/{memberUuid}/{productUuid}/subtract")
+	@PutMapping("/itemQuantity/{productUuid}/subtract")
 	@Operation(summary = "장바구니의 특정 품목 수량 1 감소")
 	public CommonResponseEntity<Void> subtractProductFromWishList(
-		@PathVariable String memberUuid,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable String productUuid) {
+
+		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.modifySubtractWishList(memberUuid, productUuid);
 
@@ -147,11 +169,13 @@ public class WishListController {
 			null);
 	}
 
-	@PutMapping("/wishlist/{memberUuid}/{productUuid}/check")
+	@PutMapping("/{productUuid}/check")
 	@Operation(summary = "장바구니의 특정 품목 체크")
 	public CommonResponseEntity<Void> checkProductFromWishList(
-		@PathVariable String memberUuid,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable String productUuid) {
+
+		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.modifyWishListCheck(memberUuid, productUuid);
 
@@ -161,10 +185,12 @@ public class WishListController {
 			null);
 	}
 
-	@PutMapping("/wishlist/{memberUuid}/checkAll")
+	@PutMapping("/checkAll")
 	@Operation(summary = "장바구니 전체 체크")
 	public CommonResponseEntity<Void> checkAllProductFromWishList(
-		@PathVariable String memberUuid) {
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.modifyWishListAllSelect(memberUuid);
 
@@ -174,11 +200,13 @@ public class WishListController {
 			null);
 	}
 
-	@DeleteMapping("/wishlist/{memberUuid}/{productUuid}/delete")
+	@DeleteMapping("/{productUuid}/deleteWishListItem")
 	@Operation(summary = "장바구니의 특정 품목 삭제")
 	public CommonResponseEntity<Void> deleteProductFromWishList(
-		@PathVariable String memberUuid,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable String productUuid) {
+
+		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.deleteWishList(memberUuid, productUuid);
 
@@ -188,10 +216,12 @@ public class WishListController {
 			null);
 	}
 
-	@DeleteMapping("/wishlist/{memberUuid}/delete")
+	@DeleteMapping("/deleteAll")
 	@Operation(summary = "장바구니 전체 삭제")
 	public CommonResponseEntity<Void> deleteAllProductFromWishList(
-		@PathVariable String memberUuid) {
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.deleteWishListAll(memberUuid);
 
@@ -201,10 +231,12 @@ public class WishListController {
 			null);
 	}
 
-	@DeleteMapping("/wishlist/{memberUuid}/deleteChecked")
+	@DeleteMapping("/deleteChecked")
 	@Operation(summary = "장바구니 체크된 품목 삭제")
 	public CommonResponseEntity<Void> deleteCheckedProductFromWishList(
-		@PathVariable String memberUuid) {
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.deleteWishListChecked(memberUuid);
 

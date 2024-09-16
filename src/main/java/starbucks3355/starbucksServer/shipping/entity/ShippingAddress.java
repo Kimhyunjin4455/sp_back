@@ -35,10 +35,12 @@ public class ShippingAddress {
 	private boolean baseAddress = true; // 기본 배송지 유무
 	@Column(nullable = false)
 	private String uuid; // 회원의 uuid 값 받아오기
+	@Column(nullable = false, length = 30)
+	private String receiver;
 
 	@Builder
 	public ShippingAddress(Long deliveryId, String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean baseAddress, String uuid) {
+		String phone1, String phone2, String message, boolean baseAddress, String uuid, String receiver) {
 		this.deliveryId = deliveryId;
 		this.nickname = nickname;
 		this.postNumber = postNumber;
@@ -49,6 +51,7 @@ public class ShippingAddress {
 		this.message = message;
 		this.baseAddress = baseAddress;
 		this.uuid = uuid;
+		this.receiver = receiver;
 	}
 }
 

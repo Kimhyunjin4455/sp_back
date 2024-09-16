@@ -22,6 +22,7 @@ public class ShippingMemberRequestDto {
 	private String message; // 메시지 여부
 	private String uuid; //회원의 uuid
 
+	// 이 부분 다시 공부하기 왜 uuid인지 이해가 안됨
 	public ShippingMemberAddress toEntity(String uuid) {
 		return ShippingMemberAddress.builder()
 			.address(this.getAddress())
@@ -31,6 +32,8 @@ public class ShippingMemberRequestDto {
 			.phone2(this.getPhone2())
 			.receiver(this.getReceiver())
 			.postNumber(this.getPostNumber())
+			.baseAddress(this.isBaseAddress())
+			.message(this.getMessage())
 			.uuid(uuid)
 			.build();
 	}

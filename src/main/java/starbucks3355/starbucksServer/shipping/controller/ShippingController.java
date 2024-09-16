@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +24,15 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingMemberRequestDto;
-import starbucks3355.starbucksServer.shipping.dto.request.ShippingPutRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingAllResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseDto;
 import starbucks3355.starbucksServer.shipping.service.ShippingService;
 import starbucks3355.starbucksServer.shipping.vo.request.ShippingAddRequestVo;
 import starbucks3355.starbucksServer.shipping.vo.request.ShippingMemberRequestVo;
 import starbucks3355.starbucksServer.shipping.vo.response.ShippingAllResponseVo;
 import starbucks3355.starbucksServer.shipping.vo.response.ShippingBaseResponseVo;
+import starbucks3355.starbucksServer.shipping.vo.response.ShippingListResponseVo;
 
 @RestController
 @RequestMapping("/api/v1/shipping")
@@ -128,18 +130,31 @@ public class ShippingController {
 		);
 	}
 
-	@PutMapping("/modfiy")
-	@Operation(summary = "기본 배송지 수정", description = "등록된 기본 배송지를 수정합니다.")
-	public CommonResponseEntity<Void> modifyBaseAddress(
-		@RequestBody ShippingPutRequestDto shippingPutRequestDto,
-		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+	@PutMapping("/base/{memberAddressId}/set-default")
+	@Operation(summary = "기본 배송지 설정", description = "기본 배송지를 설정합니다.")
+	public CommonResponseEntity<Void> setDefaultDelivery(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@PathVariable Long memberAddressId) {
 
-		shippingService.modifyBaseAddress(shippingPutRequestDto, authUserDetail.getUuid());
+		shippingService.modifyBaseAddress(authUserDetail.getUuid(), memberAddressId);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			null);
+	}
+
+	@GetMapping("/shipping-list")
+	@Operation(summary = "배송지 목록 조회", description = "등록된 배송지 목록을 조회합니다.")
+	public CommonResponseEntity<List<ShippingListResponseVo>> getShippingList(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			shippingService.getShippingList(authUserDetail.getUuid())
+				.stream()
+				.map(ShippingListResponseDto::toVo)
+				.collect(Collectors.toList()));
 	}
 
 	// @RequestHeader("Authorization") String authorizationHeader

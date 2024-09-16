@@ -11,7 +11,7 @@ import starbucks3355.starbucksServer.shipping.entity.ShippingMemberAddress;
 @AllArgsConstructor
 @Builder
 public class ShippingPutRequestDto {
-	private Long deliveryId;
+	private Long memberAddressId;
 	private String address;
 	private String detailAddress;
 	private String phone1;
@@ -22,7 +22,7 @@ public class ShippingPutRequestDto {
 
 	public ShippingMemberAddress toEntity(ShippingPutRequestDto shippingPutRequestDto) {
 		return ShippingMemberAddress.builder()
-			.deliveryId(shippingPutRequestDto.getDeliveryId())
+			.memberAddressId(shippingPutRequestDto.getMemberAddressId())
 			.address(shippingPutRequestDto.getAddress())
 			.detailAddress(shippingPutRequestDto.getDetailAddress())
 			.nickname(shippingPutRequestDto.getNickName())

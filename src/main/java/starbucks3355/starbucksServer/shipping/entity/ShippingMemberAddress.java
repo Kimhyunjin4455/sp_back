@@ -18,14 +18,14 @@ public class ShippingMemberAddress {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)
-	private Long deliveryId;
+	private Long memberAddressId;
 	@Column(nullable = false, length = 200)
 	private String address; // 부산진구
 	@Column(nullable = false)
 	private boolean baseAddress; // 기본 주소 선택유무
 	@Column(length = 20)
 	private String nickname; // 별칭
-	@Column(nullable = false, length = 30, unique = true)
+	@Column(nullable = false, length = 30)
 	private String receiver; // 수령자
 	@Column(nullable = false, length = 30)
 	private String phone1; //제 1연락처
@@ -41,10 +41,10 @@ public class ShippingMemberAddress {
 	private String detailAddress; // 주소상세
 
 	@Builder
-	public ShippingMemberAddress(Long deliveryId, String address, String detailAddress, boolean baseAddress,
-		String nickname, String receiver, String phone1, String phone2, String postNumber, String uuid
-		, String message) {
-		this.deliveryId = deliveryId;
+	public ShippingMemberAddress(Long memberAddressId, String address, String detailAddress, boolean baseAddress,
+		String nickname, String receiver, String phone1, String phone2, String postNumber, String uuid,
+		String message) {
+		this.memberAddressId = memberAddressId;
 		this.address = address;
 		this.detailAddress = detailAddress;
 		this.baseAddress = baseAddress;

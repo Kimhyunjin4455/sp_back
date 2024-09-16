@@ -1,5 +1,6 @@
 package starbucks3355.starbucksServer.shipping.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,7 +21,13 @@ public interface ShippingRepository extends JpaRepository<ShippingAddress, Long>
 
 	ShippingAddress findByDeliveryId(Long deliveryId);
 
-	Optional<ShippingAddress> findByUuid(String uuid);
+	//Optional<ShippingAddress> findByUuid(String uuid);
 
 	boolean existsByUuid(String uuid);
+
+	int countByUuid(String uuid);
+
+	boolean existsByDetailAddressAndUuid(String detailAddress, String uuid);
+
+	List<ShippingAddress> findByUuid(String uuid);
 }

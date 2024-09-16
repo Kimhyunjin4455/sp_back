@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.shipping.vo.request;
+package starbucks3355.starbucksServer.shipping.vo.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ShippingPutRequestVo {
+public class ShippingListResponseVo {
+
+	private Long deliveryId;
 	private String address;
-	private String addressDetail;
+	private String detailAddress;
 	private String phone1;
-	private String phone2;
-	private String nickName;
-	private String postNumber;
 	private String receiver;
 }

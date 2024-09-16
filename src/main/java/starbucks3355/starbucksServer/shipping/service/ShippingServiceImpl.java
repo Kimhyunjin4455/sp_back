@@ -1,6 +1,7 @@
 package starbucks3355.starbucksServer.shipping.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingMemberRequestDto;
-import starbucks3355.starbucksServer.shipping.dto.request.ShippingPutRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingAllResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseDto;
 import starbucks3355.starbucksServer.shipping.entity.ShippingAddress;
 import starbucks3355.starbucksServer.shipping.entity.ShippingMemberAddress;
 import starbucks3355.starbucksServer.shipping.repository.ShippingMemberRepository;
@@ -48,7 +49,13 @@ public class ShippingServiceImpl implements ShippingService {
 	@Override
 	public void createShipping(String memberUuid, ShippingAddRequestDto shippingAddRequestDto) {
 
-		if (shippingRepository.existsByAddress(shippingAddRequestDto.getAddress())) {
+		int shippingAddressCount = shippingRepository.countByUuid(memberUuid);
+
+		if (shippingAddressCount >= 5) {
+			throw new IllegalArgumentException("배송지는 최대 5개까지 등록 가능합니다.");
+		}
+
+		if (shippingRepository.existsByDetailAddressAndUuid(shippingAddRequestDto.getDetailAddress(), memberUuid)) {
 			throw new IllegalArgumentException("이미 등록된 주소입니다.");
 		}
 
@@ -65,50 +72,68 @@ public class ShippingServiceImpl implements ShippingService {
 
 	// 기본 배송지 변경(수정)
 	@Override
-	public void modifyBaseAddress(ShippingPutRequestDto shippingPutRequestDto, String uuid) {
-		// 1. ShippingMemberRepository를 통해 현재 사용자의 기본 배송지를 찾는다.
-		ShippingMemberAddress currentMemberAddress = shippingMemberRepository.findByUuidAndBaseAddressTrue(uuid)
-			.orElseThrow(() -> new IllegalArgumentException("기존 기본 배송지가 없습니다."));
+	@Transactional
+	public void modifyBaseAddress(String uuid, Long memberAddressId) {
 
-		// 2. ShippingRepository를 통해 현재 기본 배송지를 찾는다.
-		ShippingAddress currentBaseAddress = shippingRepository.findBaseDeliveryByUuid(uuid)
-			.orElseThrow(() -> new IllegalArgumentException("기본 배송지가 없습니다."));
+		Optional<ShippingMemberAddress> existingBaseAddress = shippingMemberRepository
+			.findByUuidAndBaseAddressTrue(
+				uuid);
 
-		// 3. 기존 기본 배송지의 baseAddress 값을 false로 설정하고 저장한다.
-		ShippingAddress updatedOldBaseAddress = ShippingAddress.builder()
-			.deliveryId(currentBaseAddress.getDeliveryId())
-			.address(currentBaseAddress.getAddress())
-			.detailAddress(currentBaseAddress.getDetailAddress())
-			.nickname(currentBaseAddress.getNickname())
-			.phone1(currentBaseAddress.getPhone1())
-			.phone2(currentBaseAddress.getPhone2())
-			.uuid(currentBaseAddress.getUuid())
-			.postNumber(currentBaseAddress.getPostNumber())
-			.message(currentBaseAddress.getMessage())
-			.baseAddress(false) // 기본 배송지 해제
+		ShippingMemberAddress shippingMemberAddress = shippingMemberRepository.findById(memberAddressId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 배송지가 없습니다."));
+
+		existingBaseAddress.ifPresent(address -> {
+			ShippingMemberAddress updateMemberAddress = ShippingMemberAddress.builder()
+				.address(address.getAddress())
+				.detailAddress(address.getDetailAddress())
+				.nickname(address.getNickname())
+				.phone1(address.getPhone1())
+				.phone2(address.getPhone2())
+				.receiver(address.getReceiver())
+				.postNumber(address.getPostNumber())
+				.uuid(address.getUuid())
+				.baseAddress(false)
+				.build();
+
+			shippingMemberRepository.save(updateMemberAddress);
+		});
+
+		ShippingMemberAddress updateNewMem = ShippingMemberAddress.builder()
+			.address(shippingMemberAddress.getAddress())
+			.detailAddress(shippingMemberAddress.getDetailAddress())
+			.nickname(shippingMemberAddress.getNickname())
+			.phone1(shippingMemberAddress.getPhone1())
+			.phone2(shippingMemberAddress.getPhone2())
+			.receiver(shippingMemberAddress.getReceiver())
+			.postNumber(shippingMemberAddress.getPostNumber())
+			.uuid(shippingMemberAddress.getUuid())
+			.baseAddress(true)
 			.build();
 
-		shippingRepository.save(updatedOldBaseAddress);
+		shippingMemberRepository.save(updateNewMem);
 
-		// 4. 새로운 배송지를 업데이트할 필드들로 빌더를 통해 설정한다.
-		ShippingAddress newBaseAddress = ShippingAddress.builder()
-			.deliveryId(shippingPutRequestDto.getDeliveryId())
-			.address(shippingPutRequestDto.getAddress())
-			.detailAddress(shippingPutRequestDto.getDetailAddress())
-			.nickname(shippingPutRequestDto.getNickName())
-			.phone1(shippingPutRequestDto.getPhone1())
-			.phone2(shippingPutRequestDto.getPhone2())
-			.uuid(uuid)
-			.postNumber(shippingPutRequestDto.getPostNumber()) // 새로운 우편번호
-			.baseAddress(true) // 새로운 기본 배송지 설정
-			.build();
+		// // 1. ShippingMemberRepository를 통해 현재 사용자의 기본 배송지를 찾는다.
+		// ShippingMemberAddress currentMemberAddress = shippingMemberRepository.findByUuidAndDeliveryId(uuid, deliveryId)
+		// 	.orElseThrow(() -> new IllegalArgumentException("기존 기본 배송지가 없습니다."));
+		//
+		// shippingMemberRepository.updateAllBaseAddressToFalse(uuid);
+		//
+		// // 선택한 주소를 기본 배송지로 설정 (빌더 사용해서)
+		// ShippingMemberAddress updateMemberAddress = ShippingMemberAddress.builder()
+		// 	.address(currentMemberAddress.getAddress())
+		// 	.detailAddress(currentMemberAddress.getDetailAddress())
+		// 	.nickname(currentMemberAddress.getNickname())
+		// 	.phone1(currentMemberAddress.getPhone1())
+		// 	.phone2(currentMemberAddress.getPhone2())
+		// 	.receiver(currentMemberAddress.getReceiver())
+		// 	.postNumber(currentMemberAddress.getPostNumber())
+		// 	.uuid(uuid)
+		// 	.baseAddress(true)
+		// 	.build();
+		//
+		// // 새롭게 빌드된 주소 객체를 저장
+		// shippingMemberRepository.save(updateMemberAddress);
 
-		// 5. 새로운 기본 배송지를 저장한다.
-		shippingRepository.save(newBaseAddress);
-
-		// 6. ShippingMemberRepository에 해당 회원의 기본 주소를 업데이트한다.
-		ShippingMemberAddress updatedMemberAddress = shippingPutRequestDto.toEntity(shippingPutRequestDto);
-		shippingMemberRepository.save(updatedMemberAddress);
 	}
 
 	// 회원의 주소 등록
@@ -140,6 +165,22 @@ public class ShippingServiceImpl implements ShippingService {
 
 			shippingRepository.save(shippingAddress);
 		}
+	}
+
+	//배송지 목록 조회
+	@Override
+	public List<ShippingListResponseDto> getShippingList(String uuid) {
+		List<ShippingAddress> shippingAddressList = shippingRepository.findByUuid(uuid);
+		return shippingAddressList.stream()
+			.map(
+				shippingAddress -> ShippingListResponseDto.builder()
+					.deliveryId(shippingAddress.getDeliveryId())
+					.receiver(shippingAddress.getReceiver())
+					.phone1(shippingAddress.getPhone1())
+					.address(shippingAddress.getAddress())
+					.detailAddress(shippingAddress.getDetailAddress())
+					.build())
+			.toList();
 	}
 
 	// 모든 배송지 조회

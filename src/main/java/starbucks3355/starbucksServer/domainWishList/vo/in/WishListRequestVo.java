@@ -9,10 +9,10 @@ import lombok.Getter;
 @Builder
 public class WishListRequestVo {
 	private String productUuid;
-	private String memberUuid;
+	//private String memberUuid;
 	private boolean isChecked;
 	private Integer limitQuantity;
-	private Integer currentQuantity;
+	// private Integer currentQuantity;
 	private LocalDateTime regDate, modDate;
 
 }

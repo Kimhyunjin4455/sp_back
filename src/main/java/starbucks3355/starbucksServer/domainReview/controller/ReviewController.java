@@ -116,7 +116,7 @@ public class ReviewController {
 		);
 	}
 
-	@PostMapping("/{reviewUuid}")
+	@PostMapping("/post/{reviewUuid}")
 	@Operation(summary = "리뷰 한개 등록")
 	public CommonResponseEntity<Void> addReview(
 		@RequestBody ReviewRequestVo reviewRequestVo) { // Service 로직에서 UUID 생성하여 저장하므로 vo에서 관련정보를 뺴거나, 서비스 로직에서 제거하기
@@ -140,7 +140,7 @@ public class ReviewController {
 		);
 	}
 
-	@PutMapping("/{reviewUuid}")
+	@PutMapping("/update/{reviewUuid}")
 	@Operation(summary = "리뷰 수정", description = "기존에 작성된 리뷰를 수정합니다.")
 	public CommonResponseEntity<Void> updateReview(
 		@PathVariable String reviewUuid,
@@ -166,7 +166,7 @@ public class ReviewController {
 
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	@Operation(summary = "댓글 삭제", description = "작성했던 리뷰를 삭제합니다.")
 	public CommonResponseEntity<Void> deleteReview(@PathVariable Long id) {
 		reviewService.deleteReview(id);

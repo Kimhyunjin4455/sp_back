@@ -3,6 +3,9 @@ package starbucks3355.starbucksServer.domainCoupon.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,10 +24,14 @@ public class CouponServiceImpl implements CouponService {
 
 	@Override
 	public CouponResponseDto createCoupon(CouponRequestDto requestDto) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime validateDate = now.plusDays(30); // 유효기간 30일 후로 설정
+
 		Coupon coupon = Coupon.builder()
 			.couponName(requestDto.getCouponName())
 			.couponCode(requestDto.getCouponCode())
-			.createDate(LocalDateTime.now())
+			.createDate(now)
+			.validateDate(validateDate)
 			.useCondition(true)
 			.discountValue(requestDto.getDiscountValue())
 			.build();
@@ -35,6 +42,7 @@ public class CouponServiceImpl implements CouponService {
 			.couponName(savedCoupon.getCouponName())
 			.couponCode(savedCoupon.getCouponCode())
 			.createDate(savedCoupon.getCreateDate()) // 현재 시간으로 설정
+			.useCondition(savedCoupon.isUseCondition())
 			.validateDate(savedCoupon.getValidateDate())
 			.discountValue(savedCoupon.getDiscountValue())
 			.build();
@@ -53,9 +61,20 @@ public class CouponServiceImpl implements CouponService {
 		return null;
 	}
 
+	// 모든 쿠폰 조회 로직 구현
 	@Override
-	public List<CouponResponseDto> getAllCoupons() {
-		// 모든 쿠폰 조회 로직 구현
-		return null;
+	public Slice<CouponResponseDto> getAllCoupons(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Slice<Coupon> coupons = couponRepository.findAll(pageable);
+
+		return coupons.map(coupon -> CouponResponseDto.builder()
+			.id(coupon.getId())
+			.couponName(coupon.getCouponName())
+			.couponCode(coupon.getCouponCode())
+			.createDate(coupon.getCreateDate()) // 현재 시간으로 설정
+			.validateDate(coupon.getValidateDate())
+			.useCondition(coupon.isUseCondition())
+			.discountValue(coupon.getDiscountValue())
+			.build());
 	}
 }

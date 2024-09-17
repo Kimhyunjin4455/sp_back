@@ -17,6 +17,7 @@ public class CouponResponseDto {
 	private LocalDateTime validateDate;
 	private Boolean useCondition;
 	private Integer discountValue;
+	private String uuid;
 
 
 	@Builder
@@ -27,7 +28,8 @@ public class CouponResponseDto {
 		LocalDateTime createDate,
 		LocalDateTime validateDate,
 		Boolean useCondition,
-		Integer discountValue
+		Integer discountValue,
+		String uuid
 	) {
 		this.id = id;
 		this.couponName = couponName;
@@ -36,7 +38,10 @@ public class CouponResponseDto {
 		this.validateDate = validateDate;
 		this.useCondition = useCondition;
 		this.discountValue = discountValue;
+		this.uuid = uuid;
 	}
+
+
 	public CouponResponseVo toVo() {
 		return CouponResponseVo.builder()
 			.id(id)
@@ -46,6 +51,7 @@ public class CouponResponseDto {
 			.validateDate(validateDate)
 			.useCondition(useCondition)
 			.discountValue(discountValue)
+			.uuid(uuid)
 			.build();
 	}
 

@@ -32,6 +32,8 @@ public class Coupon {
 	@Column(nullable = false)
 	private Integer discountValue;
 
+	private String uuid;
+
 	@Builder
 	public Coupon(
 		Long id,
@@ -39,8 +41,9 @@ public class Coupon {
 		String couponCode,
 		LocalDateTime createDate,
 		LocalDateTime validateDate,
-		Boolean useCondition,
-		Integer discountValue
+		boolean useCondition,
+		Integer discountValue,
+		String uuid
 	) {
 		this.id = id;
 		this.couponName = couponName;
@@ -49,6 +52,7 @@ public class Coupon {
 		this.validateDate = validateDate;
 		this.useCondition = useCondition;
 		this.discountValue = discountValue;
+		this.uuid = uuid;
 	}
 
 }

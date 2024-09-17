@@ -10,4 +10,5 @@ public class CouponRequestVo {
 	private String couponCode;
 	private Boolean useCondition;
 	private Integer discountValue;
+	private String uuid;
 }

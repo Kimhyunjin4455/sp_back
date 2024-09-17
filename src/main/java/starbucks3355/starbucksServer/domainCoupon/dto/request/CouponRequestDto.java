@@ -10,6 +10,7 @@ import starbucks3355.starbucksServer.domainCoupon.vo.request.CouponRequestVo;
 @Getter
 @NoArgsConstructor
 public class CouponRequestDto {
+	private String uuid;
 	private String couponName;
 	private String couponCode;
 	private Boolean useCondition;
@@ -17,11 +18,13 @@ public class CouponRequestDto {
 
 	@Builder
 	public CouponRequestDto (
+		String uuid,
 		String couponName,
 		String couponCode,
 		Boolean useCondition,
 		Integer discountValue
 	) {
+		this.uuid = uuid;
 		this.couponName = couponName;
 		this.couponCode = couponCode;
 		this.useCondition = useCondition;
@@ -29,6 +32,7 @@ public class CouponRequestDto {
 	}
 	public static CouponRequestDto from(CouponRequestVo couponRequestVo) {
 		return CouponRequestDto.builder()
+			.uuid(couponRequestVo.getUuid())
 			.couponName(couponRequestVo.getCouponName())
 			.couponCode(couponRequestVo.getCouponCode())
 			.discountValue(couponRequestVo.getDiscountValue())

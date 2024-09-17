@@ -16,6 +16,7 @@ public class CouponResponseVo {
 	private LocalDateTime validateDate;
 	private Boolean useCondition;
 	private Integer discountValue;
+	private String uuid;
 
 	@Builder
 	public CouponResponseVo(
@@ -25,7 +26,8 @@ public class CouponResponseVo {
 		LocalDateTime createDate,
 		LocalDateTime validateDate,
 		Boolean useCondition,
-		Integer discountValue
+		Integer discountValue,
+		String uuid
 	) {
 		this.id = id;
 		this.couponName = couponName;
@@ -34,5 +36,6 @@ public class CouponResponseVo {
 		this.validateDate = validateDate;
 		this.useCondition = useCondition;
 		this.discountValue = discountValue;
+		this.uuid = uuid;
 	}
 }

@@ -1,7 +1,6 @@
 package starbucks3355.starbucksServer.domainCoupon.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -63,7 +62,7 @@ public class CouponServiceImpl implements CouponService {
 
 	// 모든 쿠폰 조회 로직 구현
 	@Override
-	public Slice<CouponResponseDto> getAllCoupons(int page, int size) {
+	public Slice<CouponResponseDto> getAllCoupons(String uuid, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Slice<Coupon> coupons = couponRepository.findAll(pageable);
 

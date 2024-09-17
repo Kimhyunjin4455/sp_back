@@ -12,5 +12,6 @@ public interface CouponService {
 	void deleteCoupon(Long id);
 	// Integer applyCoupon(String couponCode, Integer originalPrice);
 	CouponRequestDto issueCoupon(String couponCode);
-	Slice<CouponResponseDto> getAllCoupons(int page, int size);
+	Slice<CouponResponseDto> getAllCoupons(String uuid, int page, int size);
+
 }

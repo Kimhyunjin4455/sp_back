@@ -38,15 +38,23 @@ public class CouponController {
 
 	@PostMapping("/createcoupon")
 	@Operation(summary = "쿠폰 등록")
-	public ResponseEntity<CouponResponseDto> createCoupon(@RequestBody CouponRequestDto requestDto) {
+	public CommonResponseEntity<CouponResponseDto> createCoupon(@RequestBody CouponRequestDto requestDto) {
 		CouponResponseDto responseDto = couponService.createCoupon(requestDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+		return new CommonResponseEntity<>(
+			HttpStatus.CREATED,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			responseDto
+		);
 	}
 
 	@DeleteMapping("/deletecoupon/{id}")
-	public ResponseEntity<Void> deleteCoupon(@PathVariable Long id) {
+	public CommonResponseEntity<Void> deleteCoupon(@PathVariable Long id) {
 		couponService.deleteCoupon(id);
-		return ResponseEntity.noContent().build();
+		return new CommonResponseEntity<>(
+			HttpStatus.NO_CONTENT,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null
+		);
 	}
 
 	// 쿠폰 목록 조회 (스크롤)
@@ -59,7 +67,7 @@ public class CouponController {
 	) {
 		String uuid = provider.parseUuid(accessToken);
 
-		Slice<CouponResponseDto> couponResponseDtos = couponService.getAllCoupons(page, size);
+		Slice<CouponResponseDto> couponResponseDtos = couponService.getAllCoupons(uuid, page, size);
 
 		List<CouponResponseVo> couponResponseVos = couponResponseDtos.stream()
 			.map(CouponResponseDto::toVo)

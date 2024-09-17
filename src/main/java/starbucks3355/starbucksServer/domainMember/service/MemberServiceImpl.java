@@ -64,9 +64,9 @@ public class MemberServiceImpl implements MemberService {
 
 	// 찜한 상품 목록 조회
 	@Override
-	public Slice<LikesProductResponseDto> getLikesListByUuid(int page, int size) {
+	public Slice<LikesProductResponseDto> getLikesListByUuid(String uuid, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
-		Slice<Likes> likes = likeProductRepository.findAll(pageable);
+		Slice<Likes> likes = likeProductRepository.findByUuid(uuid, pageable);
 
 		return likes.map(like -> LikesProductResponseDto.builder()
 				.id(like.getId())
@@ -108,15 +108,6 @@ public class MemberServiceImpl implements MemberService {
 				.isLiked(true)
 				.build();
 			likeProductRepository.save(newLike);
-
-			// 찜 추가 이력 저장
-			LikesHistory history = LikesHistory.builder()
-				.uuid(uuid)
-				.productUuid(productUuid)
-				.isLiked(true)
-				.timestamp(LocalDateTime.now())
-				.build();
-			likesHistoryRepository.save(history);
 			return LikesProductResponseDto.builder()
 				.id(newLike.getId())
 				.uuid(newLike.getUuid())

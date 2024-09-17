@@ -109,7 +109,7 @@ public class MemberController {
 		log.info("accesstoken : {}", accessToken);
 		String uuid = provider.parseUuid(accessToken);
 
-		Slice<LikesProductResponseDto> likesProductResponseDtos = memberService.getLikesListByUuid(page, size);
+		Slice<LikesProductResponseDto> likesProductResponseDtos = memberService.getLikesListByUuid(uuid, page, size);
 
 		List<LikesProductResponseVo> likesProductResponseVos = likesProductResponseDtos.stream()
 			.map(LikesProductResponseDto::toVo)

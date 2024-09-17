@@ -11,7 +11,7 @@ import starbucks3355.starbucksServer.shipping.entity.ShippingMemberAddress;
 
 public interface ShippingMemberRepository extends JpaRepository<ShippingMemberAddress, Long> {
 
-	Optional<ShippingMemberAddress> findByUuidAndBaseAddressTrue(String uuid);
+	Optional<ShippingMemberAddress> findFirstByUuidAndBaseAddressTrue(String uuid);
 
 	Optional<ShippingMemberAddress> findByUuidAndDetailAddress(String uuid, String detailAddress);
 

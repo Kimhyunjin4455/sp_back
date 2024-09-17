@@ -122,21 +122,22 @@ public class ShippingController {
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			ShippingBaseResponseVo.builder()
-				.deliveryId(shippingBaseResponseDto.getDeliveryId())
-				.address(shippingBaseResponseDto.getAddress())
-				.detailAddress(shippingBaseResponseDto.getDetailAddress())
-				.build()
+			// ShippingBaseResponseVo.builder()
+			// 	.deliveryId(shippingBaseResponseDto.getDeliveryId())
+			// 	.address(shippingBaseResponseDto.getAddress())
+			// 	.detailAddress(shippingBaseResponseDto.getDetailAddress())
+			// 	.build()
+			shippingBaseResponseDto.toVo()
 		);
 	}
 
-	@PutMapping("/base/{memberAddressId}/set-default")
+	@PutMapping("/base/{deliveryId}/set-default")
 	@Operation(summary = "기본 배송지 설정", description = "기본 배송지를 설정합니다.")
 	public CommonResponseEntity<Void> setDefaultDelivery(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
-		@PathVariable Long memberAddressId) {
+		@PathVariable Long deliveryId) {
 
-		shippingService.modifyBaseAddress(authUserDetail.getUuid(), memberAddressId);
+		shippingService.modifyBaseAddress(authUserDetail.getUuid(), deliveryId);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

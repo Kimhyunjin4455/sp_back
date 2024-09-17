@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,14 +19,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceWithScoreEntity;
+import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.service.ReviewService;
+import starbucks3355.starbucksServer.domainReview.vo.in.ReviewModifyRequestVo;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewRequestVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.MyReviewResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewProductResponseVo;
@@ -87,10 +91,13 @@ public class ReviewController {
 		);
 	}
 
-	@GetMapping("/{memberUuid}/allReviewsOfMember")
+	@GetMapping("/allReviewsOfMember")
 	@Operation(summary = "회원별 리뷰 전체 조회")
 	public CommonResponseEntity<List<MyReviewResponseVo>> getMemberReviews(
-		@PathVariable String memberUuid) {
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
+
 		List<MyReviewResponseDto> memberReviewsDto = reviewService.getMyReviews(memberUuid);
 
 		return new CommonResponseEntity<>(
@@ -116,17 +123,20 @@ public class ReviewController {
 		);
 	}
 
-	@PostMapping("/post/{reviewUuid}")
+	@PostMapping("/{reviewUuid}")
 	@Operation(summary = "리뷰 한개 등록")
 	public CommonResponseEntity<Void> addReview(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ReviewRequestVo reviewRequestVo) { // Service 로직에서 UUID 생성하여 저장하므로 vo에서 관련정보를 뺴거나, 서비스 로직에서 제거하기
+
+		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
 
 		ReviewRequestDto reviewRequestDto = ReviewRequestDto.builder()
 			.content(reviewRequestVo.getContent())
 			.reviewUuid(reviewRequestVo.getReviewUuid())
 			.reviewScore(reviewRequestVo.getReviewScore())
 			.productUuid(reviewRequestVo.getProductUuid())
-			.memberUuid(reviewRequestVo.getMemberUuid())
+			.memberUuid(memberUuid)
 			.regDate(reviewRequestVo.getRegDate())
 			.modDate(reviewRequestVo.getModDate())
 			.build();
@@ -140,23 +150,19 @@ public class ReviewController {
 		);
 	}
 
-	@PutMapping("/update/{reviewUuid}")
+	@PutMapping("/{reviewUuid}")
 	@Operation(summary = "리뷰 수정", description = "기존에 작성된 리뷰를 수정합니다.")
 	public CommonResponseEntity<Void> updateReview(
 		@PathVariable String reviewUuid,
-		@RequestBody ReviewRequestVo reviewRequestVo) {
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@RequestBody ReviewModifyRequestVo reviewModifyRequestVo) {
 
-		ReviewRequestDto reviewRequestDto = ReviewRequestDto.builder()
-			.content(reviewRequestVo.getContent())
-			.reviewUuid(reviewRequestVo.getReviewUuid())
-			.reviewScore(reviewRequestVo.getReviewScore())
-			.productUuid(reviewRequestVo.getProductUuid())
-			.memberUuid(reviewRequestVo.getMemberUuid())
-			.regDate(reviewRequestVo.getRegDate())
-			.modDate(reviewRequestVo.getModDate())
+		ReviewModifyRequestDto reviewModifyRequestDto = ReviewModifyRequestDto.builder()
+			.content(reviewModifyRequestVo.getContent())
+			.reviewScore(reviewModifyRequestVo.getReviewScore())
 			.build();
 
-		reviewService.modifyReview(reviewRequestDto, reviewUuid);
+		reviewService.modifyReview(reviewModifyRequestDto, reviewUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
@@ -166,9 +172,12 @@ public class ReviewController {
 
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/reviewDelete/{id}")
 	@Operation(summary = "댓글 삭제", description = "작성했던 리뷰를 삭제합니다.")
-	public CommonResponseEntity<Void> deleteReview(@PathVariable Long id) {
+	public CommonResponseEntity<Void> deleteReview(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@PathVariable Long id) {
+
 		reviewService.deleteReview(id);
 
 		return new CommonResponseEntity<>(

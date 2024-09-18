@@ -106,10 +106,10 @@ public class SwaggerConfig {
 	}
 
 	@Bean
-	GroupedOpenApi DeliveryAPI() {
+	GroupedOpenApi ShippingAPI() {
 		return GroupedOpenApi.builder()
 			.group("배송지")
-			.pathsToMatch("/api/v1/delivery/**")
+			.pathsToMatch("/api/v1/shipping/**")
 			.build();
 	}
 

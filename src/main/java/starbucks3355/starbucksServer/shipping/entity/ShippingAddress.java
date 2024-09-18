@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.delivery.entity;
+package starbucks3355.starbucksServer.shipping.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,10 +13,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Getter
-public class Delivery {
+public class ShippingAddress {
 	@Id
 	@GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
 	private Long deliveryId;
+	// @(nullable = false, length = 30)
+	// private Long memberAddressId; // 회원 주소 id
 	@Column(length = 15)
 	private String nickname; // 배송지 별칭
 	@Column(nullable = false, length = 20)
@@ -35,10 +37,12 @@ public class Delivery {
 	private boolean baseAddress = true; // 기본 배송지 유무
 	@Column(nullable = false)
 	private String uuid; // 회원의 uuid 값 받아오기
+	@Column(nullable = false, length = 30)
+	private String receiver;
 
 	@Builder
-	public Delivery(Long deliveryId, String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean baseAddress, String uuid) {
+	public ShippingAddress(Long deliveryId, String nickname, String postNumber, String address, String detailAddress,
+		String phone1, String phone2, String message, boolean baseAddress, String uuid, String receiver) {
 		this.deliveryId = deliveryId;
 		this.nickname = nickname;
 		this.postNumber = postNumber;
@@ -49,6 +53,12 @@ public class Delivery {
 		this.message = message;
 		this.baseAddress = baseAddress;
 		this.uuid = uuid;
+		this.receiver = receiver;
+	}
+
+	// 더티 체킹
+	public void changeBaseAddress(boolean baseAddress) {
+		this.baseAddress = baseAddress;
 	}
 }
 

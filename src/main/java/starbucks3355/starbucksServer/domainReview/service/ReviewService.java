@@ -19,7 +19,11 @@ public interface ReviewService {
 
 	public ReviewResponseDto getReview(String reviewUuid);
 
+	public List<ReviewResponseDto> getBestReviews(String productUuid);
+
 	void addReview(ReviewRequestDto reviewRequestDto);
+
+	void addReviewViewCount(String reviewUuid);
 
 	void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto, String reviewUuid);
 

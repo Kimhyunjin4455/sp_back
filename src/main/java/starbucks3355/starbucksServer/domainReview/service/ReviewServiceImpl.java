@@ -107,6 +107,27 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
+	public List<ReviewResponseDto> getBestReviews(String productUuid) {
+		// 상품의 리뷰들 중 평점이 높은 리뷰들을 5개까지 반환
+
+		List<Review> productReviews = reviewRepository.findTop5ByProductUuidOrderByReviewScoreDescReviewViewCountDesc(
+			productUuid);
+
+		if (productReviews != null) {
+			return productReviews.stream()
+				.map(productReview -> ReviewResponseDto.builder()
+					.content(productReview.getContent())
+					.reivewScore(productReview.getReviewScore())
+					.regDate(productReview.getRegDate())
+					.modDate(productReview.getModDate())
+					.build()
+				).toList();
+		}
+
+		return List.of();
+	}
+
+	@Override
 	public void addReview(ReviewRequestDto reviewRequestDto) {
 		// String reviewUuid = UUID.randomUUID().toString();
 		// String productUuid = UUID.randomUUID().toString();
@@ -115,6 +136,17 @@ public class ReviewServiceImpl implements ReviewService {
 
 		reviewRepository.save(reviewRequestDto.toEntity(reviewRequestDto.getReviewUuid(),
 			reviewRequestDto.getProductUuid(), reviewRequestDto.getMemberUuid()));
+	}
+
+	@Override
+	public void addReviewViewCount(String reviewUuid) {
+		Optional<Review> result = reviewRepository.findByReviewUuid(reviewUuid);
+
+		Review review = result.get();
+
+		review.modifyReviewViewCount(review.getReviewViewCount() + 1);
+
+		reviewRepository.save(review);
 	}
 
 	@Override

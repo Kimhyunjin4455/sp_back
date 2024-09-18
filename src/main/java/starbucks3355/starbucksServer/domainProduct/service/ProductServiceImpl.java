@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.category.repository.CategoryListRepository;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
@@ -39,6 +40,8 @@ public class ProductServiceImpl implements ProductService {
 	private final FlagsRepository flagsRepository;
 	private final ProductTagRepository productTagRepository;
 
+	private final CategoryListRepository categoryListRepository;
+
 	@Override
 	public void addProduct(ProductRequestDto productRequestDto) {
 		String productUuid;
@@ -60,6 +63,31 @@ public class ProductServiceImpl implements ProductService {
 			.productInfo(product.getProductInfo())
 			.build());
 	}
+
+	// @Override
+	// public Slice<ProductsResponseDto> getProductsByCategoryInfo(int page, int size, Long majorCategoryId,
+	// 	Long middleCategoryId) {
+	// 	Pageable pageable = PageRequest.of(page, size);
+	//
+	// 	if (middleCategoryId == null) {
+	// 		Slice<Product> productsInCategory = categoryListRepository.findByMajorCategoryId(majorCategoryId, pageable);
+	// 		return productsInCategory.map(product -> ProductsResponseDto.builder()
+	// 			.productUuid(product.getProductUuid())
+	// 			.productName(product.getProductName())
+	// 			.productDescription(product.getProductDescription())
+	// 			.productInfo(product.getProductInfo())
+	// 			.build());
+	// 	}else {
+	// 		Slice<Product> productsInCategory = categoryListRepositoryRepository.findByMajorCategoryIdAndMiddleCategoryId(majorCategoryId, middleCategoryId, pageable);
+	// 		return productsInCategory.map(product -> ProductsResponseDto.builder()
+	// 			.productUuid(product.getProductUuid())
+	// 			.productName(product.getProductName())
+	// 			.productDescription(product.getProductDescription())
+	// 			.productInfo(product.getProductInfo())
+	// 			.build());
+	// 	}
+	//
+	// }
 
 	@Override
 	public ProductResponseDto getProduct(String productUuid) {

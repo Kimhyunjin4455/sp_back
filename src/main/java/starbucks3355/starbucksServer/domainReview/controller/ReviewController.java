@@ -91,6 +91,21 @@ public class ReviewController {
 		);
 	}
 
+	@GetMapping("/{productUuid}/bestReviewsOfProduct")
+	@Operation(summary = "상품별 베스트 리뷰 조회")
+	public CommonResponseEntity<List<ReviewResponseVo>> getBestReviews(
+		@PathVariable String productUuid) {
+		List<ReviewResponseDto> bestReviewsDto = reviewService.getBestReviews(productUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			bestReviewsDto.stream()
+				.map(ReviewResponseDto::dtoToResponseVo)
+				.toList()
+		);
+	}
+
 	@GetMapping("/allReviewsOfMember")
 	@Operation(summary = "회원별 리뷰 전체 조회")
 	public CommonResponseEntity<List<MyReviewResponseVo>> getMemberReviews(
@@ -116,6 +131,8 @@ public class ReviewController {
 		@PathVariable String reviewUuid
 	) {
 		ReviewResponseDto reviewResponseDto = reviewService.getReview(reviewUuid);
+		reviewService.addReviewViewCount(reviewUuid);
+
 		return new CommonResponseEntity<ReviewResponseVo>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),

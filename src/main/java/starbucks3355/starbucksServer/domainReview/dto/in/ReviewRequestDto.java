@@ -23,6 +23,7 @@ public class ReviewRequestDto {
 			.reviewScore(reviewScore)
 			.productUuid(productUuid)
 			.memberUuid(memberUuid)
+			.reviewViewCount(0)
 			.build();
 	}
 }

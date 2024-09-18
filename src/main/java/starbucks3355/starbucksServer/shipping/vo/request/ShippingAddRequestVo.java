@@ -16,11 +16,12 @@ public class ShippingAddRequestVo {
 	private String phone1;
 	private String phone2;
 	private String message;
+	private String receiver;
 	private boolean baseAddress;
 
 	@Builder
 	public ShippingAddRequestVo(String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean baseAddress) {
+		String phone1, String phone2, String message, boolean baseAddress, String receiver) {
 		this.nickname = nickname;
 		this.postNumber = postNumber;
 		this.address = address;
@@ -29,5 +30,6 @@ public class ShippingAddRequestVo {
 		this.phone2 = phone2;
 		this.message = message;
 		this.baseAddress = baseAddress;
+		this.receiver = receiver;
 	}
 }

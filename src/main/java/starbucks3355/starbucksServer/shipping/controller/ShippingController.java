@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,6 +87,7 @@ public class ShippingController {
 			.phone1(shippingAddRequestVo.getPhone1())
 			.phone2(shippingAddRequestVo.getPhone2())
 			.message(shippingAddRequestVo.getMessage())
+			.receiver(shippingAddRequestVo.getReceiver())
 			.baseAddress(shippingAddRequestVo.isBaseAddress())
 			.build();
 
@@ -122,17 +124,12 @@ public class ShippingController {
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			// ShippingBaseResponseVo.builder()
-			// 	.deliveryId(shippingBaseResponseDto.getDeliveryId())
-			// 	.address(shippingBaseResponseDto.getAddress())
-			// 	.detailAddress(shippingBaseResponseDto.getDetailAddress())
-			// 	.build()
 			shippingBaseResponseDto.toVo()
 		);
 	}
 
 	@PutMapping("/base/{deliveryId}/set-default")
-	@Operation(summary = "기본 배송지 설정", description = "기본 배송지를 설정합니다.")
+	@Operation(summary = "기본 배송지 변경", description = "기본 배송지를 설정합니다.")
 	public CommonResponseEntity<Void> setDefaultDelivery(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable Long deliveryId) {
@@ -158,35 +155,19 @@ public class ShippingController {
 				.collect(Collectors.toList()));
 	}
 
-	// @RequestHeader("Authorization") String authorizationHeader
-	// if (authorizationHeader == null) {
-	// 	log.error("Authorization header is missing.");
-	// 	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authorization header is missing");
-	// }
-	//
-	// // "Bearer " 부분을 제거하고 토큰만 추출
-	// String accessToken = authorizationHeader.replace("Bearer ", "");
-	//
-	// // JWT 토큰을 검증하고 사용자 UUID 추출
-	// String userUuid = jwtTokenProvider.parseUuid(accessToken);
+	@DeleteMapping("/delete/{deliveryId}")
+	@Operation(summary = "배송지 삭제", description = "배송지를 삭제합니다.")
+	public CommonResponseEntity<Void> deleteDelivery(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@PathVariable Long deliveryId) {
 
-	// @GetMapping("/base/{uuid}")
-	// @Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
-	// public CommonResponseEntity<DeliveryBaseResponseVo> getBaseDelivery(
-	// 	@PathVariable String uuid) {
-	//
-	// 	// UUID로 기본 배송지 정보를 조회
-	// 	DeliveryBaseResponseDto deliveryBaseResponseDto = deliveryService.getBaseDelivery(uuid);
-	//
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		DeliveryBaseResponseVo.builder()
-	// 			.deliveryId(deliveryBaseResponseDto.getDeliveryId())
-	// 			.detailAddress(deliveryBaseResponseDto.getDetailAddress())
-	// 			.address(deliveryBaseResponseDto.getAddress())
-	// 			.build()
-	// 	);
-	// }
+		shippingService.deleteShipping(authUserDetail.getUuid(), deliveryId);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+
+	}
 
 }

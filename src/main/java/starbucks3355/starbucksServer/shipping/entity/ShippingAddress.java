@@ -53,5 +53,10 @@ public class ShippingAddress {
 		this.uuid = uuid;
 		this.receiver = receiver;
 	}
+
+	// 더티 체킹
+	public void changeBaseAddress(boolean baseAddress) {
+		this.baseAddress = baseAddress;
+	}
 }
 

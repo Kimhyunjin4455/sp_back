@@ -56,4 +56,9 @@ public class ShippingMemberAddress {
 		this.phone1 = phone1;
 		this.phone2 = phone2;
 	}
+
+	// 더티 체킹
+	public void changeBaseAddress(boolean baseAddress) {
+		this.baseAddress = baseAddress;
+	}
 }

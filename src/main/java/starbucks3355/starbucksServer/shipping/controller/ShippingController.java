@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,7 +75,7 @@ public class ShippingController {
 	@PostMapping("/add")
 	@Operation(summary = "배송지 추가", description = "배송지를 추가합니다.")
 	public CommonResponseEntity<Void> addDelivery(
-		@RequestParam String memberUuid,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ShippingAddRequestVo shippingAddRequestVo) {
 
 		ShippingAddRequestDto shippingAddRequestDto = ShippingAddRequestDto.builder()
@@ -91,7 +90,7 @@ public class ShippingController {
 			.baseAddress(shippingAddRequestVo.isBaseAddress())
 			.build();
 
-		shippingService.createShipping(memberUuid, shippingAddRequestDto);
+		shippingService.createShipping(authUserDetail.getUuid(), shippingAddRequestDto);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

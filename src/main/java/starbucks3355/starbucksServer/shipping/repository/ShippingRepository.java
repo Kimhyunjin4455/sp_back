@@ -34,4 +34,8 @@ public interface ShippingRepository extends JpaRepository<ShippingAddress, Long>
 
 	List<ShippingAddress> findByUuid(String uuid);
 
+	// //memberAddressId로 ShippingAddress 조회
+	// @Query("select sa from ShippingAddress sa JOIN ShippingMemberAddress sm On sa.uuid = sm.uuid where sm.memberAddressId = :memberAddressId")
+	// List<ShippingAddress> findAllByMemberAddressId(@Param("memberAddressId") Long memberAddressId);
+
 }

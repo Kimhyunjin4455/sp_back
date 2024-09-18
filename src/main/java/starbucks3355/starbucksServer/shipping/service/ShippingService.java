@@ -31,4 +31,6 @@ public interface ShippingService {
 
 	// 배송지 삭제
 	void deleteShipping(String uuid, Long deliveryId);
+
+	//void createShipping(String memberUuid,Long memberAddressId ,ShippingAddRequestDto shippingAddRequestDto);
 }

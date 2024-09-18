@@ -17,6 +17,8 @@ public class ShippingAddress {
 	@Id
 	@GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
 	private Long deliveryId;
+	@(nullable = false, length = 30)
+	private Long memberAddressId; // 회원 주소 id
 	@Column(length = 15)
 	private String nickname; // 배송지 별칭
 	@Column(nullable = false, length = 20)

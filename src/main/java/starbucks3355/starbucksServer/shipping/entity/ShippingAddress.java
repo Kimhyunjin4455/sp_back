@@ -17,8 +17,6 @@ public class ShippingAddress {
 	@Id
 	@GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
 	private Long deliveryId;
-	// @(nullable = false, length = 30)
-	// private Long memberAddressId; // 회원 주소 id
 	@Column(length = 15)
 	private String nickname; // 배송지 별칭
 	@Column(nullable = false, length = 20)
@@ -42,7 +40,8 @@ public class ShippingAddress {
 
 	@Builder
 	public ShippingAddress(Long deliveryId, String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean baseAddress, String uuid, String receiver) {
+		String phone1, String phone2, String message, boolean baseAddress, String uuid, String receiver
+	) {
 		this.deliveryId = deliveryId;
 		this.nickname = nickname;
 		this.postNumber = postNumber;
@@ -56,9 +55,5 @@ public class ShippingAddress {
 		this.receiver = receiver;
 	}
 
-	// 더티 체킹
-	public void changeBaseAddress(boolean baseAddress) {
-		this.baseAddress = baseAddress;
-	}
 }
 

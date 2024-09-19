@@ -28,11 +28,11 @@ public class Review extends BaseEntity {
 	private String reviewUuid;
 	private Integer reviewScore;
 	@Column(nullable = false)
-	private String productUuid;
+	private String productUuid; // 상품의 정보가 너무 많기에, 매핑 테이블 요구됨
 	@Column(nullable = false)
-	private String memberUuid; // 정원이와 타입 통일 필요
+	private String memberUuid; // 정원이와 타입 통일 필요, uuid보단 닉네임
 	@Column
-	private Integer reviewViewCount; // 조회수
+	private Integer reviewViewCount; // 조회수 -> 동시성문제, 집계테이블 필요, 베스트는 db의 더미깂 통해 해결
 
 	public void modifyContent(String content) {
 		this.content = content;

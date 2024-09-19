@@ -58,7 +58,7 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional // get 이 많으면 위에 선언하고 필요한데만 write로
 	public void deleteWishList(String userId, String productUuid) {
 		wishListRepository.deleteByMemberUuidAndProductUuid(userId, productUuid);
 	}

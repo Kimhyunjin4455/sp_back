@@ -43,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
 					.modDate(myReview.getModDate())
 					.build()
 				).toList();
-		}
+		}// 리뷰 id만
 
 		return List.of();
 
@@ -111,7 +111,7 @@ public class ReviewServiceImpl implements ReviewService {
 		// 상품의 리뷰들 중 평점과 조회수 높은 리뷰들을 5개까지 반환
 
 		List<Review> productReviews = reviewRepository.findTop5ByProductUuidOrderByReviewScoreDescReviewViewCountDesc(
-			productUuid);
+			productUuid); // 새 테이블을 만들어 값을 넣어놓는게
 
 		if (productReviews != null) {
 			return productReviews.stream()
@@ -132,9 +132,9 @@ public class ReviewServiceImpl implements ReviewService {
 		//reviewUuid가 존재하면 추가하지 않고 예외 발생
 		if (reviewRepository.existsByReviewUuid(reviewRequestDto.getReviewUuid())) {
 			throw new IllegalArgumentException("리뷰 UUID가 이미 존재합니다: " + reviewRequestDto.getReviewUuid());
-		}
+		} // unique와 transactional을 이용하여 중복 방지
 
-		reviewRepository.save(reviewRequestDto.toEntity(reviewRequestDto.getReviewUuid(),
+		reviewRepository.save(reviewRequestDto.toEntity(reviewRequestDto.getReviewUuid(), // 이때 uuid 생성
 			reviewRequestDto.getProductUuid(), reviewRequestDto.getMemberUuid()));
 	}
 
@@ -145,6 +145,8 @@ public class ReviewServiceImpl implements ReviewService {
 		Review review = result.get();
 
 		review.modifyReviewViewCount(review.getReviewViewCount() + 1);
+
+		// modifyXXX 보단 build()를 통해 새로운 객체를 생성하는 것이 좋을 것 같다.
 
 		reviewRepository.save(review);
 	}
@@ -166,7 +168,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	@Transactional
-	public void deleteReview(
+	public void deleteReview( // 소프트delete 형식 추천
 		Long reviewId
 	) {
 		reviewRepository.deleteById(reviewId);

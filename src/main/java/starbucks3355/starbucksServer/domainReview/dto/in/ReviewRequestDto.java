@@ -10,7 +10,7 @@ import starbucks3355.starbucksServer.domainReview.entity.Review;
 @Builder
 public class ReviewRequestDto {
 	private String content;
-	private String reviewUuid;
+	private String reviewUuid; // UUID 타입 통해 입력 받기
 	private Integer reviewScore;
 	private String productUuid; // 회원이 구매한 '상품'에 대한 리뷰
 	private String memberUuid; // 액세스 토큰을 통해 값 입력받음

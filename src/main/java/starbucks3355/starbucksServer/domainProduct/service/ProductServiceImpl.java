@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.category.repository.CategoryListRepository;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
@@ -26,6 +27,7 @@ import starbucks3355.starbucksServer.domainProduct.entity.ProductTag;
 import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.FlagsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductDetailsRepository;
+import starbucks3355.starbucksServer.domainProduct.repository.ProductListRepositoryCustom;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductTagRepository;
 
@@ -39,8 +41,8 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductDetailsRepository productDetailsRepository;
 	private final FlagsRepository flagsRepository;
 	private final ProductTagRepository productTagRepository;
-
 	private final CategoryListRepository categoryListRepository;
+	private final ProductListRepositoryCustom productListRepositoryCustom;
 
 	@Override
 	public void addProduct(ProductRequestDto productRequestDto) {
@@ -62,6 +64,11 @@ public class ProductServiceImpl implements ProductService {
 			.productDescription(product.getProductDescription())
 			.productInfo(product.getProductInfo())
 			.build());
+	}
+
+	@Override
+	public CursorPage<String> getProductList(Long lastId, Integer pageSize, Integer page) {
+		return productListRepositoryCustom.getProductList(lastId, pageSize, page);
 	}
 
 	// @Override
@@ -92,14 +99,9 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductResponseDto getProduct(String productUuid) {
 
-		Product product = productRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+		return ProductResponseDto.from(productRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다.")));
 
-		return ProductResponseDto.builder()
-			.productName(product.getProductName())
-			.productDescription(product.getProductDescription())
-			.productInfo(product.getProductInfo())
-			.build();
 	}
 
 	@Override
@@ -114,14 +116,14 @@ public class ProductServiceImpl implements ProductService {
 					.build()
 				).toList();
 
-		} else {
-			List<Product> nameUuidList = productRepository.findByProductNameContaining(productSearchInfo);
-			return nameUuidList.stream()
-				.map(nameOfProductUuid -> ProductInfoResponseDto.builder()
-					.productUuid(nameOfProductUuid.getProductUuid())
-					.build()
-				).toList();
-		}
+		} // else 사용할 이유가 없음, if 에서 미리 반환됨, 검색 로직 개선
+		List<Product> nameUuidList = productRepository.findByProductNameContaining(productSearchInfo);
+		return nameUuidList.stream()
+			.map(nameOfProductUuid -> ProductInfoResponseDto.builder()
+				.productUuid(nameOfProductUuid.getProductUuid())
+				.build()
+			).toList();
+
 	}
 
 	@Override

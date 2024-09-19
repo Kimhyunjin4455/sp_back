@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductInfoResponseDto;
@@ -82,6 +83,21 @@ public class ProductController {
 			CommonResponseMessage.SUCCESS.getMessage(),
 			productResponseVos,
 			productResponseDtos.hasNext()
+		);
+	}
+
+	@GetMapping("/list")
+	@Operation(summary = "상품 목록 조회 2 (커서 페이지 처리)")
+	public CommonResponseEntity<CursorPage<String>> getProducts(
+		@RequestParam(value = "lastId", required = false) Long lastId,
+		@RequestParam(value = "pageSize", required = false) Integer pageSize,
+		@RequestParam(value = "page", required = false) Integer page
+	) {
+		CursorPage<String> productResponseDtos = productService.getProductList(lastId, pageSize, page);
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			productResponseDtos
 		);
 	}
 

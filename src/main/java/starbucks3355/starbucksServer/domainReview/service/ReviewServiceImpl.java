@@ -14,9 +14,9 @@ import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.entity.Review;
 import starbucks3355.starbucksServer.domainReview.repository.ReviewRepository;
 
@@ -28,12 +28,12 @@ public class ReviewServiceImpl implements ReviewService {
 	private final ImageRepository imageRepository;
 
 	@Override
-	public List<MyReviewResponseDto> getMyReviews(String memberUuid) {
+	public List<UserReviewResponseDto> getUserReviews(String memberUuid) {
 		List<Review> myReviews = reviewRepository.findByMemberUuid(memberUuid);
 
 		if (myReviews != null) {
 			return myReviews.stream()
-				.map(myReview -> MyReviewResponseDto.builder()
+				.map(myReview -> UserReviewResponseDto.builder()
 					.content(myReview.getContent())
 					.reviewUuid(myReview.getReviewUuid())
 					.reviewScore(myReview.getReviewScore())

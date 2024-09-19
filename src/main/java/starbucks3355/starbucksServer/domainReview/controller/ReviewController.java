@@ -25,15 +25,15 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceWithScoreEntity;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.service.ReviewService;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewModifyRequestVo;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewRequestVo;
-import starbucks3355.starbucksServer.domainReview.vo.out.MyReviewResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewProductResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
+import starbucks3355.starbucksServer.domainReview.vo.out.UserReviewResponseVo;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -106,20 +106,38 @@ public class ReviewController {
 		);
 	}
 
-	@GetMapping("/allReviewsOfMember")
-	@Operation(summary = "회원별 리뷰 전체 조회")
-	public CommonResponseEntity<List<MyReviewResponseVo>> getMemberReviews(
+	@GetMapping("/allReviewsOfMyPage")
+	@Operation(summary = "나의 리뷰 전체 조회")
+	public CommonResponseEntity<List<UserReviewResponseVo>> getMemberReviews(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
 		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
 
-		List<MyReviewResponseDto> memberReviewsDto = reviewService.getMyReviews(memberUuid);
+		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(memberUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			memberReviewsDto.stream()
-				.map(MyReviewResponseDto::dtoToResponseVo)
+				.map(UserReviewResponseDto::dtoToResponseVo)
+				.toList()
+		);
+
+	}
+
+	@GetMapping("/allReviewsOfUser/{memberUuid}")
+	@Operation(summary = "회원별 리뷰 전체 조회")
+	// 상품상세 페이지에서 이용할 용도(페이지 생성여부에 따라 갈림)
+	public CommonResponseEntity<List<UserReviewResponseVo>> getUserReviews(
+		@PathVariable String memberUuid
+	) {
+		List<UserReviewResponseDto> userReviews = reviewService.getUserReviews(memberUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			userReviews.stream()
+				.map(UserReviewResponseDto::dtoToResponseVo)
 				.toList()
 		);
 

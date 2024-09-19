@@ -31,6 +31,8 @@ public class Review extends BaseEntity {
 	private String productUuid;
 	@Column(nullable = false)
 	private String memberUuid; // 정원이와 타입 통일 필요
+	@Column
+	private Integer reviewViewCount; // 조회수
 
 	public void modifyContent(String content) {
 		this.content = content;
@@ -38,6 +40,10 @@ public class Review extends BaseEntity {
 
 	public void modifyReviewScore(Integer reviewScore) {
 		this.reviewScore = reviewScore;
+	}
+
+	public void modifyReviewViewCount(Integer reviewViewCount) {
+		this.reviewViewCount = reviewViewCount;
 	}
 
 }

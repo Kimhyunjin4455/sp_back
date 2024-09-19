@@ -14,9 +14,9 @@ import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.entity.Review;
 import starbucks3355.starbucksServer.domainReview.repository.ReviewRepository;
 
@@ -28,12 +28,12 @@ public class ReviewServiceImpl implements ReviewService {
 	private final ImageRepository imageRepository;
 
 	@Override
-	public List<MyReviewResponseDto> getMyReviews(String memberUuid) {
+	public List<UserReviewResponseDto> getUserReviews(String memberUuid) {
 		List<Review> myReviews = reviewRepository.findByMemberUuid(memberUuid);
 
 		if (myReviews != null) {
 			return myReviews.stream()
-				.map(myReview -> MyReviewResponseDto.builder()
+				.map(myReview -> UserReviewResponseDto.builder()
 					.content(myReview.getContent())
 					.reviewUuid(myReview.getReviewUuid())
 					.reviewScore(myReview.getReviewScore())
@@ -107,14 +107,46 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
+	public List<ReviewResponseDto> getBestReviews(String productUuid) {
+		// 상품의 리뷰들 중 평점과 조회수 높은 리뷰들을 5개까지 반환
+
+		List<Review> productReviews = reviewRepository.findTop5ByProductUuidOrderByReviewScoreDescReviewViewCountDesc(
+			productUuid);
+
+		if (productReviews != null) {
+			return productReviews.stream()
+				.map(productReview -> ReviewResponseDto.builder()
+					.content(productReview.getContent())
+					.reivewScore(productReview.getReviewScore())
+					.regDate(productReview.getRegDate())
+					.modDate(productReview.getModDate())
+					.build()
+				).toList();
+		}
+
+		return List.of();
+	}
+
+	@Override
 	public void addReview(ReviewRequestDto reviewRequestDto) {
-		// String reviewUuid = UUID.randomUUID().toString();
-		// String productUuid = UUID.randomUUID().toString();
-		// String memberUuid = UUID.randomUUID().toString();
-		// 스웨거랑 별개로 리뷰 등록 시에는 리뷰, 상품, 회원의 UUID를 생성하여 저장
+		//reviewUuid가 존재하면 추가하지 않고 예외 발생
+		if (reviewRepository.existsByReviewUuid(reviewRequestDto.getReviewUuid())) {
+			throw new IllegalArgumentException("리뷰 UUID가 이미 존재합니다: " + reviewRequestDto.getReviewUuid());
+		}
 
 		reviewRepository.save(reviewRequestDto.toEntity(reviewRequestDto.getReviewUuid(),
 			reviewRequestDto.getProductUuid(), reviewRequestDto.getMemberUuid()));
+	}
+
+	@Override
+	public void addReviewViewCount(String reviewUuid) {
+		Optional<Review> result = reviewRepository.findByReviewUuid(reviewUuid);
+
+		Review review = result.get();
+
+		review.modifyReviewViewCount(review.getReviewViewCount() + 1);
+
+		reviewRepository.save(review);
 	}
 
 	@Override

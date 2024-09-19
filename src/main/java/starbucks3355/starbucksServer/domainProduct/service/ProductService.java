@@ -19,6 +19,9 @@ public interface ProductService {
 
 	public Slice<ProductsResponseDto> getProducts(int page, int size);
 
+	// public Slice<ProductsResponseDto> getProductsByCategoryInfo(int page, int size, Integer majorCategoryId,
+	// 	Integer middleCategoryId);
+
 	public ProductResponseDto getProduct(String productUuid);
 
 	public List<ProductInfoResponseDto> getProductsInfo(String productSearchInfo);

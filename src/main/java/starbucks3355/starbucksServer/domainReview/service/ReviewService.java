@@ -6,12 +6,12 @@ import org.springframework.data.domain.Slice;
 
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.MyReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 
 public interface ReviewService {
-	public List<MyReviewResponseDto> getMyReviews(String memberUuid);
+	public List<UserReviewResponseDto> getUserReviews(String memberUuid);
 
 	public Slice<ReviewProductResponseDto> getProductReviews(String productUuid, int page, int size);
 
@@ -19,7 +19,11 @@ public interface ReviewService {
 
 	public ReviewResponseDto getReview(String reviewUuid);
 
+	public List<ReviewResponseDto> getBestReviews(String productUuid);
+
 	void addReview(ReviewRequestDto reviewRequestDto);
+
+	void addReviewViewCount(String reviewUuid);
 
 	void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto, String reviewUuid);
 

@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
-import starbucks3355.starbucksServer.domainReview.vo.out.MyReviewResponseVo;
+import starbucks3355.starbucksServer.domainReview.vo.out.UserReviewResponseVo;
 
 @Getter
 @Builder
-public class MyReviewResponseDto {
+public class UserReviewResponseDto {
 	private String content;
 	private String reviewUuid;
 	private Integer reviewScore;
@@ -16,7 +16,7 @@ public class MyReviewResponseDto {
 	private String memberUuid; // 미확실 필드: "시큐리티의 토큰처리에 따라" 사용여부 결정
 	private LocalDateTime regDate, modDate;
 
-	public MyReviewResponseDto(
+	public UserReviewResponseDto(
 		String content,
 		String reviewUuid,
 		Integer reviewScore,
@@ -33,8 +33,8 @@ public class MyReviewResponseDto {
 		this.modDate = modDate;
 	}
 
-	public MyReviewResponseVo dtoToResponseVo() {
-		return MyReviewResponseVo.builder()
+	public UserReviewResponseVo dtoToResponseVo() {
+		return UserReviewResponseVo.builder()
 			.content(content)
 			.reviewUuid(reviewUuid)
 			.reviewScore(reviewScore)

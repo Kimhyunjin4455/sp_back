@@ -23,4 +23,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	// 상품의 리뷰들 중 평점이 높고 조회수가 높은 리뷰들을 5개까지 반환
 	List<Review> findTop5ByProductUuidOrderByReviewScoreDescReviewViewCountDesc(String productUuid);
 
+	boolean existsByReviewUuid(String reviewUuid);
+
 }

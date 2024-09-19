@@ -24,6 +24,17 @@ public enum BaseResponseStatus {
 	DISABLED_USER(HttpStatus.FORBIDDEN, false, 404, "비활성화된 계정입니다. 계정을 복구하시겠습니까?"),
 	FAILED_TO_RESTORE(HttpStatus.INTERNAL_SERVER_ERROR, false, 405, "계정 복구에 실패했습니다. 관리자에게 문의해주세요."),
 
+	// Shipping
+	SHIPPING_ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, false, 406, "배송지 정보를 찾을 수 없습니다."),
+	DUPLICATE_ADDRESS(HttpStatus.CONFLICT, false, 407, "이미 존재하는 배송지입니다."),
+	COUNT_OVER(HttpStatus.BAD_REQUEST, false, 408, "최대 개수를 초과하였습니다."),
+	SHIPPING_ADDRESS_ENROLL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 409, "배송지 등록에 실패했습니다."),
+	SHIPPING_ADDRESS_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 410, "배송지 삭제에 실패했습니다."),
+	SHIPPING_ADDRESS_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 411, "배송지 수정에 실패했습니다."),
+	SHIPPING_ADDRESS_NOT_EXIST(HttpStatus.NOT_FOUND, false, 412, "존재하지 않는 배송지입니다."),
+	SHIPPING_ID_NOT_EXIST(HttpStatus.NOT_FOUND, false, 413, "존재하지 않는 배송지 ID입니다."),
+	BASE_ADDRESS_EXIST(HttpStatus.BAD_REQUEST, false, 414, "기본 배송지가 이미 존재합니다."),
+
 	/**
 	 * 900: 기타 에러
 	 */

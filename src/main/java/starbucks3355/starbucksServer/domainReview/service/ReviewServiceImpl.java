@@ -18,9 +18,11 @@ import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.entity.Review;
 import starbucks3355.starbucksServer.domainReview.repository.ReviewRepository;
+import starbucks3355.starbucksServer.domainReview.repository.ReviewRepositoryCustom;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final MemberRepository memberRepository;
 	private final ImageRepository imageRepository;
+	private final ReviewRepositoryCustom reviewRepositoryCustom;
 
 	@Override
 	public List<UserReviewResponseDto> getUserReviews(String authorName) {
@@ -101,6 +104,11 @@ public class ReviewServiceImpl implements ReviewService {
 			.regDate(review.getRegDate())
 			.modDate(review.getModDate())
 			.build();
+	}
+
+	@Override
+	public ReviewScoreResponseDto getReviewScore(String productUuid) {
+		return reviewRepositoryCustom.getReviewScore(productUuid);
 	}
 
 	@Override

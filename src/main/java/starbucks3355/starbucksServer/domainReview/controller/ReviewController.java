@@ -24,17 +24,19 @@ import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
-import starbucks3355.starbucksServer.common.entity.CommonResponseSliceWithScoreEntity;
+import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.service.ReviewService;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewModifyRequestVo;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewRequestVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewProductResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
+import starbucks3355.starbucksServer.domainReview.vo.out.ReviewScoreResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.UserReviewResponseVo;
 
 @Slf4j
@@ -47,32 +49,21 @@ public class ReviewController {
 
 	@GetMapping("/{productUuid}/allReviewsOfProduct")
 	@Operation(summary = "상품별 리뷰 전체 조회")
-	public CommonResponseSliceWithScoreEntity<List<ReviewProductResponseVo>> getProductReviews(
+	public CommonResponseSliceEntity<List<ReviewProductResponseVo>> getProductReviews(
 		@PathVariable String productUuid,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "20") int size) {
 		Slice<ReviewProductResponseDto> productReviewResponseDtoSlice = reviewService.getProductReviews(productUuid,
 			page, size);
 
-		Double reviewAvgScore = productReviewResponseDtoSlice.stream()
-			.mapToDouble(ReviewProductResponseDto::getReviewScore)
-			.average()
-			.orElse(0);
-
-		String formattedScore = String.format("%.1f", reviewAvgScore);
-
-		Integer reviewCnt = productReviewResponseDtoSlice.getNumberOfElements();
-
 		List<ReviewProductResponseVo> responseVoList = productReviewResponseDtoSlice.stream()
 			.map(ReviewProductResponseDto::dtoToResponseVo)
 			.toList();
 
-		return new CommonResponseSliceWithScoreEntity<>(
+		return new CommonResponseSliceEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			responseVoList,
-			Double.parseDouble(formattedScore), // Double 형식으로 변환 (소수점 1자리까지만 표시하기 위해
-			reviewCnt,
 			productReviewResponseDtoSlice.hasNext()
 		);
 	}
@@ -157,6 +148,22 @@ public class ReviewController {
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			reviewResponseDto.dtoToResponseVo()
+		);
+	}
+
+	@GetMapping("/{productUuid}/reviewScore")
+	@Operation(summary = "상품별 리뷰 점수의 평균과 갯수 조회")
+	public BaseResponse<ReviewScoreResponseVo> getReviewScore(
+		@PathVariable String productUuid
+	) {
+		ReviewScoreResponseDto reviewScoreResponseDto = reviewService.getReviewScore(productUuid);
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			reviewScoreResponseDto.dtoToResponseVo()
 		);
 	}
 

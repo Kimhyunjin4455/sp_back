@@ -8,6 +8,7 @@ import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 
 public interface ReviewService {
@@ -18,6 +19,8 @@ public interface ReviewService {
 	public List<ReviewProductResponseDto> getProductReviewsHaveMedia(String productUuid);
 
 	public ReviewResponseDto getReview(String reviewUuid);
+
+	public ReviewScoreResponseDto getReviewScore(String productUuid);
 
 	public List<ReviewResponseDto> getBestReviews(String productUuid);
 

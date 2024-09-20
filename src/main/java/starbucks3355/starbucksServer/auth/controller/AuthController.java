@@ -22,6 +22,8 @@ import starbucks3355.starbucksServer.auth.vo.request.SignUpRequestVo;
 import starbucks3355.starbucksServer.auth.vo.response.SignInResponseVo;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
+import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
+import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,9 +59,12 @@ public class AuthController {
 
 	@Operation(summary = "이메일 중복 여부 확인 API", description = "이메일 중복 여부 확인 API 입니다.", tags = {"AuthUserDetail"})
 	@PostMapping("/email-duplicate")
-	public ResponseEntity<EmailCheckResponseDto> checkEmail(@RequestBody EmailCheckRequestDto emailCheckRequestDto) {
+	public CommonResponseEntity<EmailCheckResponseDto> checkEmail(@RequestBody EmailCheckRequestDto emailCheckRequestDto) {
 		EmailCheckResponseDto response = authService.checkEmail(emailCheckRequestDto);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			response);
 	}
 
 

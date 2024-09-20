@@ -11,27 +11,27 @@ import starbucks3355.starbucksServer.domainMember.entity.Member;
 public class SignInResponseDto {
 
 	private String accessToken;
-	private String name;
+	private String userId;
 	private String uuid;
 
 	@Builder
-	public SignInResponseDto(String accessToken, String name, String uuid) {
+	public SignInResponseDto(String accessToken, String userId, String uuid) {
 		this.accessToken = accessToken;
-		this.name = name;
+		this.userId = userId;
 		this.uuid = uuid;
 	}
 
 	public SignInResponseVo toVo() {
 		return SignInResponseVo.builder()
 			.accessToken(accessToken)
-			.name(name)
+			.userId(userId)
 			.uuid(uuid)
 			.build();
 	}
 	public static SignInResponseDto from(Member member, String accessToken) {
 		return SignInResponseDto.builder()
 			.accessToken(accessToken)
-			.name(member.getName())
+			.userId(member.getUserId())
 			.uuid(member.getUuid())
 			.build();
 	}

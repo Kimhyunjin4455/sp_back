@@ -10,18 +10,17 @@ import starbucks3355.starbucksServer.auth.vo.request.SignInRequestVo;
 @NoArgsConstructor
 @ToString
 public class SignInRequestDto {
-
-	private String email;
+	private String userId;
 	private String password;
 
 	@Builder
-	public SignInRequestDto(String email, String password) {
-		this.email = email;
+	public SignInRequestDto(String email, String userId, String password) {
+		this.userId = userId;
 		this.password = password;
 	}
 	public static SignInRequestDto from(SignInRequestVo signInRequestVo) {
 		return SignInRequestDto.builder()
-			.email(signInRequestVo.getEmail())
+			.userId(signInRequestVo.getUserId())
 			.password(signInRequestVo.getPassword())
 			.build();
 	}

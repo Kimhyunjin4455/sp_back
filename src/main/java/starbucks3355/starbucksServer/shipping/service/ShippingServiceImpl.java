@@ -32,13 +32,6 @@ public class ShippingServiceImpl implements ShippingService {
 			throw new BaseException(BaseResponseStatus.COUNT_OVER);  // 배송지 최대 개수 초과 예외
 		}
 
-		if (shippingRepository.existsByDetailAddressAndUuid(shippingAddRequestDto.getDetailAddress(), memberUuid)) {
-			throw new BaseException(BaseResponseStatus.DUPLICATE_ADDRESS);  // 중복된 주소 예외
-		}
-		// if (shippingRepository.findBaseAddressByUuid(memberUuid).isPresent()) {
-		//  throw new BaseException(BaseResponseStatus.BASE_ADDRESS_EXIST);  // 기본 배송지가 이미 존재하는 경우
-		// }
-
 		// 기본 배송지 있는지 유무
 		// 있으면 기본 배송지로 설정
 		// 기존 값 False로 바꾸기

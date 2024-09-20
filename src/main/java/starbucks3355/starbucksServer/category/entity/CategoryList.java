@@ -21,13 +21,15 @@ public class CategoryList {
 	private Integer majorCategoryName;
 	private Integer middleCategoryName;
 	private Integer bottomCategoryName;
-	//private String productCode; // 각 상품개체를 표현하는 값
+	private String productUuid;
 
 	@Builder
-	public CategoryList(Long id, Integer majorCategoryName, Integer middleCategoryName, Integer bottomCategoryName) {
+	public CategoryList(Long id, Integer majorCategoryName, Integer middleCategoryName, Integer bottomCategoryName,
+		String productUuid) {
 		this.id = id;
 		this.majorCategoryName = majorCategoryName;
 		this.middleCategoryName = middleCategoryName;
 		this.bottomCategoryName = bottomCategoryName;
+		this.productUuid = productUuid;
 	}
 }

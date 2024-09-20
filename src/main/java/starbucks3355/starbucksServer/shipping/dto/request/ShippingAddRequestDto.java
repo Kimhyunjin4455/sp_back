@@ -39,13 +39,13 @@ public class ShippingAddRequestDto {
 	public ShippingAddress toEntity(String memberUuid, ShippingAddRequestDto shippingAddRequestDto) {
 		return ShippingAddress.builder()
 			.nickname(shippingAddRequestDto.getNickname())
-			.postNumber(shippingAddRequestDto.getPostNumber())
 			.address(shippingAddRequestDto.getAddress())
 			.detailAddress(shippingAddRequestDto.getDetailAddress())
+			.postNumber(shippingAddRequestDto.getPostNumber())
+			.receiver(shippingAddRequestDto.getReceiver())
 			.phone1(shippingAddRequestDto.getPhone1())
 			.phone2(shippingAddRequestDto.getPhone2())
 			.message(shippingAddRequestDto.getMessage())
-			.receiver(shippingAddRequestDto.getReceiver())
 			.baseAddress(shippingAddRequestDto.isBaseAddress())
 			.uuid(memberUuid)
 			.build();

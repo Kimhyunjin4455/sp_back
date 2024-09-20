@@ -2,35 +2,31 @@ package starbucks3355.starbucksServer.domainProduct.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductsResponseVo;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class ProductsResponseDto {
 	private String productUuid;
-	private String productName;
-	private String productDescription;
-	private String productInfo;
 
+	@Builder
 	public ProductsResponseDto(
-		String productUuid,
-		String productName,
-		String productDescription,
-		String productInfo
+		String productUuid
 	) {
 		this.productUuid = productUuid;
-		this.productName = productName;
-		this.productDescription = productDescription;
-		this.productInfo = productInfo;
-
 	}
 
 	public ProductsResponseVo dtoToResponseVo() {
 		return ProductsResponseVo.builder()
 			.productUuid(productUuid)
-			// .productName(productName)
-			// .productDescription(productDescription)
-			// .productInfo(productInfo)
+			.build();
+	}
+
+	public static ProductsResponseDto from(Product product) {
+		return ProductsResponseDto.builder()
+			.productUuid(product.getProductUuid())
 			.build();
 	}
 

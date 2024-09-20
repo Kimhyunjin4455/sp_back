@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +12,7 @@ import lombok.ToString;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class Product {
 	@Id
@@ -29,5 +26,13 @@ public class Product {
 	private String productDescription;
 	@Column(length = 10000)
 	private String productInfo;
+
+	@Builder
+	public Product(String productUuid, String productName, String productDescription, String productInfo) {
+		this.productUuid = productUuid;
+		this.productName = productName;
+		this.productDescription = productDescription;
+		this.productInfo = productInfo;
+	}
 
 }

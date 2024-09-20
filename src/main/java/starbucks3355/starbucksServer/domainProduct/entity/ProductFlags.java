@@ -21,8 +21,6 @@ public class ProductFlags {
 	@GeneratedValue
 	private Long id;
 	@Column(nullable = false)
-	private boolean isLiked; // 수정 필요, 회원의 정보가 같이 필요 -> 변화가 심함 -> noSQL
-	@Column(nullable = false)
 	private boolean isNew;
 	@Column(nullable = false)
 	private boolean isBest;

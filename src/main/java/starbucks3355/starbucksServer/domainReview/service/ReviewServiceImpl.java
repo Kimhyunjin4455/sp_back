@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
+import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
@@ -28,8 +30,8 @@ public class ReviewServiceImpl implements ReviewService {
 	private final ImageRepository imageRepository;
 
 	@Override
-	public List<UserReviewResponseDto> getUserReviews(String memberUuid) {
-		List<Review> myReviews = reviewRepository.findByMemberUuid(memberUuid);
+	public List<UserReviewResponseDto> getUserReviews(String authorName) {
+		List<Review> myReviews = reviewRepository.findByAuthorName(authorName);
 
 		if (myReviews != null) {
 			return myReviews.stream()
@@ -37,13 +39,13 @@ public class ReviewServiceImpl implements ReviewService {
 					.content(myReview.getContent())
 					.reviewUuid(myReview.getReviewUuid())
 					.reviewScore(myReview.getReviewScore())
-					.productUuid(myReview.getMemberUuid())
-					.memberUuid(myReview.getMemberUuid())
+					.productUuid(myReview.getProductUuid())
+					.authorName(myReview.getAuthorName())
 					.regDate(myReview.getRegDate())
 					.modDate(myReview.getModDate())
 					.build()
 				).toList();
-		}
+		}// 리뷰 id만
 
 		return List.of();
 
@@ -59,9 +61,7 @@ public class ReviewServiceImpl implements ReviewService {
 			.reviewScore(review.getReviewScore())
 			.reviewUuid(review.getReviewUuid())
 			.productUuid(review.getProductUuid())
-			.userId(memberRepository.findByUuid(review.getMemberUuid())
-				.map(member -> member.getUserId().substring(0, 3) + "*******")
-				.orElse("UNKNOWN")) // 회원 정보가 없을 경우 처리
+			.authorName(review.getAuthorName())
 			.regDate(review.getRegDate())
 			.modDate(review.getModDate())
 			.build());
@@ -80,10 +80,7 @@ public class ReviewServiceImpl implements ReviewService {
 					.reviewScore(productReview.getReviewScore())
 					.reviewUuid(productReview.getReviewUuid())
 					.productUuid(productReview.getProductUuid())
-					.userId(memberRepository.findByUuid(productReview.getMemberUuid())
-						.get()
-						.getUserId()
-						.substring(0, 3) + "*******")
+					.authorName(productReview.getAuthorName())
 					.regDate(productReview.getRegDate())
 					.modDate(productReview.getModDate())
 					.build()
@@ -111,7 +108,7 @@ public class ReviewServiceImpl implements ReviewService {
 		// 상품의 리뷰들 중 평점과 조회수 높은 리뷰들을 5개까지 반환
 
 		List<Review> productReviews = reviewRepository.findTop5ByProductUuidOrderByReviewScoreDescReviewViewCountDesc(
-			productUuid);
+			productUuid); // 새 테이블을 만들어 값을 넣어놓는게
 
 		if (productReviews != null) {
 			return productReviews.stream()
@@ -129,13 +126,11 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public void addReview(ReviewRequestDto reviewRequestDto) {
-		//reviewUuid가 존재하면 추가하지 않고 예외 발생
-		if (reviewRepository.existsByReviewUuid(reviewRequestDto.getReviewUuid())) {
-			throw new IllegalArgumentException("리뷰 UUID가 이미 존재합니다: " + reviewRequestDto.getReviewUuid());
+		try {
+			reviewRepository.save(reviewRequestDto.toEntity());
+		} catch (Exception e) {
+			throw new BaseException(BaseResponseStatus.FAILED_TO_ADD_REVIEWS);
 		}
-
-		reviewRepository.save(reviewRequestDto.toEntity(reviewRequestDto.getReviewUuid(),
-			reviewRequestDto.getProductUuid(), reviewRequestDto.getMemberUuid()));
 	}
 
 	@Override
@@ -145,6 +140,8 @@ public class ReviewServiceImpl implements ReviewService {
 		Review review = result.get();
 
 		review.modifyReviewViewCount(review.getReviewViewCount() + 1);
+
+		// modifyXXX 보단 build()를 통해 새로운 객체를 생성하는 것이 좋을 것 같다.
 
 		reviewRepository.save(review);
 	}
@@ -166,7 +163,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	@Transactional
-	public void deleteReview(
+	public void deleteReview( // 소프트delete 형식 추천
 		Long reviewId
 	) {
 		reviewRepository.deleteById(reviewId);

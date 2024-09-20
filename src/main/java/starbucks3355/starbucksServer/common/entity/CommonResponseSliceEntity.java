@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class CommonResponseSliceEntity<T> {
 	private HttpStatus status;
 	private String message;
-	private T data;
+	private T result;
 	private boolean hasNext; // 다음 페이지 여부 추가
 }

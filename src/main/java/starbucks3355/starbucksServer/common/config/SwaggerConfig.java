@@ -129,4 +129,12 @@ public class SwaggerConfig {
 			.build();
 	}
 
+	@Bean
+	GroupedOpenApi PromotionAPI() {
+		return GroupedOpenApi.builder()
+			.group("기획전")
+			.pathsToMatch("/api/v1/promotion/**")
+			.build();
+	}
+
 }

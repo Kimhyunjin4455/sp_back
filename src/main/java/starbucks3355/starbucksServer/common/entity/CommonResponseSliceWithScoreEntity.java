@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CommonResponseSliceWithScoreEntity<T> {
 	private HttpStatus status;
 	private String message;
-	private T data;
+	private T result;
 	private Double avg;
 	private Integer cnt;
 	private boolean hasNext; // 다음 페이지 여부 추가

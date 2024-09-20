@@ -3,6 +3,7 @@ package starbucks3355.starbucksServer.domainProduct.dto.request;
 import lombok.Builder;
 import lombok.Getter;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
+import starbucks3355.starbucksServer.domainProduct.vo.request.ProductRequestVo;
 
 @Getter
 public class ProductRequestDto {
@@ -29,5 +30,14 @@ public class ProductRequestDto {
 		this.productDescription = productDescription;
 		this.productInfo = productInfo;
 		this.productCode = productCode;
+	}
+
+	public static ProductRequestDto of(ProductRequestVo productRequestVo) {
+		return ProductRequestDto.builder()
+			.productName(productRequestVo.getProductName())
+			.productDescription(productRequestVo.getProductDescription())
+			.productInfo(productRequestVo.getProductInfo())
+			.build();
+
 	}
 }

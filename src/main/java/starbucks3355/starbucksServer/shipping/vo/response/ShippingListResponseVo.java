@@ -14,6 +14,11 @@ public class ShippingListResponseVo {
 	private Long deliveryId;
 	private String address;
 	private String detailAddress;
-	private String phone1;
+	private String nickname;
 	private String receiver;
+	private String postNumber;
+	private String phone1;
+	private String phone2;
+	private String message;
+	private boolean baseAddress;
 }

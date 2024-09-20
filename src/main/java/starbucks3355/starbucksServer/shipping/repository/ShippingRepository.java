@@ -14,7 +14,7 @@ public interface ShippingRepository extends JpaRepository<ShippingAddress, Long>
 	@Query("select d from ShippingAddress d where d.uuid = :uuid and d.baseAddress = true")
 	Optional<ShippingAddress> findBaseAddressByUuid(@Param("uuid") String uuid);
 
-	ShippingAddress findByDeliveryId(Long deliveryId);
+	Optional<ShippingAddress> findByDeliveryId(Long deliveryId);
 
 	boolean existsByUuid(String uuid);
 

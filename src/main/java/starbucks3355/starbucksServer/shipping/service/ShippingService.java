@@ -30,4 +30,5 @@ public interface ShippingService {
 	void deleteShipping(String uuid, Long deliveryId);
 
 	void createShipping(String memberUuid, ShippingAddRequestDto shippingAddRequestDto);
+
 }

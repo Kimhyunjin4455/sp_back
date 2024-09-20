@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import starbucks3355.starbucksServer.auth.vo.response.SignInResponseVo;
+import starbucks3355.starbucksServer.domainMember.entity.Member;
 
 @Getter
 @NoArgsConstructor
@@ -25,6 +26,13 @@ public class SignInResponseDto {
 			.accessToken(accessToken)
 			.name(name)
 			.uuid(uuid)
+			.build();
+	}
+	public static SignInResponseDto from(Member member, String accessToken) {
+		return SignInResponseDto.builder()
+			.accessToken(accessToken)
+			.name(member.getName())
+			.uuid(member.getUuid())
 			.build();
 	}
 

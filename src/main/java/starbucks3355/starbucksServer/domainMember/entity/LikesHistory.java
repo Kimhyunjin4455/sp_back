@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 public class LikesHistory {
 	@Id

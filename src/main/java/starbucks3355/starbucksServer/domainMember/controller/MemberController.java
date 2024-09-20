@@ -68,23 +68,6 @@ public class MemberController {
 		);
 	}
 
-	@GetMapping("/{uuid}")
-	@Operation(summary = "회원 닉네임 조회")
-	public CommonResponseEntity<MemberReviewResponseVo> getNickname(@PathVariable String uuid) {
-		// MemberReviewResponseDto를 가져옴
-		MemberReviewResponseDto nicknameDto = memberService.getNickname(uuid);
-
-		// MemberReviewResponseVo로 변환
-		MemberReviewResponseVo nicknameVo = nicknameDto.toVo();
-
-		// CommonResponseEntity를 반환
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			nicknameVo
-		);
-	}
-
 	@PostMapping("/likes")
 	@Operation(summary = "찜하기, 찜하기 취소")
 	public ResponseEntity<LikesProductResponseDto> likeProduct(@RequestHeader("Authorization") String accessToken,

@@ -42,27 +42,7 @@ public class MemberServiceImpl implements MemberService {
 		));
 	}
 
-	@Override
-	public MemberReviewResponseDto getNickname(String uuid) {
-		// 데이터베이스에서 회원 정보 조회
-		Optional<Member> optionalMember = memberRepository.findByUuid(uuid);
-
-		// 회원이 존재하지 않을 경우 null 반환
-		if (!optionalMember.isPresent()) {
-			return null; // 또는 적절한 기본값을 반환할 수 있습니다.
-		}
-
-		// 회원 정보를 가져옴
-		Member member = optionalMember.get();
-
-		// MemberReviewResponseDto로 변환하여 반환
-		return MemberReviewResponseDto.builder()
-			.uuid(member.getUuid())
-			.nickname(member.getNickname())
-			.build();
-	}
-
-	// 찜한 상품 목록 조회
+	// 찜한 상품 목록 조회 (라스트 값 뽑기)
 	@Override
 	public Slice<LikesProductResponseDto> getLikesListByUuid(String uuid, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
@@ -76,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
 				.build());
 	}
 
-	// 찜하기 여부
+	// 찜하기 여부 정하면서 history 쌓았음 (리팩토링 필요), else문 사용하지 않기
 	@Override
 	public LikesProductResponseDto LikeStatus(String uuid, String productUuid) {
 		Optional<Likes> optionalLikes = likeProductRepository.findByUuidAndProductUuid(uuid, productUuid);

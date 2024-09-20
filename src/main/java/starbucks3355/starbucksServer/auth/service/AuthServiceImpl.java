@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
+import starbucks3355.starbucksServer.auth.repository.OAuthRepository;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
@@ -26,6 +28,7 @@ import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 public class AuthServiceImpl implements AuthService{
 
 	private final MemberRepository memberRepository;
+	private final OAuthRepository oAuthRepository;
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final PasswordEncoder passwordEncoder;
@@ -41,8 +44,6 @@ public class AuthServiceImpl implements AuthService{
 	@Transactional
 	public void signUp(SignUpRequestDto signUpRequestDto) {
 
-		log.info("signUpRequestDto : {}", signUpRequestDto);
-
 		try {
 			memberRepository.save(signUpRequestDto.toEntity(passwordEncoder));
 		} catch (Exception e) {
@@ -55,7 +56,6 @@ public class AuthServiceImpl implements AuthService{
 	@Transactional
 	public SignInResponseDto signIn(SignInRequestDto signInRequestDto) {
 
-		log.info("signInRequestDto : {}", signInRequestDto);
 		Member member = memberRepository.findByEmail(signInRequestDto.getEmail()).orElseThrow(
 			() -> new BaseException(BaseResponseStatus.FAILED_TO_LOGIN)
 		);
@@ -63,17 +63,33 @@ public class AuthServiceImpl implements AuthService{
 		try
 		{
 			String token = createToken(authenticate(member, signInRequestDto.getPassword()));
-			// log.info("token : {}", token);
-
-			return SignInResponseDto.builder()
-				.accessToken(token)
-				.uuid(member.getUuid())
-				.name(member.getName())
-				.build();
+			return SignInResponseDto.from(member, token);
 
 		} catch (Exception e) {
 			throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
 		}
+
+	}
+
+	@Override
+	public void signOut(String accessToken) {
+
+	}
+
+	@Override
+	public SignInResponseDto oAuthSignIn(OAuthSignInRequestDto oAuthSignInRequestDto) {
+
+		Member member = memberRepository.findByEmail(oAuthSignInRequestDto.getEmail()).orElseThrow(
+			() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
+		);
+
+		oAuthRepository.findByUserUuid(member.getUuid()).orElseGet(
+			() -> oAuthRepository.save(oAuthSignInRequestDto.toEntity(member.getUuid()))
+		);
+
+		String token = createToken(oAuthAuthenticate(member.getEmail()));
+		log.info("token : {}", token);
+		return SignInResponseDto.from(member, token);
 
 	}
 
@@ -87,6 +103,16 @@ public class AuthServiceImpl implements AuthService{
 			new UsernamePasswordAuthenticationToken(
 				authUserDetail.getUsername(),
 				inputPassword
+			)
+		);
+	}
+
+	private Authentication oAuthAuthenticate(String email) {
+		log.info("email : {}", email);
+		return authenticationManager.authenticate(
+			new UsernamePasswordAuthenticationToken(
+				email,
+				null
 			)
 		);
 	}

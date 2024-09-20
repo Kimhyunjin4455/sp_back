@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainWishList.vo.out;
+package starbucks3355.starbucksServer.domainCart.vo.out;
 
 import lombok.Builder;
 import lombok.Getter;

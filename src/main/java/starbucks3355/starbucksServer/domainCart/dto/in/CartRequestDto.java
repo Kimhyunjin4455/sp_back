@@ -1,14 +1,14 @@
-package starbucks3355.starbucksServer.domainWishList.dto.out;
+package starbucks3355.starbucksServer.domainCart.dto.in;
 
 import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
-import starbucks3355.starbucksServer.domainWishList.vo.out.WishListResponseVo;
+import starbucks3355.starbucksServer.domainCart.entity.WishList;
 
 @Getter
 @Builder
-public class WishListResponseDto {
+public class CartRequestDto {
 	private String productUuid;
 	private String memberUuid;
 	private boolean isChecked;
@@ -16,15 +16,17 @@ public class WishListResponseDto {
 	private Integer currentQuantity;
 	private LocalDateTime regDate, modDate;
 
-	public WishListResponseVo dtoToResponseVo() {
-		return WishListResponseVo.builder()
+	public WishList toEntity(String productUuid, String memberUuid) {
+		return WishList.builder()
 			.productUuid(productUuid)
 			.memberUuid(memberUuid)
 			.isChecked(isChecked)
 			.limitQuantity(limitQuantity)
 			.currentQuantity(currentQuantity)
-			.regDate(regDate)
-			.modDate(modDate)
 			.build();
+	}
+
+	public void updateCurrentQuantity(int quantity) {
+		this.currentQuantity = quantity;
 	}
 }

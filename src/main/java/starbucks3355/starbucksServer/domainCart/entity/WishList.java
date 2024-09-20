@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainWishList.entity;
+package starbucks3355.starbucksServer.domainCart.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

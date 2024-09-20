@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainWishList.service;
+package starbucks3355.starbucksServer.domainCart.service;
 
 import java.util.Comparator;
 import java.util.List;
@@ -9,34 +9,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.domainCart.dto.in.CartRequestDto;
+import starbucks3355.starbucksServer.domainCart.dto.out.CartResponseDto;
+import starbucks3355.starbucksServer.domainCart.dto.out.TotalInfoResponseDto;
+import starbucks3355.starbucksServer.domainCart.entity.WishList;
+import starbucks3355.starbucksServer.domainCart.repository.CartRepository;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductDefaultDisCount;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductDetails;
 import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductDetailsRepository;
-import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
-import starbucks3355.starbucksServer.domainWishList.dto.out.TotalInfoResponseDto;
-import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
-import starbucks3355.starbucksServer.domainWishList.entity.WishList;
-import starbucks3355.starbucksServer.domainWishList.repository.WishListRepository;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class WishListServiceImpl implements WishListService {
-	private final WishListRepository wishListRepository;
+public class CartServiceImpl implements CartService {
+	private final CartRepository wishListRepository;
 
 	private final ProductDetailsRepository productDetailsRepository;
 
 	private final DiscountRepository discountRepository;
 
 	@Override
-	public List<WishListResponseDto> getMyWishListItems(String memberUuid) {
+	public List<CartResponseDto> getMyWishListItems(String memberUuid) {
 		List<WishList> myWishList = wishListRepository.findByMemberUuid(memberUuid);
 
 		if (myWishList != null) {
 			return myWishList.stream()
 				.sorted(Comparator.comparing(WishList::getModDate).reversed())
-				.map(myWishListItem -> WishListResponseDto.builder()
+				.map(myWishListItem -> CartResponseDto.builder()
 					.productUuid(myWishListItem.getProductUuid())
 					.memberUuid(myWishListItem.getMemberUuid())
 					.isChecked(
@@ -52,7 +52,7 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 	@Override
-	public void addWishList(WishListRequestDto wishListRequestDto) {
+	public void addWishList(CartRequestDto wishListRequestDto) {
 		wishListRepository.save(
 			wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid()));
 	}
@@ -167,7 +167,7 @@ public class WishListServiceImpl implements WishListService {
 	// }
 
 	@Override
-	public void addWishListAtProductPage(WishListRequestDto wishListRequestDto, int quantity) {
+	public void addWishListAtProductPage(CartRequestDto wishListRequestDto, int quantity) {
 
 		List<WishList> wishLists = wishListRepository.findByMemberUuid(wishListRequestDto.getMemberUuid());
 

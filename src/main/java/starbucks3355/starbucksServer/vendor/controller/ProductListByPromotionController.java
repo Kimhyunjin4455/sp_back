@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.vendor.dto.controller;
+package starbucks3355.starbucksServer.vendor.controller;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class ProductListByPromotionController {
 	private final ProductListByPromotionService productListByPromotionService;
 
 	// 기획전의 uuid를 받아 상품 목록을 조회
-	@GetMapping("/product/{promotionUuid}")
+	@GetMapping("/{promotionUuid}/products")
 	@Operation(summary = "기획전별 상품 목록 조회")
 	public BaseResponse<List<ProductListByPromotionResponseVo>> getProductListByPromotion(
 		@PathVariable String promotionUuid

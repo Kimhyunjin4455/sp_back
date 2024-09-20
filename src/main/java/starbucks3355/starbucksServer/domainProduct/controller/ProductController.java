@@ -52,7 +52,7 @@ public class ProductController {
 		);
 	}
 
-	@GetMapping("/productDetails/{productUuid}")
+	@GetMapping("/{productUuid}/productDetails")
 	@Operation(summary = "상품 가격만 조회")
 	public CommonResponseEntity<ProductDetailsPriceResponseVo> getProductDetails(
 		@PathVariable String productUuid) {
@@ -65,7 +65,7 @@ public class ProductController {
 		);
 	}
 
-	@GetMapping
+	@GetMapping("/listWithPageable")
 	@Operation(summary = "상품 목록 조회 (무한 스크롤 페이지 처리)")
 	public CommonResponseSliceEntity<List<ProductsResponseVo>> getProducts(
 
@@ -86,7 +86,7 @@ public class ProductController {
 		);
 	}
 
-	@GetMapping("/list")
+	@GetMapping("/listWithQueryDSL")
 	@Operation(summary = "상품 목록 조회 2 (커서 페이지 처리)")
 	public CommonResponseEntity<CursorPage<String>> getProducts(
 		@RequestParam(value = "lastId", required = false) Long lastId,
@@ -101,7 +101,7 @@ public class ProductController {
 		);
 	}
 
-	@GetMapping("/productDiscountInfo/{productUuid}")
+	@GetMapping("/{productUuid}/productDiscountInfo")
 	@Operation(summary = "상품 할인 정보 조회")
 	public CommonResponseEntity<DiscountResponseVo> getProductRateDiscountInfo(
 		@PathVariable String productUuid) {

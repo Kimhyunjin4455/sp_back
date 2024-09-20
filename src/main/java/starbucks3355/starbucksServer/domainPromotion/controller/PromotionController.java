@@ -46,7 +46,7 @@ public class PromotionController {
 	}
 
 	// 기획전의 uuid를 받아 기획전 명을 조회
-	@GetMapping("/name/{promotionUuid}")
+	@GetMapping("/{promotionUuid}/name")
 	@Operation(summary = "기획전 이름 조회")
 	public BaseResponse<PromotionNameResponseVo> getPromotionName(
 		@PathVariable String promotionUuid

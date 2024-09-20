@@ -32,7 +32,7 @@ import starbucks3355.starbucksServer.domainImage.vo.out.ImageResponseVo;
 public class ImageController {
 	private final ImageService imageService;
 
-	@GetMapping("/allMedias/{otherUuid}")
+	@GetMapping("/{otherUuid}/allMedias")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 목록 이미지 조회")
 	public CommonResponseEntity<List<ImageResponseVo>> getImages(
 		@PathVariable String otherUuid
@@ -48,7 +48,7 @@ public class ImageController {
 		);
 	}
 
-	@GetMapping("/mainMedia/{otherUuid}")
+	@GetMapping("/{otherUuid}/mainMedia")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 메인 이미지 조회")
 	public CommonResponseEntity<ImageResponseVo> getMainImage(
 		@PathVariable String otherUuid
@@ -62,7 +62,7 @@ public class ImageController {
 		);
 	}
 
-	@PostMapping("/addMedia/{otherUuid}")
+	@PostMapping("/{otherUuid}/addMedia")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 추가")
 	public CommonResponseEntity<Void> addImages(
 		@RequestBody List<ImageRequestVo> imageRequestVoList,
@@ -80,7 +80,7 @@ public class ImageController {
 		);
 	}
 
-	@DeleteMapping("/deleteMedia/{id}/{otherUuid}")
+	@DeleteMapping("/{otherUuid}/deleteMedia/{id}")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 삭제")
 	public CommonResponseEntity<Void> deleteImage(
 		@PathVariable Long id, String otherUuid,
@@ -95,7 +95,7 @@ public class ImageController {
 		);
 	}
 
-	@DeleteMapping("/deleteAllMedia/{otherUuid}")
+	@DeleteMapping("/{otherUuid}/deleteAllMedia")
 	// 개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제(수정의 경우 기존 등록된 모든 이미지리스트를 삭제하고 새 리스트을 입력할 것)
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제")
 	public CommonResponseEntity<Void> deleteAllImage(

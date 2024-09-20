@@ -118,7 +118,7 @@ public class ReviewController {
 
 	}
 
-	@GetMapping("/allReviewsOfUser/{authorName}")
+	@GetMapping("/{authorName}/allReviewsOfUser")
 	@Operation(summary = "작성자의 리뷰 전체 조회")
 	// 상품상세 페이지에서 이용할 용도(페이지 생성여부에 따라 갈림)
 	public CommonResponseEntity<List<UserReviewResponseVo>> getUserReviews(
@@ -202,7 +202,7 @@ public class ReviewController {
 
 	}
 
-	@DeleteMapping("/reviewDelete/{id}")
+	@DeleteMapping("/{id}/reviewDelete")
 	@Operation(summary = "댓글 삭제", description = "작성했던 리뷰를 삭제합니다.")
 	public CommonResponseEntity<Void> deleteReview(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,

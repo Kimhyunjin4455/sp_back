@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.auth.dto.request.EmailCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.auth.repository.OAuthRepository;
@@ -44,16 +46,23 @@ public class AuthServiceImpl implements AuthService{
 	@Transactional
 	public void signUp(SignUpRequestDto signUpRequestDto) {
 
-		if (memberRepository.findByEmail(signUpRequestDto.getEmail()).isPresent()) {
-			throw new BaseException(BaseResponseStatus.DUPLICATED_EMAIL);
-		}
-
 		try {
 			memberRepository.save(signUpRequestDto.toEntity(passwordEncoder));
 		} catch (Exception e) {
 			throw new BaseException(BaseResponseStatus.FAILED_TO_RESTORE);
 		}
 
+	}
+
+	@Override
+	public EmailCheckResponseDto checkEmail(EmailCheckRequestDto emailCheckRequestDto) {
+		boolean isDuplicated = memberRepository.findByEmail(emailCheckRequestDto.getEmail()).isPresent();
+		String message = isDuplicated ? "이미 존재하는 이메일입니다.":"사용 가능한 이메일입니다.";
+
+		return EmailCheckResponseDto.builder()
+			.isDuplicated(isDuplicated)
+			.message(message)
+			.build();
 	}
 
 	@Override

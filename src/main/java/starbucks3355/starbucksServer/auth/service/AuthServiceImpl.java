@@ -44,6 +44,10 @@ public class AuthServiceImpl implements AuthService{
 	@Transactional
 	public void signUp(SignUpRequestDto signUpRequestDto) {
 
+		if (memberRepository.findByEmail(signUpRequestDto.getEmail()).isPresent()) {
+			throw new BaseException(BaseResponseStatus.DUPLICATED_EMAIL);
+		}
+
 		try {
 			memberRepository.save(signUpRequestDto.toEntity(passwordEncoder));
 		} catch (Exception e) {
@@ -56,7 +60,7 @@ public class AuthServiceImpl implements AuthService{
 	@Transactional
 	public SignInResponseDto signIn(SignInRequestDto signInRequestDto) {
 
-		Member member = memberRepository.findByEmail(signInRequestDto.getEmail()).orElseThrow(
+		Member member = memberRepository.findByUserId(signInRequestDto.getUserId()).orElseThrow(
 			() -> new BaseException(BaseResponseStatus.FAILED_TO_LOGIN)
 		);
 

@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 public class SignInResponseVo {
 
 	private String accessToken;
-	private String name;
+	private String userId;
 	private String uuid;
 
 	@Builder
-	public SignInResponseVo(String accessToken, String name, String uuid) {
+	public SignInResponseVo(String accessToken, String userId, String uuid) {
 		this.accessToken = accessToken;
-		this.name = name;
+		this.userId = userId;
 		this.uuid = uuid;
 	}
 }

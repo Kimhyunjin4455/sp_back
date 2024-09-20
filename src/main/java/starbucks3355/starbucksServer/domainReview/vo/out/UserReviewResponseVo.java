@@ -12,6 +12,6 @@ public class UserReviewResponseVo {
 	private String reviewUuid;
 	private Integer reviewScore;
 	private String productUuid; // 회원이 구매한 '상품'에 대한 리뷰
-	private String memberUuid;
+	private String authorName;
 	private LocalDateTime regDate, modDate;
 }

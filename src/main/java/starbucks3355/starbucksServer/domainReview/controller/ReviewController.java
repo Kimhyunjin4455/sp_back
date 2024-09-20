@@ -20,6 +20,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
+import starbucks3355.starbucksServer.common.entity.BaseResponse;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceWithScoreEntity;
@@ -125,13 +127,13 @@ public class ReviewController {
 
 	}
 
-	@GetMapping("/allReviewsOfUser/{memberUuid}")
-	@Operation(summary = "회원별 리뷰 전체 조회")
+	@GetMapping("/allReviewsOfUser/{authorName}")
+	@Operation(summary = "작성자의 리뷰 전체 조회")
 	// 상품상세 페이지에서 이용할 용도(페이지 생성여부에 따라 갈림)
 	public CommonResponseEntity<List<UserReviewResponseVo>> getUserReviews(
-		@PathVariable String memberUuid
+		@PathVariable String authorName
 	) {
-		List<UserReviewResponseDto> userReviews = reviewService.getUserReviews(memberUuid);
+		List<UserReviewResponseDto> userReviews = reviewService.getUserReviews(authorName);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
@@ -160,28 +162,14 @@ public class ReviewController {
 
 	@PostMapping("/{reviewUuid}")
 	@Operation(summary = "리뷰 한개 등록")
-	public CommonResponseEntity<Void> addReview(
+	public BaseResponse<Void> addReview(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ReviewRequestVo reviewRequestVo) { // Service 로직에서 UUID 생성하여 저장하므로 vo에서 관련정보를 뺴거나, 서비스 로직에서 제거하기
 
-		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
+		reviewService.addReview(ReviewRequestDto.of(reviewRequestVo));
 
-		ReviewRequestDto reviewRequestDto = ReviewRequestDto.builder()
-			.content(reviewRequestVo.getContent())
-			.reviewUuid(reviewRequestVo.getReviewUuid())
-			.reviewScore(reviewRequestVo.getReviewScore())
-			.productUuid(reviewRequestVo.getProductUuid())
-			.memberUuid(memberUuid)
-			.regDate(reviewRequestVo.getRegDate())
-			.modDate(reviewRequestVo.getModDate())
-			.build();
-
-		reviewService.addReview(reviewRequestDto);
-
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			null
+		return new BaseResponse<>(
+			BaseResponseStatus.SUCCESS
 		);
 	}
 

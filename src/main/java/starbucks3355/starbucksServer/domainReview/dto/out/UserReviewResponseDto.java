@@ -13,7 +13,7 @@ public class UserReviewResponseDto {
 	private String reviewUuid;
 	private Integer reviewScore;
 	private String productUuid; // 회원이 구매한 '상품'에 대한 리뷰
-	private String memberUuid; // 타인의 정보는 닉네임XXXXX 이런 정보를 통하
+	private String authorName;
 	private LocalDateTime regDate, modDate;
 
 	public UserReviewResponseDto(
@@ -21,14 +21,14 @@ public class UserReviewResponseDto {
 		String reviewUuid,
 		Integer reviewScore,
 		String productUuid,
-		String memberUuid,
+		String authorName,
 		LocalDateTime regDate,
 		LocalDateTime modDate) {
 		this.content = content;
 		this.reviewUuid = reviewUuid;
 		this.reviewScore = reviewScore;
 		this.productUuid = productUuid;
-		this.memberUuid = memberUuid;
+		this.authorName = authorName;
 		this.regDate = regDate;
 		this.modDate = modDate;
 	}
@@ -39,7 +39,7 @@ public class UserReviewResponseDto {
 			.reviewUuid(reviewUuid)
 			.reviewScore(reviewScore)
 			.productUuid(productUuid)
-			.memberUuid(memberUuid)
+			.authorName(authorName)
 			.regDate(getRegDate())
 			.modDate(getModDate())
 			.build();

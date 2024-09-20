@@ -16,7 +16,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 	List<Review> findByProductUuid(String productUuid);
 
-	List<Review> findByMemberUuid(String memberUuid);
+	List<Review> findByAuthorName(String authorName);
 
 	Slice<Review> findPageByProductUuid(String productUuid, Pageable pageable);
 

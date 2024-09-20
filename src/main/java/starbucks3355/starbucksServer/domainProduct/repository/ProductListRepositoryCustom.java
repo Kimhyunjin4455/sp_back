@@ -12,4 +12,12 @@ public interface ProductListRepositoryCustom {
 		Integer page
 	);
 
+	// CursorPage<String> getProductList(
+	// 	String categoryName,
+	// 	String middleCategoryName,
+	// 	Long lastId,
+	// 	Integer pageSize,
+	// 	Integer page
+	// );
+
 }

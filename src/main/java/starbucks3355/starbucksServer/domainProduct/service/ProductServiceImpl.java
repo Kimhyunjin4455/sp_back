@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import starbucks3355.starbucksServer.category.repository.CategoryListRepository;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
@@ -20,9 +19,6 @@ import starbucks3355.starbucksServer.domainProduct.dto.response.ProductInfoRespo
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
-import starbucks3355.starbucksServer.domainProduct.entity.ProductDefaultDisCount;
-import starbucks3355.starbucksServer.domainProduct.entity.ProductDetails;
-import starbucks3355.starbucksServer.domainProduct.entity.ProductFlags;
 import starbucks3355.starbucksServer.domainProduct.entity.ProductTag;
 import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.FlagsRepository;
@@ -41,16 +37,12 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductDetailsRepository productDetailsRepository;
 	private final FlagsRepository flagsRepository;
 	private final ProductTagRepository productTagRepository;
-	private final CategoryListRepository categoryListRepository;
 	private final ProductListRepositoryCustom productListRepositoryCustom;
 
 	@Override
 	public void addProduct(ProductRequestDto productRequestDto) {
-		String productUuid;
-
-		productUuid = UUID.randomUUID().toString();
-
-		productRepository.save(productRequestDto.dtoToEntity(productUuid));
+		// 관리자 기능이기에 제외
+		productRepository.save(productRequestDto.dtoToEntity(UUID.randomUUID().toString()));
 	}
 
 	@Override
@@ -58,12 +50,7 @@ public class ProductServiceImpl implements ProductService {
 		Pageable pageable = PageRequest.of(page, size);
 		Slice<Product> products = productRepository.findAll(pageable);
 
-		return products.map(product -> ProductsResponseDto.builder()
-			.productUuid(product.getProductUuid())
-			.productName(product.getProductName())
-			.productDescription(product.getProductDescription())
-			.productInfo(product.getProductInfo())
-			.build());
+		return products.map(product -> ProductsResponseDto.from(product));
 	}
 
 	@Override
@@ -129,37 +116,25 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductDetailsPriceResponseDto getProductPrice(String productUuid) {
 
-		ProductDetails productDetails = productDetailsRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
+		return ProductDetailsPriceResponseDto.from(productDetailsRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다.")));
 
-		return ProductDetailsPriceResponseDto.builder()
-			.price(productDetails.getProductPrice())
-			.build();
 	}
 
 	@Override
 	public ProductFlagsResponseDto getProductFlags(String productUuid) {
-		// Q2. 여기는 상품에 대해 찜하기여부, 최신상품여부, 베스트 여부
-		// 단순 Boolean 처리이니, 위 3가지 필드에 대해 짬하기 나 베스트 등의 구현에 대해 신경쓰지 말고 새로 엔티티 생성할지?
-		ProductFlags productFlags = flagsRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다."));
 
-		return ProductFlagsResponseDto.builder()
-			.isLiked(productFlags.isLiked())
-			.isNew(productFlags.isNew())
-			.isBest(productFlags.isBest())
-			.build();
+		return ProductFlagsResponseDto.from(flagsRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다.")));
+
 	}
 
 	@Override
 	public DiscountResponseDto getDiscountInfo(String productUuid) {
-		ProductDefaultDisCount productDefaultDisCount = discountRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다."));
 
-		return DiscountResponseDto.builder()
-			.discountType(productDefaultDisCount.getDiscountType())
-			.discountValue(productDefaultDisCount.getDiscountValue())
-			.build();
+		return DiscountResponseDto.from(discountRepository.findByProductUuid(productUuid)
+			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다.")));
+
 	}
 
 	@Override

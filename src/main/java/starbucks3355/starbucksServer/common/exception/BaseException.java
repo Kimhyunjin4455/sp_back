@@ -8,7 +8,5 @@ public class BaseException extends RuntimeException{
 
 	private final BaseResponseStatus status;
 
-	public BaseException(BaseResponseStatus status) {
-		this.status = status;
-	}
+	public BaseException(BaseResponseStatus status) { this.status = status; }
 }

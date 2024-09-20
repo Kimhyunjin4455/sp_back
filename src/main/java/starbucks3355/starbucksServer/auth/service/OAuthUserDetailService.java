@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
+import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 
 @Service
@@ -18,7 +20,7 @@ public class OAuthUserDetailService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		return new AuthUserDetail(memberRepository.findByEmail(email).orElseThrow(
-			() -> new UsernameNotFoundException(email))
-		);
+			() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
+		));
 	}
 }

@@ -14,8 +14,6 @@ import starbucks3355.starbucksServer.domainMember.repository.LikeProductReposito
 @Service
 public interface MemberService {
 	MemberInfoResponseDto getMemberInfo(String userUuid);
-	MemberReviewResponseDto getNickname(String memberUuid);
-	// LikesProductResponseDto addLike(String uuid, String productUuid);
 	Slice<LikesProductResponseDto> getLikesListByUuid(String uuid, int page, int size);
 	LikesProductResponseDto LikeStatus(String uuid, String productUuid);
 

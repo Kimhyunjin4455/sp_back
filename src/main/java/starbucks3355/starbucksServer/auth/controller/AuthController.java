@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
 import starbucks3355.starbucksServer.auth.service.AuthService;
+import starbucks3355.starbucksServer.auth.vo.request.OAuthSignInRequestVo;
 import starbucks3355.starbucksServer.auth.vo.request.SignInRequestVo;
 import starbucks3355.starbucksServer.auth.vo.request.SignUpRequestVo;
 import starbucks3355.starbucksServer.auth.vo.response.SignInResponseVo;
@@ -30,10 +32,16 @@ public class AuthController {
 	 * 1. 회원가입
 	 * 2. 로그인
 	 * 3. 로그아웃
+	 * 4. 소셜로그인
 	 */
 
 
-	@Operation(summary = "SignUp API", description = "SignUp API", tags = {"AuthUserDetail"})
+	/**
+	 * 회원가입
+	 * @param signUpRequestVo SignUpRequestVo
+	 * @return BaseResponse<Void>
+	 */
+	@Operation(summary = "SignUp API", description = "SignUp API 입니다.", tags = {"AuthUserDetail"})
 	@PostMapping("/sign-up")
 	public BaseResponse<Void> signUp(
 		@RequestBody SignUpRequestVo signUpRequestVo) {
@@ -42,7 +50,7 @@ public class AuthController {
 		return new BaseResponse<>(BaseResponseStatus.SUCCESS);
 	}
 
-	@Operation(summary = "SignIn API", description = "SignIn API", tags = {"AuthUserDetail"})
+	@Operation(summary = "SignIn API", description = "SignIn API 입니다.", tags = {"AuthUserDetail"})
 	@PostMapping("/sign-in")
 	public BaseResponse<SignInResponseVo> signIn(
 		@RequestBody SignInRequestVo signInRequestVo) {
@@ -51,6 +59,22 @@ public class AuthController {
 			authService.signIn(SignInRequestDto.from(signInRequestVo)).toVo()
 		);
 	}
+
+	/**
+	 * 소셜로그인
+	 * @param oAuthSignInRequestVo OAuthSignInRequestVo
+	 * @return BaseResponse<SignInResponseVo>
+	 */
+	@Operation(summary = "OAuth SignIn API", description = "OAuth SignIn API 입니다.", tags = {"AuthUserDetail"})
+	@PostMapping("/oauth-sign-in")
+	public BaseResponse<SignInResponseVo> oAuthSignIn(
+		@RequestBody OAuthSignInRequestVo oAuthSignInRequestVo) {
+
+		return new BaseResponse<>(
+			authService.oAuthSignIn(OAuthSignInRequestDto.of(oAuthSignInRequestVo)).toVo()
+		);
+	}
+
 
 
 }

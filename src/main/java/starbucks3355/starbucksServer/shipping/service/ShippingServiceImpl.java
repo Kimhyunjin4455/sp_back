@@ -35,15 +35,44 @@ public class ShippingServiceImpl implements ShippingService {
 		if (shippingRepository.existsByDetailAddressAndUuid(shippingAddRequestDto.getDetailAddress(), memberUuid)) {
 			throw new BaseException(BaseResponseStatus.DUPLICATE_ADDRESS);  // 중복된 주소 예외
 		}
-		if (shippingRepository.findBaseAddressByUuid(memberUuid).isPresent()) {
-			throw new BaseException(BaseResponseStatus.BASE_ADDRESS_EXIST);  // 기본 배송지가 이미 존재하는 경우
-		}
+		// if (shippingRepository.findBaseAddressByUuid(memberUuid).isPresent()) {
+		//  throw new BaseException(BaseResponseStatus.BASE_ADDRESS_EXIST);  // 기본 배송지가 이미 존재하는 경우
+		// }
 
-		// ShippingAddress 엔티티 생성
-		ShippingAddress shippingAddress = shippingAddRequestDto.toEntity(memberUuid, shippingAddRequestDto);
-
-		// 예외 처리 없이 엔티티 저장
-		shippingRepository.save(shippingAddress);
+		// 기본 배송지 있는지 유무
+		// 있으면 기본 배송지로 설정
+		// 기존 값 False로 바꾸기
+		Optional<ShippingAddress> existingAddress = shippingRepository.findBaseAddressByUuid(memberUuid);
+		existingAddress.ifPresent(shippingAddress -> {
+			ShippingAddress updateAddress = ShippingAddress.builder()
+				.deliveryId(shippingAddress.getDeliveryId())
+				.address(shippingAddress.getAddress())
+				.detailAddress(shippingAddress.getDetailAddress())
+				.phone1(shippingAddress.getPhone1())
+				.phone2(shippingAddress.getPhone2())
+				.receiver(shippingAddress.getReceiver())
+				.message(shippingAddress.getMessage())
+				.nickname(shippingAddress.getNickname())
+				.postNumber(shippingAddress.getPostNumber())
+				.uuid(shippingAddress.getUuid())
+				.baseAddress(false)
+				.build();
+			shippingRepository.save(updateAddress);
+		});
+		// 새로운 배송지 추가 -> 기본 배송지로 설정
+		ShippingAddress newAddress = shippingRepository.save(
+			ShippingAddress.builder()
+				.nickname(shippingAddRequestDto.getNickname())
+				.postNumber(shippingAddRequestDto.getPostNumber())
+				.address(shippingAddRequestDto.getAddress())
+				.detailAddress(shippingAddRequestDto.getDetailAddress())
+				.phone1(shippingAddRequestDto.getPhone1())
+				.phone2(shippingAddRequestDto.getPhone2())
+				.message(shippingAddRequestDto.getMessage())
+				.receiver(shippingAddRequestDto.getReceiver())
+				.baseAddress(true)
+				.uuid(memberUuid)
+				.build());
 	}
 
 	//배송지 목록 조회
@@ -59,6 +88,11 @@ public class ShippingServiceImpl implements ShippingService {
 					.phone1(shippingAddress.getPhone1())
 					.address(shippingAddress.getAddress())
 					.detailAddress(shippingAddress.getDetailAddress())
+					.nickname(shippingAddress.getNickname())
+					.baseAddress(shippingAddress.isBaseAddress())
+					.phone2(shippingAddress.getPhone2())
+					.postNumber(shippingAddress.getPostNumber())
+					.message(shippingAddress.getMessage())
 					.build())
 			.toList();
 	}

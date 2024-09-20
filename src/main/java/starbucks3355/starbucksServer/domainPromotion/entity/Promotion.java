@@ -24,13 +24,13 @@ public class Promotion {
 	@Column(columnDefinition = "TEXT")
 	private String promotionInfoContent;
 	private String promotionUuid;
-	private String productUuid;
+	// private String productUuid;
 
 	@Builder
-	public Promotion(String promotionName, Boolean isState, String promotionInfoContent, String productUuid) {
+	public Promotion(String promotionName, Boolean isState, String promotionInfoContent) {
 		this.promotionName = promotionName;
 		this.isState = isState;
 		this.promotionInfoContent = promotionInfoContent;
-		this.productUuid = productUuid;
+		//this.productUuid = productUuid;
 	}
 }

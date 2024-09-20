@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionNameResponseDto;
-import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionProductResponseDto;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionResponseDto;
 import starbucks3355.starbucksServer.domainPromotion.repository.PromotionRepositoryCustom;
 
@@ -28,9 +27,9 @@ public class PromotionServiceImpl implements PromotionService {
 		return promotionRepositoryCustom.getPromotionName(promotionUuid);
 	}
 
-	@Override
-	public List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid) {
-		return promotionRepositoryCustom.getPromotionProductList(promotionUuid);
-	}
+	// @Override
+	// public List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid) {
+	// 	return promotionRepositoryCustom.getPromotionProductList(promotionUuid);
+	// }
 
 }

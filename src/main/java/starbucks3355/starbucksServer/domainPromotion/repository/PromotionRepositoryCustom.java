@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionNameResponseDto;
-import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionProductResponseDto;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionResponseDto;
 
 @Repository
@@ -15,5 +14,5 @@ public interface PromotionRepositoryCustom {
 
 	PromotionNameResponseDto getPromotionName(String promotionUuid);
 
-	List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid);
+	// List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid);
 }

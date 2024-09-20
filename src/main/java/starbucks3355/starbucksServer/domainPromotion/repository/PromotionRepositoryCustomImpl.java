@@ -9,7 +9,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionNameResponseDto;
-import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionProductResponseDto;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionResponseDto;
 import starbucks3355.starbucksServer.domainPromotion.entity.QPromotion;
 
@@ -49,20 +48,20 @@ public class PromotionRepositoryCustomImpl implements PromotionRepositoryCustom 
 		return promotionName == null ? null : new PromotionNameResponseDto(promotionName);
 	}
 
-	@Override
-	public List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid) {
-		QPromotion promotion = QPromotion.promotion;
-		BooleanBuilder builder = new BooleanBuilder();
-
-		// 기획전의 uuid가 같으면 기획전 상품 목록을 조회
-		List<String> productsList = jpaQueryFactory
-			.select(promotion.productUuid)
-			.from(promotion)
-			.where(promotion.promotionUuid.eq(promotionUuid))
-			.fetch();
-
-		return productsList.stream()
-			.map(PromotionProductResponseDto::new)
-			.toList();
-	}
+	// @Override
+	// public List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid) {
+	// 	QPromotion promotion = QPromotion.promotion;
+	// 	BooleanBuilder builder = new BooleanBuilder();
+	//
+	// 	// 기획전의 uuid가 같으면 기획전 상품 목록을 조회
+	// 	List<String> productsList = jpaQueryFactory
+	// 		.select(promotion.productUuid)
+	// 		.from(promotion)
+	// 		.where(promotion.promotionUuid.eq(promotionUuid))
+	// 		.fetch();
+	//
+	// 	return productsList.stream()
+	// 		.map(PromotionProductResponseDto::new)
+	// 		.toList();
+	// }
 }

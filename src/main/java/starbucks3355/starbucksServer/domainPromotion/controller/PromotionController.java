@@ -15,11 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionNameResponseDto;
-import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionProductResponseDto;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionResponseDto;
 import starbucks3355.starbucksServer.domainPromotion.service.PromotionService;
 import starbucks3355.starbucksServer.domainPromotion.vo.out.PromotionNameResponseVo;
-import starbucks3355.starbucksServer.domainPromotion.vo.out.PromotionProductResponseVo;
 import starbucks3355.starbucksServer.domainPromotion.vo.out.PromotionResponseVo;
 
 @Slf4j
@@ -65,22 +63,22 @@ public class PromotionController {
 	}
 
 	// 기획전의 uuid를 받아 기획전 상품 목록을 조회
-	@GetMapping("/products/{promotionUuid}")
-	@Operation(summary = "기획전 상품 목록 조회")
-	public BaseResponse<List<PromotionProductResponseVo>> getPromotionProductList(
-		@PathVariable String promotionUuid
-	) {
-		List<PromotionProductResponseDto> promotionProductList = promotionService.getPromotionProductList(
-			promotionUuid);
-
-		return new BaseResponse<>(
-			HttpStatus.OK,
-			BaseResponseStatus.SUCCESS.isSuccess(),
-			BaseResponseStatus.SUCCESS.getMessage(),
-			BaseResponseStatus.SUCCESS.getCode(),
-			promotionProductList.stream()
-				.map(PromotionProductResponseDto::dtoToResponseVo)
-				.toList()
-		);
-	}
+	// @GetMapping("/products/{promotionUuid}")
+	// @Operation(summary = "기획전 상품 목록 조회")
+	// public BaseResponse<List<PromotionProductResponseVo>> getPromotionProductList(
+	// 	@PathVariable String promotionUuid
+	// ) {
+	// 	List<PromotionProductResponseDto> promotionProductList = promotionService.getPromotionProductList(
+	// 		promotionUuid);
+	//
+	// 	return new BaseResponse<>(
+	// 		HttpStatus.OK,
+	// 		BaseResponseStatus.SUCCESS.isSuccess(),
+	// 		BaseResponseStatus.SUCCESS.getMessage(),
+	// 		BaseResponseStatus.SUCCESS.getCode(),
+	// 		promotionProductList.stream()
+	// 			.map(PromotionProductResponseDto::dtoToResponseVo)
+	// 			.toList()
+	// 	);
+	// }
 }

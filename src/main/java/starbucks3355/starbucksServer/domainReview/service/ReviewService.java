@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
@@ -29,6 +30,12 @@ public interface ReviewService {
 	public ReviewScoreResponseDto getReviewScore(String productUuid);
 
 	//public List<ReviewResponseDto> getBestReviews(String productUuid);
+
+	CursorPage<BestReviewResponseDto> getBestReviews(
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	);
 
 	void addReview(ReviewRequestDto reviewRequestDto);
 

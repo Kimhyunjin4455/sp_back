@@ -15,6 +15,7 @@ import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
@@ -91,6 +92,11 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public ReviewScoreResponseDto getReviewScore(String productUuid) {
 		return reviewRepositoryCustom.getReviewScore(productUuid);
+	}
+
+	@Override
+	public CursorPage<BestReviewResponseDto> getBestReviews(Long lastId, Integer pageSize, Integer page) {
+		return reviewRepositoryCustom.getBestReviews(lastId, pageSize, page);
 	}
 
 	// @Override

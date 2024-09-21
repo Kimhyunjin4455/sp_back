@@ -6,11 +6,13 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainImage.entity.QImage;
+import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.entity.QReview;
@@ -152,10 +154,53 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 	}
 
 	@Override
-	public CursorPage<String> getBestReviews(Long lastId, Integer pageSize, Integer page) {
+	public CursorPage<BestReviewResponseDto> getBestReviews(Long lastId, Integer pageSize, Integer page) {
 		QReview review = QReview.review;
 		QReviewAggregate reviewAggregate = QReviewAggregate.reviewAggregate;
 
-		return null;
+		BooleanBuilder builder = new BooleanBuilder();
+
+		// 마지막 ID 커서 적용
+		Optional.ofNullable(lastId)
+			.ifPresent(id -> builder.and(reviewAggregate.id.lt(id)));
+
+		// 페이지와 페이지 크기 기본값 설정
+		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
+		int currentPageSize = 6;
+
+		// offset 계산
+		int offset = currentPage == 0 ? 0 : (currentPage - 1) * currentPageSize;
+
+		// 리뷰의 조회수와 점수가 높고 리뷰내용의 길이가 긴 것에 대해
+		List<Tuple> bestReviews = jpaQueryFactory
+			.select(reviewAggregate, review)
+			.from(reviewAggregate)
+			.join(review)
+			.on(reviewAggregate.reviewUuid.eq(review.reviewUuid))
+			.where(builder)
+			.orderBy(reviewAggregate.viewCount.desc(), reviewAggregate.reviewScore.desc(),
+				review.content.length().desc())
+			.limit(currentPageSize + 1)
+			.offset(offset)
+			.fetch();
+		// 다음 페이지의 커서 처리 및 hasNext 여부 판단
+		Long nextCursor = null;
+		boolean hasNext = false;
+
+		if (bestReviews.size() > currentPageSize) {
+			hasNext = true;
+			bestReviews = bestReviews.subList(0, currentPageSize);  // 실제 페이지 사이즈 만큼 자르기
+			nextCursor = ((ReviewAggregate)bestReviews.get(bestReviews.size() - 1)).getId();  // 마지막 항목의 ID를 커서로 설정
+		}
+
+		List<BestReviewResponseDto> bestReviewList = bestReviews.stream()
+			.map(tuple -> BestReviewResponseDto.builder()
+				.reviewUuid(tuple.get(1, Review.class).getReviewUuid())
+				.productUuid(tuple.get(1, Review.class).getProductUuid())
+				.build())
+			.toList();
+
+		return new CursorPage<>(bestReviewList, nextCursor, hasNext, currentPageSize, currentPage);
 	}
+
 }

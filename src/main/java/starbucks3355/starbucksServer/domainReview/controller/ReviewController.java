@@ -28,6 +28,7 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
@@ -82,20 +83,17 @@ public class ReviewController {
 		);
 	}
 
-	// @GetMapping("/{productUuid}/bestReviewsOfProduct")
-	// @Operation(summary = "상품별 베스트 리뷰 조회")
-	// public CommonResponseEntity<List<ReviewResponseVo>> getBestReviews(
-	// 	@PathVariable String productUuid) {
-	// 	List<ReviewResponseDto> bestReviewsDto = reviewService.getBestReviews(productUuid);
-	//
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		bestReviewsDto.stream()
-	// 			.map(ReviewResponseDto::dtoToResponseVo)
-	// 			.toList()
-	// 	);
-	// }
+	@GetMapping("/bestReviews")
+	@Operation(summary = "전체 리뷰들 중 베스트 리뷰 조회")
+	public BaseResponse<CursorPage<BestReviewResponseDto>> getBestReviews(
+		@RequestParam(value = "lastId", required = false) Long lastId,
+		@RequestParam(value = "pageSize", required = false) Integer pageSize,
+		@RequestParam(value = "page", required = false) Integer page) {
+
+		return new BaseResponse<>(
+			reviewService.getBestReviews(lastId, pageSize, page)
+		);
+	}
 
 	@GetMapping("/allReviewsOfMyPage")
 	@Operation(summary = "나의 리뷰 전체 조회")

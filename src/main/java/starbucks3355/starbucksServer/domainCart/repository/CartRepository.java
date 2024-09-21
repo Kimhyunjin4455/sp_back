@@ -7,13 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
-import starbucks3355.starbucksServer.domainCart.entity.WishList;
+import starbucks3355.starbucksServer.domainCart.entity.Cart;
 
 @Repository
-public interface CartRepository extends JpaRepository<WishList, Long> {
-	List<WishList> findByMemberUuid(String memberUuid);
+public interface CartRepository extends JpaRepository<Cart, Long> {
+	List<Cart> findByMemberUuid(String memberUuid);
 
-	Optional<WishList> findByMemberUuidAndProductUuid(String memberUuid, String productUuid);
+	Optional<Cart> findByMemberUuidAndProductUuid(String memberUuid, String productUuid);
 
 	@Modifying
 	void deleteByMemberUuidAndProductUuid(String memberUuid, String productUuid);

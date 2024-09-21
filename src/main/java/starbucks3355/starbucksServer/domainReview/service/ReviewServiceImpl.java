@@ -12,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
-import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
-import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
@@ -28,8 +27,6 @@ import starbucks3355.starbucksServer.domainReview.repository.ReviewRepositoryCus
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 	private final ReviewRepository reviewRepository;
-	private final MemberRepository memberRepository;
-	private final ImageRepository imageRepository;
 	private final ReviewRepositoryCustom reviewRepositoryCustom;
 
 	@Override
@@ -71,26 +68,12 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<ReviewProductResponseDto> getProductReviewsHaveMedia(String productUuid) {
-		List<Review> productReviews = reviewRepository.findByProductUuid(productUuid);
-
-		if (productReviews != null) {
-			// 상품의 리뷰들에 대해 리뷰에 대한 이미지가 한개라도 있으면 리뷰들을 반환
-			return productReviews.stream()
-				.filter(productReview -> imageRepository.findByOtherUuid(productReview.getReviewUuid()).size() > 0)
-				.map(productReview -> ReviewProductResponseDto.builder()
-					.content(productReview.getContent())
-					.reviewScore(productReview.getReviewScore())
-					.reviewUuid(productReview.getReviewUuid())
-					.productUuid(productReview.getProductUuid())
-					.authorName(productReview.getAuthorName())
-					.regDate(productReview.getRegDate())
-					.modDate(productReview.getModDate())
-					.build()
-				).toList();
-
-		}
-		return List.of();
+	public CursorPage<String> getProductReviewsHaveMedia(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page) {
+		return reviewRepositoryCustom.getProductReviewsHaveMedia(productUuid, lastId, pageSize, page);
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Slice;
 
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
@@ -16,7 +17,12 @@ public interface ReviewService {
 
 	public Slice<ReviewProductResponseDto> getProductReviews(String productUuid, int page, int size);
 
-	public List<ReviewProductResponseDto> getProductReviewsHaveMedia(String productUuid);
+	CursorPage<String> getProductReviewsHaveMedia(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	);
 
 	public ReviewResponseDto getReview(String reviewUuid);
 

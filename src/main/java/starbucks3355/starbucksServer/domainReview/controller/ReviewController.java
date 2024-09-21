@@ -25,6 +25,7 @@ import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
@@ -68,19 +69,16 @@ public class ReviewController {
 		);
 	}
 
-	@GetMapping("/{productUuid}/allReviewsHaveMediaOfProduct")
+	@GetMapping("/allReviewsHaveMediaOfProduct")
 	@Operation(summary = "상품별 리뷰 전체 조회(이미지가 있는 리뷰만)")
-	public CommonResponseEntity<List<ReviewProductResponseVo>> getProductReviewsHaveMedia(
-		@PathVariable String productUuid) {
-		List<ReviewProductResponseDto> productReviewResponseDtoList = reviewService.getProductReviewsHaveMedia(
-			productUuid);
+	public BaseResponse<CursorPage<String>> getProductReviewsHaveMedia(
+		@RequestParam(value = "productUuid") String productUuid,
+		@RequestParam(value = "lastId", required = false) Long lastId,
+		@RequestParam(value = "pageSize", required = false) Integer pageSize,
+		@RequestParam(value = "page", required = false) Integer page) {
 
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			productReviewResponseDtoList.stream()
-				.map(ReviewProductResponseDto::dtoToResponseVo)
-				.toList()
+		return new BaseResponse<>(
+			reviewService.getProductReviewsHaveMedia(productUuid, lastId, pageSize, page)
 		);
 	}
 

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
-import starbucks3355.starbucksServer.domainCart.entity.WishList;
+import starbucks3355.starbucksServer.domainCart.entity.Cart;
 
 @Getter
 @Builder
@@ -16,8 +16,8 @@ public class CartRequestDto {
 	private Integer currentQuantity;
 	private LocalDateTime regDate, modDate;
 
-	public WishList toEntity(String productUuid, String memberUuid) {
-		return WishList.builder()
+	public Cart toEntity(String productUuid, String memberUuid) {
+		return Cart.builder()
 			.productUuid(productUuid)
 			.memberUuid(memberUuid)
 			.isChecked(isChecked)

@@ -24,7 +24,7 @@ public class Image {
 	@Column(nullable = false, length = 200)
 	private String s3url;
 	@Column(nullable = false, length = 200, unique = true)
-	private String imageName;
+	private String imageName; // 삭제될 수도 있는 컬럼
 	@Column(length = 250)
 	private String thumbnailPath;
 	@Column(nullable = false)

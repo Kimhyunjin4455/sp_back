@@ -2,10 +2,12 @@ package starbucks3355.starbucksServer.domainProduct.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainProduct.vo.request.ProductRequestVo;
 
 @Getter
+@NoArgsConstructor
 public class ProductRequestDto {
 	private String productUuid;
 	private String productName;

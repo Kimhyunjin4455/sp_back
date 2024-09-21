@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainWishList.entity;
+package starbucks3355.starbucksServer.domainCart.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +15,7 @@ import starbucks3355.starbucksServer.common.entity.BaseEntity;
 @Getter
 @NoArgsConstructor
 @ToString
-public class WishList extends BaseEntity {
+public class Cart extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -28,7 +28,7 @@ public class WishList extends BaseEntity {
 	private Integer currentQuantity;
 
 	@Builder
-	public WishList(int limitQuantity, String memberUuid, boolean isChecked, String productUuid,
+	public Cart(int limitQuantity, String memberUuid, boolean isChecked, String productUuid,
 		Integer currentQuantity) {
 		this.limitQuantity = limitQuantity;
 		this.memberUuid = memberUuid;

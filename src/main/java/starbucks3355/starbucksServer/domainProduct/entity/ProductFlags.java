@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +11,7 @@ import lombok.ToString;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class ProductFlags {
 	@Id
@@ -26,4 +23,19 @@ public class ProductFlags {
 	private boolean isBest;
 	@Column(nullable = false)
 	private String productUuid;
+
+	@Builder
+	public ProductFlags(Long id, boolean isNew, boolean isBest, String productUuid) {
+		this.id = id;
+		this.isNew = isNew;
+		this.isBest = isBest;
+		this.productUuid = productUuid;
+	}
+
+	@Builder
+	public ProductFlags(boolean isNew, boolean isBest, String productUuid) {
+		this.isNew = isNew;
+		this.isBest = isBest;
+		this.productUuid = productUuid;
+	}
 }

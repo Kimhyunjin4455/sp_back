@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.vendor.dto.controller;
+package starbucks3355.starbucksServer.vendor.controller;
 
 import java.util.List;
 
@@ -27,13 +27,33 @@ public class ProductListByPromotionController {
 	private final ProductListByPromotionService productListByPromotionService;
 
 	// 기획전의 uuid를 받아 상품 목록을 조회
-	@GetMapping("/product/{promotionUuid}")
+	@GetMapping("/{promotionUuid}/products")
 	@Operation(summary = "기획전별 상품 목록 조회")
 	public BaseResponse<List<ProductListByPromotionResponseVo>> getProductListByPromotion(
 		@PathVariable String promotionUuid
 	) {
 		List<ProductListByPromotionResponseDto> productListByPromotion = productListByPromotionService.getProductListByPromotion(
 			promotionUuid);
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			productListByPromotion.stream()
+				.map(ProductListByPromotionResponseDto::dtoToResponseVo)
+				.toList()
+
+		);
+	}
+
+	@GetMapping("/{productUuid}/samePromotionProducts")
+	@Operation(summary = "현재 상품과 같은 기획전 인 상품 목록 조회")
+	public BaseResponse<List<ProductListByPromotionResponseVo>> getProductsBySamePromotion(
+		@PathVariable String productUuid
+	) {
+		List<ProductListByPromotionResponseDto> productListByPromotion = productListByPromotionService.getProductsBySamePromotion(
+			productUuid);
 
 		return new BaseResponse<>(
 			HttpStatus.OK,

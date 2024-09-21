@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainWishList.vo.out;
+package starbucks3355.starbucksServer.domainCart.vo.out;
 
 import java.time.LocalDateTime;
 
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class WishListResponseVo {
+public class CartResponseVo {
 	private String productUuid;
 	private String memberUuid;
 	private boolean isChecked;

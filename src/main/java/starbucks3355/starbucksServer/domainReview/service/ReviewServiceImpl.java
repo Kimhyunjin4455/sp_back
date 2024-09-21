@@ -12,22 +12,25 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
-import starbucks3355.starbucksServer.domainImage.repository.ImageRepository;
-import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.entity.Review;
+import starbucks3355.starbucksServer.domainReview.repository.ReviewAggregateRepository;
 import starbucks3355.starbucksServer.domainReview.repository.ReviewRepository;
+import starbucks3355.starbucksServer.domainReview.repository.ReviewRepositoryCustom;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 	private final ReviewRepository reviewRepository;
-	private final MemberRepository memberRepository;
-	private final ImageRepository imageRepository;
+	private final ReviewRepositoryCustom reviewRepositoryCustom;
+	private final ReviewAggregateRepository reviewAggregateRepository;
 
 	@Override
 	public List<UserReviewResponseDto> getUserReviews(String authorName) {
@@ -68,26 +71,12 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<ReviewProductResponseDto> getProductReviewsHaveMedia(String productUuid) {
-		List<Review> productReviews = reviewRepository.findByProductUuid(productUuid);
-
-		if (productReviews != null) {
-			// 상품의 리뷰들에 대해 리뷰에 대한 이미지가 한개라도 있으면 리뷰들을 반환
-			return productReviews.stream()
-				.filter(productReview -> imageRepository.findByOtherUuid(productReview.getReviewUuid()).size() > 0)
-				.map(productReview -> ReviewProductResponseDto.builder()
-					.content(productReview.getContent())
-					.reviewScore(productReview.getReviewScore())
-					.reviewUuid(productReview.getReviewUuid())
-					.productUuid(productReview.getProductUuid())
-					.authorName(productReview.getAuthorName())
-					.regDate(productReview.getRegDate())
-					.modDate(productReview.getModDate())
-					.build()
-				).toList();
-
-		}
-		return List.of();
+	public CursorPage<String> getProductReviewsHaveMedia(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page) {
+		return reviewRepositoryCustom.getProductReviewsHaveMedia(productUuid, lastId, pageSize, page);
 	}
 
 	@Override
@@ -95,34 +84,41 @@ public class ReviewServiceImpl implements ReviewService {
 		Review review = reviewRepository.findByReviewUuid(reviewUuid)
 			.orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다."));
 
-		return ReviewResponseDto.builder()
-			.content(review.getContent())
-			.reivewScore(review.getReviewScore())
-			.regDate(review.getRegDate())
-			.modDate(review.getModDate())
-			.build();
+		reviewRepositoryCustom.updateReviewAggregate(review);
+
+		return ReviewResponseDto.from(review);
 	}
 
 	@Override
-	public List<ReviewResponseDto> getBestReviews(String productUuid) {
-		// 상품의 리뷰들 중 평점과 조회수 높은 리뷰들을 5개까지 반환
-
-		List<Review> productReviews = reviewRepository.findTop5ByProductUuidOrderByReviewScoreDescReviewViewCountDesc(
-			productUuid); // 새 테이블을 만들어 값을 넣어놓는게
-
-		if (productReviews != null) {
-			return productReviews.stream()
-				.map(productReview -> ReviewResponseDto.builder()
-					.content(productReview.getContent())
-					.reivewScore(productReview.getReviewScore())
-					.regDate(productReview.getRegDate())
-					.modDate(productReview.getModDate())
-					.build()
-				).toList();
-		}
-
-		return List.of();
+	public ReviewScoreResponseDto getReviewScore(String productUuid) {
+		return reviewRepositoryCustom.getReviewScore(productUuid);
 	}
+
+	@Override
+	public CursorPage<BestReviewResponseDto> getBestReviews(Long lastId, Integer pageSize, Integer page) {
+		return reviewRepositoryCustom.getBestReviews(lastId, pageSize, page);
+	}
+
+	// @Override
+	// public List<ReviewResponseDto> getBestReviews(String productUuid) {
+	// 	// 상품의 리뷰들 중 평점과 조회수 높은 리뷰들을 5개까지 반환
+	//
+	// 	List<Review> productReviews = reviewRepository.findTop5ByProductUuidOrderByReviewScoreDescReviewViewCountDesc(
+	// 		productUuid); // 새 테이블을 만들어 값을 넣어놓는게
+	//
+	// 	if (productReviews != null) {
+	// 		return productReviews.stream()
+	// 			.map(productReview -> ReviewResponseDto.builder()
+	// 				.content(productReview.getContent())
+	// 				.reivewScore(productReview.getReviewScore())
+	// 				.regDate(productReview.getRegDate())
+	// 				.modDate(productReview.getModDate())
+	// 				.build()
+	// 			).toList();
+	// 	}
+	//
+	// 	return List.of();
+	// }
 
 	@Override
 	public void addReview(ReviewRequestDto reviewRequestDto) {
@@ -139,7 +135,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 		Review review = result.get();
 
-		review.modifyReviewViewCount(review.getReviewViewCount() + 1);
+		// review.modifyReviewViewCount(review.getReviewViewCount() + 1);
 
 		// modifyXXX 보단 build()를 통해 새로운 객체를 생성하는 것이 좋을 것 같다.
 

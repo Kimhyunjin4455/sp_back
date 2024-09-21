@@ -33,4 +33,31 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 			.map(ProductListByPromotionResponseDto::new)
 			.toList();
 	}
+
+	@Override
+	public List<ProductListByPromotionResponseDto> getProductsBySamePromotion(String productUuid) {
+
+		QProductByPromotionList qProductByPromotionList = QProductByPromotionList.productByPromotionList;
+		BooleanBuilder builder = new BooleanBuilder();
+
+		// 상품 uuid를 통해 기획전 uuid를 조회
+		List<String> promotionUuidList = jpaQueryFactory
+			.select(qProductByPromotionList.promotionUuid)
+			.from(qProductByPromotionList)
+			.where(qProductByPromotionList.productUuid.eq(productUuid))
+			.fetch();
+
+		List<String> productUuidList = jpaQueryFactory
+			.select(qProductByPromotionList.productUuid)
+			.from(qProductByPromotionList)
+			.where(qProductByPromotionList.promotionUuid.eq(promotionUuidList.get(0)))
+			.fetch();
+
+		// 현재 상품의 uuid를 제외한 상품 목록을 조회
+		return productUuidList.stream()
+			.filter(uuid -> !uuid.equals(productUuid))
+			.map(ProductListByPromotionResponseDto::new)
+			.toList();
+
+	}
 }

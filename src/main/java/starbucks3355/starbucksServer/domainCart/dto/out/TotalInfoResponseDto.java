@@ -1,8 +1,8 @@
-package starbucks3355.starbucksServer.domainWishList.dto.out;
+package starbucks3355.starbucksServer.domainCart.dto.out;
 
 import lombok.Builder;
 import lombok.Getter;
-import starbucks3355.starbucksServer.domainWishList.vo.out.TotalInfoResponseVo;
+import starbucks3355.starbucksServer.domainCart.vo.out.TotalInfoResponseVo;
 
 @Getter
 @Builder

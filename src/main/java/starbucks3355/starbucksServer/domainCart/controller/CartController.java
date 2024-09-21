@@ -1,4 +1,4 @@
-package starbucks3355.starbucksServer.domainWishList.controller;
+package starbucks3355.starbucksServer.domainCart.controller;
 
 import java.util.List;
 
@@ -20,36 +20,36 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
-import starbucks3355.starbucksServer.domainWishList.dto.in.WishListRequestDto;
-import starbucks3355.starbucksServer.domainWishList.dto.out.TotalInfoResponseDto;
-import starbucks3355.starbucksServer.domainWishList.dto.out.WishListResponseDto;
-import starbucks3355.starbucksServer.domainWishList.service.WishListService;
-import starbucks3355.starbucksServer.domainWishList.vo.in.WishListRequestVo;
-import starbucks3355.starbucksServer.domainWishList.vo.out.TotalInfoResponseVo;
-import starbucks3355.starbucksServer.domainWishList.vo.out.WishListResponseVo;
+import starbucks3355.starbucksServer.domainCart.dto.in.CartRequestDto;
+import starbucks3355.starbucksServer.domainCart.dto.out.CartResponseDto;
+import starbucks3355.starbucksServer.domainCart.dto.out.TotalInfoResponseDto;
+import starbucks3355.starbucksServer.domainCart.service.CartService;
+import starbucks3355.starbucksServer.domainCart.vo.in.CartRequestVo;
+import starbucks3355.starbucksServer.domainCart.vo.out.CartResponseVo;
+import starbucks3355.starbucksServer.domainCart.vo.out.TotalInfoResponseVo;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/wishList")
 @Tag(name = "WishList", description = "장바구니 API")
-public class WishListController {
-	private final WishListService wishListService;
+public class CartController {
+	private final CartService wishListService;
 
 	@GetMapping("/view")
 	@Operation(summary = " 나의 상품 장바구니 조회")
-	public CommonResponseEntity<List<WishListResponseVo>> getMyWishList(
+	public CommonResponseEntity<List<CartResponseVo>> getMyWishList(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
 		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
 
-		List<WishListResponseDto> wishListRequestDtoList = wishListService.getMyWishListItems(memberUuid);
+		List<CartResponseDto> wishListRequestDtoList = wishListService.getMyWishListItems(memberUuid);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			wishListRequestDtoList.stream()
-				.map(WishListResponseDto::dtoToResponseVo)
+				.map(CartResponseDto::dtoToResponseVo)
 				.toList());
 
 	}
@@ -110,12 +110,12 @@ public class WishListController {
 	@Operation(summary = "상품 상세페이지에서 장바구니에 n개 추가")
 	public CommonResponseEntity<Void> addProductToWishListFromProductDetailsPage(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
-		@RequestBody WishListRequestVo wishListRequestVo,
+		@RequestBody CartRequestVo wishListRequestVo,
 		@PathVariable int quantity) {
 
 		String memberUuid = authUserDetail.getUuid();
 
-		WishListRequestDto wishListRequestDto = WishListRequestDto.builder()
+		CartRequestDto wishListRequestDto = CartRequestDto.builder()
 			.productUuid(wishListRequestVo.getProductUuid())
 			.memberUuid(memberUuid)
 			.isChecked(true)

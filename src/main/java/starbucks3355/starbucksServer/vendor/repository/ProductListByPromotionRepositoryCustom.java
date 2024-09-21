@@ -9,4 +9,6 @@ import starbucks3355.starbucksServer.vendor.dto.out.ProductListByPromotionRespon
 @Repository
 public interface ProductListByPromotionRepositoryCustom {
 	List<ProductListByPromotionResponseDto> getProductByPromotionList(String promotionUuid);
+
+	List<ProductListByPromotionResponseDto> getProductsBySamePromotion(String productUuid);
 }

@@ -21,10 +21,13 @@ public class AuthUserDetail implements UserDetails {
 	private String password;
 	private String email;
 
+	private String nickname;
+
 	public AuthUserDetail(Member member) {
 		this.uuid = member.getUuid();
 		this.password = member.getPassword();
 		this.email = member.getEmail();
+		this.nickname = member.getNickname();
 	}
 
 	@Override
@@ -33,14 +36,14 @@ public class AuthUserDetail implements UserDetails {
 	}
 
 	@Override
-	public String getPassword() {
-		return this.password;
-	}
+	public String getPassword() { return this.password; }
 
 	@Override
 	public String getUsername() {
 		return this.uuid;
 	}
+
+	public String getNickname() { return this.nickname; }
 
 	@Override
 	public boolean isAccountNonExpired() {

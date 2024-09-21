@@ -22,7 +22,7 @@ public class LikesProductRequestDto {
 		this.productUuid = productUuid;
 		this.isLiked = isLiked;
 	}
-	public static LikesProductRequestDto from(LikesProductRequestVo likesProductRequestVo) {
+	public static LikesProductRequestDto of(LikesProductRequestVo likesProductRequestVo) {
 		return LikesProductRequestDto.builder()
 			.uuid(likesProductRequestVo.getUuid())
 			.productUuid(likesProductRequestVo.getProductUuid())

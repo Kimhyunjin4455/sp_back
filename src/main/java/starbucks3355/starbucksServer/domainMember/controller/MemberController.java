@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.CustomLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
@@ -25,6 +26,7 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainMember.dto.LikesProductResponseDto;
 import starbucks3355.starbucksServer.domainMember.dto.MemberReviewResponseDto;
 import starbucks3355.starbucksServer.domainMember.service.MemberService;
@@ -84,26 +86,40 @@ public class MemberController {
 
 	@GetMapping("/likeslist")
 	@Operation(summary = "찜한 상품 목록 조회")
-	public CommonResponseSliceEntity<List<LikesProductResponseVo>> getLikesListByUuid(
+// 	public CommonResponseSliceEntity<List<LikesProductResponseVo>> getLikesListByUuid(
+// 		@RequestHeader("Authorization") String accessToken, String productUuid,
+// 		@RequestParam(defaultValue = "0") int page,
+// 		@RequestParam(defaultValue = "20") int size
+// 	) {
+// 		log.info("accesstoken : {}", accessToken);
+// 		String uuid = provider.parseUuid(accessToken);
+//
+// 		Slice<LikesProductResponseDto> likesProductResponseDtos = memberService.getLikesListByUuid(uuid, page, size);
+//
+// 		List<LikesProductResponseVo> likesProductResponseVos = likesProductResponseDtos.stream()
+// 			.map(LikesProductResponseDto::toVo)
+// 			.collect(Collectors.toList());
+//
+// 		return new CommonResponseSliceEntity<>(
+// 			HttpStatus.OK,
+// 			CommonResponseMessage.SUCCESS.getMessage(),
+// 			likesProductResponseVos,
+// 			likesProductResponseDtos.hasNext()
+// 		);
+//
+// 	}
+// }
+	public CommonResponseEntity<CursorPage<String>> getLikes(
 		@RequestHeader("Authorization") String accessToken, String productUuid,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "20") int size
+		@RequestParam(value = "lastId", required = false) Long lastId,
+		@RequestParam(value = "pageSize", required = false) Integer pageSize,
+		@RequestParam(value = "page", required = false) Integer page
 	) {
-		log.info("accesstoken : {}", accessToken);
-		String uuid = provider.parseUuid(accessToken);
-
-		Slice<LikesProductResponseDto> likesProductResponseDtos = memberService.getLikesListByUuid(uuid, page, size);
-
-		List<LikesProductResponseVo> likesProductResponseVos = likesProductResponseDtos.stream()
-			.map(LikesProductResponseDto::toVo)
-			.collect(Collectors.toList());
-
-		return new CommonResponseSliceEntity<>(
+		CursorPage<String> likesProductResponseDtos = memberService.getLikesList(lastId, pageSize, page);
+		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			likesProductResponseVos,
-			likesProductResponseDtos.hasNext()
+			likesProductResponseDtos
 		);
-
 	}
 }

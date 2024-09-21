@@ -31,7 +31,7 @@ public class ReviewRequestDto {
 			.reviewScore(reviewScore)
 			.productUuid(productUuid)
 			.authorName(authorName)
-			.reviewViewCount(0)
+			//.reviewViewCount(0)
 			.build();
 	}
 

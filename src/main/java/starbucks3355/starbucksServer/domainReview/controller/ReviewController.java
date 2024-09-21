@@ -82,29 +82,31 @@ public class ReviewController {
 		);
 	}
 
-	@GetMapping("/{productUuid}/bestReviewsOfProduct")
-	@Operation(summary = "상품별 베스트 리뷰 조회")
-	public CommonResponseEntity<List<ReviewResponseVo>> getBestReviews(
-		@PathVariable String productUuid) {
-		List<ReviewResponseDto> bestReviewsDto = reviewService.getBestReviews(productUuid);
-
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			bestReviewsDto.stream()
-				.map(ReviewResponseDto::dtoToResponseVo)
-				.toList()
-		);
-	}
+	// @GetMapping("/{productUuid}/bestReviewsOfProduct")
+	// @Operation(summary = "상품별 베스트 리뷰 조회")
+	// public CommonResponseEntity<List<ReviewResponseVo>> getBestReviews(
+	// 	@PathVariable String productUuid) {
+	// 	List<ReviewResponseDto> bestReviewsDto = reviewService.getBestReviews(productUuid);
+	//
+	// 	return new CommonResponseEntity<>(
+	// 		HttpStatus.OK,
+	// 		CommonResponseMessage.SUCCESS.getMessage(),
+	// 		bestReviewsDto.stream()
+	// 			.map(ReviewResponseDto::dtoToResponseVo)
+	// 			.toList()
+	// 	);
+	// }
 
 	@GetMapping("/allReviewsOfMyPage")
 	@Operation(summary = "나의 리뷰 전체 조회")
 	public CommonResponseEntity<List<UserReviewResponseVo>> getMemberReviews(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
-		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
+		// 로그인된 사용자의 UUID 가져와서 그 사용자의 닉네임 찾기
+		String username = authUserDetail.getUsername();
 
-		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(memberUuid);
+		// 수정 필요
+		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(username);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,

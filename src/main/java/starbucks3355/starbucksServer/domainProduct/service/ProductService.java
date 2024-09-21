@@ -1,7 +1,5 @@
 package starbucks3355.starbucksServer.domainProduct.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Slice;
 
 import starbucks3355.starbucksServer.common.utils.CursorPage;
@@ -9,7 +7,6 @@ import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.ProductInfoResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 
@@ -31,7 +28,7 @@ public interface ProductService {
 
 	public ProductResponseDto getProduct(String productUuid);
 
-	public List<ProductInfoResponseDto> getProductsInfo(String productSearchInfo);
+	// public List<ProductInfoResponseDto> getProductsInfo(String productSearchInfo);
 
 	public ProductDetailsPriceResponseDto getProductPrice(String productUuid);
 

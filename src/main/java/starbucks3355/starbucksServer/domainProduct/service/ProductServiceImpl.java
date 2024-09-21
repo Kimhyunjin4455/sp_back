@@ -1,6 +1,5 @@
 package starbucks3355.starbucksServer.domainProduct.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.PageRequest;
@@ -15,11 +14,9 @@ import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
-import starbucks3355.starbucksServer.domainProduct.dto.response.ProductInfoResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
-import starbucks3355.starbucksServer.domainProduct.entity.ProductTag;
 import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.FlagsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductDetailsRepository;
@@ -91,27 +88,27 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
-	@Override
-	public List<ProductInfoResponseDto> getProductsInfo(String productSearchInfo) {
-		// 검색어 첫글자가 # 이면 findByTagNameContaining, 이외에는 findByProductNameContaining
-		// 상품의 이름이나 태그를 통해서 상품의 uuid 값 반환
-		if (productSearchInfo.startsWith("#")) {
-			List<ProductTag> tagUuidList = productTagRepository.findByTagNameContaining(productSearchInfo);
-			return tagUuidList.stream()
-				.map(tagOfProductUuid -> ProductInfoResponseDto.builder()
-					.productUuid(tagOfProductUuid.getProductUuid())
-					.build()
-				).toList();
-
-		} // else 사용할 이유가 없음, if 에서 미리 반환됨, 검색 로직 개선
-		List<Product> nameUuidList = productRepository.findByProductNameContaining(productSearchInfo);
-		return nameUuidList.stream()
-			.map(nameOfProductUuid -> ProductInfoResponseDto.builder()
-				.productUuid(nameOfProductUuid.getProductUuid())
-				.build()
-			).toList();
-
-	}
+	// @Override
+	// public List<ProductInfoResponseDto> getProductsInfo(String productSearchInfo) {
+	// 	// 검색어 첫글자가 # 이면 findByTagNameContaining, 이외에는 findByProductNameContaining
+	// 	// 상품의 이름이나 태그를 통해서 상품의 uuid 값 반환
+	// 	if (productSearchInfo.startsWith("#")) {
+	// 		List<ProductTag> tagUuidList = productTagRepository.findByTagNameContaining(productSearchInfo);
+	// 		return tagUuidList.stream()
+	// 			.map(tagOfProductUuid -> ProductInfoResponseDto.builder()
+	// 				.productUuid(tagOfProductUuid.getProductUuid())
+	// 				.build()
+	// 			).toList();
+	//
+	// 	} // else 사용할 이유가 없음, if 에서 미리 반환됨, 검색 로직 개선
+	// 	List<Product> nameUuidList = productRepository.findByProductNameContaining(productSearchInfo);
+	// 	return nameUuidList.stream()
+	// 		.map(nameOfProductUuid -> ProductInfoResponseDto.builder()
+	// 			.productUuid(nameOfProductUuid.getProductUuid())
+	// 			.build()
+	// 		).toList();
+	//
+	// }
 
 	@Override
 	public ProductDetailsPriceResponseDto getProductPrice(String productUuid) {

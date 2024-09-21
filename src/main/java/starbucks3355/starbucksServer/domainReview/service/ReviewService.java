@@ -28,7 +28,7 @@ public interface ReviewService {
 
 	public ReviewScoreResponseDto getReviewScore(String productUuid);
 
-	public List<ReviewResponseDto> getBestReviews(String productUuid);
+	//public List<ReviewResponseDto> getBestReviews(String productUuid);
 
 	void addReview(ReviewRequestDto reviewRequestDto);
 

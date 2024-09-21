@@ -11,9 +11,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainImage.entity.QImage;
+import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.entity.QReview;
+import starbucks3355.starbucksServer.domainReview.entity.QReviewAggregate;
 import starbucks3355.starbucksServer.domainReview.entity.Review;
+import starbucks3355.starbucksServer.domainReview.entity.ReviewAggregate;
 
 @RequiredArgsConstructor
 @Repository
@@ -22,6 +25,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 	private static final int DEFAULT_PAGE_SIZE = 20;
 	private static final int DEFAULT_PAGE_NUMBER = 0;
 	private final JPAQueryFactory jpaQueryFactory;
+	private final ReviewAggregateRepository reviewAggregateRepository;
 
 	@Override
 	public ReviewScoreResponseDto getReviewScore(String productUuid) {
@@ -97,5 +101,61 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
 		return new CursorPage<>(mediaReviewList, nextCursor, hasNext, currentPageSize, currentPage);
 
+	}
+
+	@Override
+	public ReviewResponseDto getReviewAndUpdateAggregate(String reviewUuid) {
+		QReview review = QReview.review;
+
+		Review reviewEntity = jpaQueryFactory
+			.selectFrom(review)
+			.where(review.reviewUuid.eq(reviewUuid))
+			.fetchOne();
+
+		updateReviewAggregate(reviewEntity);
+
+		return new ReviewResponseDto(
+			reviewEntity.getReviewUuid(),
+			reviewEntity.getReviewScore(),
+			reviewEntity.getRegDate(),
+			reviewEntity.getModDate()
+		);
+	}
+
+	@Override
+	public void updateReviewAggregate(Review review) {
+		if (review == null) {
+			return;
+		}
+
+		QReviewAggregate reviewAggregate = QReviewAggregate.reviewAggregate;
+
+		ReviewAggregate aggregate = jpaQueryFactory
+			.selectFrom(reviewAggregate)
+			.where(reviewAggregate.reviewUuid.eq(review.getReviewUuid()))
+			.fetchOne();
+
+		if (aggregate != null) {
+			ReviewAggregate updateAggregate = aggregate.incrementViewCount();
+			reviewAggregateRepository.save(updateAggregate);
+		} else {
+			ReviewAggregate newAggregate = ReviewAggregate.builder()
+				.reviewUuid(review.getReviewUuid())
+				.viewCount(1)
+				.reviewScore(review.getReviewScore())
+				.build();
+			reviewAggregateRepository.save(newAggregate);
+		}
+
+		// 리뷰 집계 테이블이 없으면 생성
+
+	}
+
+	@Override
+	public CursorPage<String> getBestReviews(Long lastId, Integer pageSize, Integer page) {
+		QReview review = QReview.review;
+		QReviewAggregate reviewAggregate = QReviewAggregate.reviewAggregate;
+
+		return null;
 	}
 }

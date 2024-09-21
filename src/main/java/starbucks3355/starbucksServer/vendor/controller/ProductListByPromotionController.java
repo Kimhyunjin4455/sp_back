@@ -46,4 +46,24 @@ public class ProductListByPromotionController {
 
 		);
 	}
+
+	@GetMapping("/{productUuid}/samePromotionProducts")
+	@Operation(summary = "현재 상품과 같은 기획전 인 상품 목록 조회")
+	public BaseResponse<List<ProductListByPromotionResponseVo>> getProductsBySamePromotion(
+		@PathVariable String productUuid
+	) {
+		List<ProductListByPromotionResponseDto> productListByPromotion = productListByPromotionService.getProductsBySamePromotion(
+			productUuid);
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			productListByPromotion.stream()
+				.map(ProductListByPromotionResponseDto::dtoToResponseVo)
+				.toList()
+
+		);
+	}
 }

@@ -19,4 +19,9 @@ public class ProductListByPromotionServiceImpl implements ProductListByPromotion
 	public List<ProductListByPromotionResponseDto> getProductListByPromotion(String promotionUuid) {
 		return productListByPromotionRepositoryCustom.getProductByPromotionList(promotionUuid);
 	}
+
+	@Override
+	public List<ProductListByPromotionResponseDto> getProductsBySamePromotion(String productUuid) {
+		return productListByPromotionRepositoryCustom.getProductsBySamePromotion(productUuid);
+	}
 }

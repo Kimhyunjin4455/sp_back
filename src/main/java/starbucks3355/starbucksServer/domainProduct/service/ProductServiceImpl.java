@@ -38,8 +38,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void addProduct(ProductRequestDto productRequestDto) {
-		// 관리자 기능이기에 제외
-		productRepository.save(productRequestDto.dtoToEntity(UUID.randomUUID().toString()));
+		Product product = productRequestDto.dtoToEntity(UUID.randomUUID().toString());
+		productRepository.save(product);
 	}
 
 	@Override

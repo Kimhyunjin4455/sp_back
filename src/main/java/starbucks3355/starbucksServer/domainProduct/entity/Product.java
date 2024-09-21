@@ -9,12 +9,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import starbucks3355.starbucksServer.common.entity.BaseEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @ToString
-public class Product {
+public class Product extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -33,6 +34,7 @@ public class Product {
 		this.productName = productName;
 		this.productDescription = productDescription;
 		this.productInfo = productInfo;
+
 	}
 
 }

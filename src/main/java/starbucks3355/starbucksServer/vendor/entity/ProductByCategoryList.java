@@ -17,7 +17,7 @@ public class ProductByCategoryList {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String majorCategoryName;
+	private String topCategoryName;
 
 	private String middleCategoryName;
 

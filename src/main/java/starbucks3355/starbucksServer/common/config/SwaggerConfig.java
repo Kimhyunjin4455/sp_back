@@ -128,12 +128,4 @@ public class SwaggerConfig {
 			.pathsToMatch("/api/v1/coupon/**")
 			.build();
 	}
-
-	@Bean
-	GroupedOpenApi S3API() {
-		return GroupedOpenApi.builder()
-			.group("S3")
-			.pathsToMatch("/api/v1/S3/**")
-			.build();
-	}
 }

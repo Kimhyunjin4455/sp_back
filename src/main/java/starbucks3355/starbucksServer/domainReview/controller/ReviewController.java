@@ -20,19 +20,25 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
+import starbucks3355.starbucksServer.common.entity.BaseResponse;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
-import starbucks3355.starbucksServer.common.entity.CommonResponseSliceWithScoreEntity;
+import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
+import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.service.ReviewService;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewModifyRequestVo;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewRequestVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewProductResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
+import starbucks3355.starbucksServer.domainReview.vo.out.ReviewScoreResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.UserReviewResponseVo;
 
 @Slf4j
@@ -45,64 +51,47 @@ public class ReviewController {
 
 	@GetMapping("/{productUuid}/allReviewsOfProduct")
 	@Operation(summary = "상품별 리뷰 전체 조회")
-	public CommonResponseSliceWithScoreEntity<List<ReviewProductResponseVo>> getProductReviews(
+	public CommonResponseSliceEntity<List<ReviewProductResponseVo>> getProductReviews(
 		@PathVariable String productUuid,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "20") int size) {
 		Slice<ReviewProductResponseDto> productReviewResponseDtoSlice = reviewService.getProductReviews(productUuid,
 			page, size);
 
-		Double reviewAvgScore = productReviewResponseDtoSlice.stream()
-			.mapToDouble(ReviewProductResponseDto::getReviewScore)
-			.average()
-			.orElse(0);
-
-		String formattedScore = String.format("%.1f", reviewAvgScore);
-
-		Integer reviewCnt = productReviewResponseDtoSlice.getNumberOfElements();
-
 		List<ReviewProductResponseVo> responseVoList = productReviewResponseDtoSlice.stream()
 			.map(ReviewProductResponseDto::dtoToResponseVo)
 			.toList();
 
-		return new CommonResponseSliceWithScoreEntity<>(
+		return new CommonResponseSliceEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			responseVoList,
-			Double.parseDouble(formattedScore), // Double 형식으로 변환 (소수점 1자리까지만 표시하기 위해
-			reviewCnt,
 			productReviewResponseDtoSlice.hasNext()
 		);
 	}
 
-	@GetMapping("/{productUuid}/allReviewsHaveMediaOfProduct")
+	@GetMapping("/allReviewsHaveMediaOfProduct")
 	@Operation(summary = "상품별 리뷰 전체 조회(이미지가 있는 리뷰만)")
-	public CommonResponseEntity<List<ReviewProductResponseVo>> getProductReviewsHaveMedia(
-		@PathVariable String productUuid) {
-		List<ReviewProductResponseDto> productReviewResponseDtoList = reviewService.getProductReviewsHaveMedia(
-			productUuid);
+	public BaseResponse<CursorPage<String>> getProductReviewsHaveMedia(
+		@RequestParam(value = "productUuid") String productUuid,
+		@RequestParam(value = "lastId", required = false) Long lastId,
+		@RequestParam(value = "pageSize", required = false) Integer pageSize,
+		@RequestParam(value = "page", required = false) Integer page) {
 
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			productReviewResponseDtoList.stream()
-				.map(ReviewProductResponseDto::dtoToResponseVo)
-				.toList()
+		return new BaseResponse<>(
+			reviewService.getProductReviewsHaveMedia(productUuid, lastId, pageSize, page)
 		);
 	}
 
-	@GetMapping("/{productUuid}/bestReviewsOfProduct")
-	@Operation(summary = "상품별 베스트 리뷰 조회")
-	public CommonResponseEntity<List<ReviewResponseVo>> getBestReviews(
-		@PathVariable String productUuid) {
-		List<ReviewResponseDto> bestReviewsDto = reviewService.getBestReviews(productUuid);
+	@GetMapping("/bestReviews")
+	@Operation(summary = "전체 리뷰들 중 베스트 리뷰 조회")
+	public BaseResponse<CursorPage<BestReviewResponseDto>> getBestReviews(
+		@RequestParam(value = "lastId", required = false) Long lastId,
+		@RequestParam(value = "pageSize", required = false) Integer pageSize,
+		@RequestParam(value = "page", required = false) Integer page) {
 
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			bestReviewsDto.stream()
-				.map(ReviewResponseDto::dtoToResponseVo)
-				.toList()
+		return new BaseResponse<>(
+			reviewService.getBestReviews(lastId, pageSize, page)
 		);
 	}
 
@@ -111,9 +100,11 @@ public class ReviewController {
 	public CommonResponseEntity<List<UserReviewResponseVo>> getMemberReviews(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
-		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
+		// 로그인된 사용자의 UUID 가져와서 그 사용자의 닉네임 찾기
+		String username = authUserDetail.getUsername();
 
-		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(memberUuid);
+		// 수정 필요
+		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(username);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
@@ -125,13 +116,13 @@ public class ReviewController {
 
 	}
 
-	@GetMapping("/allReviewsOfUser/{memberUuid}")
-	@Operation(summary = "회원별 리뷰 전체 조회")
+	@GetMapping("/{authorName}/allReviewsOfUser")
+	@Operation(summary = "작성자의 리뷰 전체 조회")
 	// 상품상세 페이지에서 이용할 용도(페이지 생성여부에 따라 갈림)
 	public CommonResponseEntity<List<UserReviewResponseVo>> getUserReviews(
-		@PathVariable String memberUuid
+		@PathVariable String authorName
 	) {
-		List<UserReviewResponseDto> userReviews = reviewService.getUserReviews(memberUuid);
+		List<UserReviewResponseDto> userReviews = reviewService.getUserReviews(authorName);
 
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
@@ -158,30 +149,32 @@ public class ReviewController {
 		);
 	}
 
+	@GetMapping("/{productUuid}/reviewScore")
+	@Operation(summary = "상품별 리뷰 점수의 평균과 갯수 조회")
+	public BaseResponse<ReviewScoreResponseVo> getReviewScore(
+		@PathVariable String productUuid
+	) {
+		ReviewScoreResponseDto reviewScoreResponseDto = reviewService.getReviewScore(productUuid);
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			reviewScoreResponseDto.dtoToResponseVo()
+		);
+	}
+
 	@PostMapping("/{reviewUuid}")
 	@Operation(summary = "리뷰 한개 등록")
-	public CommonResponseEntity<Void> addReview(
+	public BaseResponse<Void> addReview(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ReviewRequestVo reviewRequestVo) { // Service 로직에서 UUID 생성하여 저장하므로 vo에서 관련정보를 뺴거나, 서비스 로직에서 제거하기
 
-		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
+		reviewService.addReview(ReviewRequestDto.of(reviewRequestVo));
 
-		ReviewRequestDto reviewRequestDto = ReviewRequestDto.builder()
-			.content(reviewRequestVo.getContent())
-			.reviewUuid(reviewRequestVo.getReviewUuid())
-			.reviewScore(reviewRequestVo.getReviewScore())
-			.productUuid(reviewRequestVo.getProductUuid())
-			.memberUuid(memberUuid)
-			.regDate(reviewRequestVo.getRegDate())
-			.modDate(reviewRequestVo.getModDate())
-			.build();
-
-		reviewService.addReview(reviewRequestDto);
-
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			null
+		return new BaseResponse<>(
+			BaseResponseStatus.SUCCESS
 		);
 	}
 
@@ -207,7 +200,7 @@ public class ReviewController {
 
 	}
 
-	@DeleteMapping("/reviewDelete/{id}")
+	@DeleteMapping("/{id}/reviewDelete")
 	@Operation(summary = "댓글 삭제", description = "작성했던 리뷰를 삭제합니다.")
 	public CommonResponseEntity<Void> deleteReview(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,

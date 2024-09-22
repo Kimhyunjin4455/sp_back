@@ -3,6 +3,7 @@ package starbucks3355.starbucksServer.domainMember.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import starbucks3355.starbucksServer.domainMember.entity.Likes;
 import starbucks3355.starbucksServer.domainMember.vo.LikesProductResponseVo;
 
 @Getter
@@ -28,6 +29,14 @@ public class LikesProductResponseDto {
 			.uuid(uuid)
 			.productUuid(productUuid)
 			.isLiked(isLiked)
+			.build();
+	}
+	public static LikesProductResponseDto from(Likes likes) {
+		return LikesProductResponseDto.builder()
+			.id(likes.getId())
+			.uuid(likes.getUuid())
+			.productUuid(likes.getProductUuid())
+			.isLiked(likes.isLiked())
 			.build();
 	}
 

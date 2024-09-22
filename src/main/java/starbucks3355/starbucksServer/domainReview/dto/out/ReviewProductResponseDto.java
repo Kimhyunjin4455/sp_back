@@ -15,7 +15,7 @@ public class ReviewProductResponseDto {
 	private String reviewUuid;
 	private Integer reviewScore;
 	private String productUuid;
-	private String memberUuid;
+	private String authorName;
 	private String userId;
 	private LocalDateTime regDate, modDate;
 
@@ -25,7 +25,7 @@ public class ReviewProductResponseDto {
 			.reviewScore(reviewScore)
 			.reviewUuid(reviewUuid)
 			.productUuid(productUuid)
-			.userId(userId)
+			.authorName(authorName)
 			.regDate(getRegDate())
 			.modDate(getModDate())
 			.build();

@@ -18,16 +18,16 @@ public class CategoryList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Integer majorCategoryName;
-	private Integer middleCategoryName;
-	private Integer bottomCategoryName;
+	private String topCategoryName;
+	private String middleCategoryName;
+	private String bottomCategoryName;
 	private String productUuid;
 
 	@Builder
-	public CategoryList(Long id, Integer majorCategoryName, Integer middleCategoryName, Integer bottomCategoryName,
+	public CategoryList(Long id, String topCategoryName, String middleCategoryName, String bottomCategoryName,
 		String productUuid) {
 		this.id = id;
-		this.majorCategoryName = majorCategoryName;
+		this.topCategoryName = topCategoryName;
 		this.middleCategoryName = middleCategoryName;
 		this.bottomCategoryName = bottomCategoryName;
 		this.productUuid = productUuid;

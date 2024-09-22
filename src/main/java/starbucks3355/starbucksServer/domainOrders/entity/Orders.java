@@ -1,51 +1,53 @@
 package starbucks3355.starbucksServer.domainOrders.entity;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import starbucks3355.starbucksServer.common.entity.BaseEntity;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @ToString
-public class Orders {
+public class Orders extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, length = 30)
 	private Long id;
 	@Column(nullable = false, length = 30)
-	private LocalDateTime orderDate;
+	private String orderId; // 주문번호
+	@Column(nullable = false, length = 30)
+	private String userId; // 사용자 id
 	@Column(nullable = false, length = 40)
-	private Integer totalAmount;
-	@Column(nullable = false, columnDefinition = "BINARY(16)")
-	private UUID uuid;
+	private Integer totalAmount; // 총 결제 금액
 	@Column(nullable = false, length = 30)
-	private String userName;
+	private String productName; // 상품명
 	@Column(nullable = false, length = 30)
-	private String userPhoneNumber;
-	@Column(nullable = false, length = 30)
-	private String userAddress;
+	private Integer productQuantity; // 상품 수량
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 10)
-	private OrderStatus orderStatus;
+	private PayStatus payStatus; // 결제 상태
 
 	@Builder
-	public Orders(Long id, LocalDateTime orderDate, Integer totalAmount, UUID uuid, String userName,
-		String userPhoneNumber, String userAddress, OrderStatus orderStatus) {
+	public Orders(Long id, String orderId, String userId, Integer totalAmount, String productName,
+		Integer productQuantity,
+		PayStatus payStatus) {
 		this.id = id;
-		this.orderDate = orderDate;
+		this.orderId = orderId;
+		this.userId = userId;
 		this.totalAmount = totalAmount;
-		this.uuid = uuid;
-		this.userName = userName;
-		this.userPhoneNumber = userPhoneNumber;
-		this.userAddress = userAddress;
-		this.orderStatus = orderStatus;
+		this.productName = productName;
+		this.productQuantity = productQuantity;
+		this.payStatus = payStatus;
 	}
 }

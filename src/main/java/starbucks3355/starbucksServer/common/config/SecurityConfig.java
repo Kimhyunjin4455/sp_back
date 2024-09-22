@@ -56,6 +56,9 @@ public class SecurityConfig {
 						"/swagger-ui/**",
 						"/v3/api-docs/**",
 						"/api/v1/shipping/**",
+						"/api/v1/kakao/**",
+						"/api/v1/orders/**",
+						"/api/v1/S3/**",
 						"/error"
 					)
 					.permitAll()

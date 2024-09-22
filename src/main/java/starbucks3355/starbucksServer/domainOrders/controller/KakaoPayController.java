@@ -72,4 +72,5 @@ public class KakaoPayController {
 			CommonResponseMessage.SUCCESS.getMessage(),
 			response);
 	}
+	
 }

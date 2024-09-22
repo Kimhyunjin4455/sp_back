@@ -106,6 +106,11 @@ public enum BaseResponseStatus {
 	GPT_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, 6001, "GPT API 호출에 실패했습니다."),
 	;
 
+	/**
+	 * 7000: s3 error
+	 */
+	// S3
+
 	private final HttpStatusCode httpStatusCode;
 	private final boolean isSuccess;
 	private final int code;

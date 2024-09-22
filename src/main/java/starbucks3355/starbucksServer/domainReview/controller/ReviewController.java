@@ -101,7 +101,7 @@ public class ReviewController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
 		// 로그인된 사용자의 UUID 가져와서 그 사용자의 닉네임 찾기
-		String username = authUserDetail.getUsername();
+		String username = authUserDetail.getNickname();
 
 		// 수정 필요
 		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(username);
@@ -171,7 +171,9 @@ public class ReviewController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ReviewRequestVo reviewRequestVo) { // Service 로직에서 UUID 생성하여 저장하므로 vo에서 관련정보를 뺴거나, 서비스 로직에서 제거하기
 
-		reviewService.addReview(ReviewRequestDto.of(reviewRequestVo));
+		String authorName = authUserDetail.getNickname();
+		log.info("authorName: {}", authorName);
+		reviewService.addReview(ReviewRequestDto.of(reviewRequestVo, authorName));
 
 		return new BaseResponse<>(
 			BaseResponseStatus.SUCCESS
@@ -180,22 +182,16 @@ public class ReviewController {
 
 	@PutMapping("/{reviewUuid}")
 	@Operation(summary = "리뷰 수정", description = "기존에 작성된 리뷰를 수정합니다.")
-	public CommonResponseEntity<Void> updateReview(
+	public BaseResponse<Void> updateReview(
 		@PathVariable String reviewUuid,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ReviewModifyRequestVo reviewModifyRequestVo) {
 
-		ReviewModifyRequestDto reviewModifyRequestDto = ReviewModifyRequestDto.builder()
-			.content(reviewModifyRequestVo.getContent())
-			.reviewScore(reviewModifyRequestVo.getReviewScore())
-			.build();
+		// authorName이 같으먄 수정가능
+		reviewService.modifyReview(ReviewModifyRequestDto.of(reviewModifyRequestVo), reviewUuid);
 
-		reviewService.modifyReview(reviewModifyRequestDto, reviewUuid);
-
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			null
+		return new BaseResponse<>(
+			BaseResponseStatus.SUCCESS
 		);
 
 	}

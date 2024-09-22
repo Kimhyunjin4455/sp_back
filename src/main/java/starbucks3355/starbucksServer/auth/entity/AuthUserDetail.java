@@ -19,14 +19,14 @@ public class AuthUserDetail implements UserDetails {
 
 	private String uuid;
 	private String password;
-	private String email;
+	private String name;
 
 	private String nickname;
 
 	public AuthUserDetail(Member member) {
 		this.uuid = member.getUuid();
 		this.password = member.getPassword();
-		this.email = member.getEmail();
+		this.name = member.getName();
 		this.nickname = member.getNickname();
 	}
 

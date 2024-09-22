@@ -36,6 +36,8 @@ import starbucks3355.starbucksServer.domainProduct.vo.response.DiscountResponseV
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsPriceResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductsResponseVo;
+import starbucks3355.starbucksServer.vendor.service.ProductListByCategoryService;
+import starbucks3355.starbucksServer.vendor.vo.out.CategoryAndCountOfSearchedProductListResponseVo;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,6 +46,8 @@ import starbucks3355.starbucksServer.domainProduct.vo.response.ProductsResponseV
 @Tag(name = "Product", description = "상품 API")
 public class ProductController {
 	private final ProductService productService;
+
+	private final ProductListByCategoryService productListByCategoryService;
 
 	@GetMapping("/{productUuid}")
 	@Operation(summary = "상품 조회")
@@ -122,17 +126,41 @@ public class ProductController {
 
 	@GetMapping("/search")
 	@Operation(summary = "상품 검색")
-	public CommonResponseEntity<CursorPage<String>> searchProduct(
+	public BaseResponse<CursorPage<String>> searchProduct(
 		@RequestParam String keyword,
 		@RequestParam(value = "lastId", required = false) Long lastId,
 		@RequestParam(value = "pageSize", required = false) Integer pageSize,
 		@RequestParam(value = "page", required = false) Integer page
 	) {
-		CursorPage<String> productResponseDto = productService.getSearchedProductList(keyword, lastId, pageSize, page);
-		return new CommonResponseEntity<>(
-			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			productResponseDto
+
+		return new BaseResponse<>(
+			productService.getSearchedProductList(keyword, lastId, pageSize, page)
+		);
+	}
+
+	@GetMapping("/categoryInfoOfSearchedProduct")
+	@Operation(summary = "검색된 상품의 카테고리 정보와 포함된 상품 수 조회")
+	public BaseResponse<List<CategoryAndCountOfSearchedProductListResponseVo>> getCategoryInfoOfSearchedProduct(
+		@RequestParam List<String> productUuidList
+	) {
+		return new BaseResponse<>(
+			productListByCategoryService.getCategoryAndCountOfSearchedProductList(
+				productUuidList).stream().map(dto -> dto.dtoToResponseVo()).toList()
+		);
+	}
+
+	@GetMapping("/byCategoryOfSearchedProducts")
+	@Operation(summary = "검색된 상품들에 대해 카테고리 필터 적용")
+	public BaseResponse<CursorPage<String>> getCategoryInfoOfSearchedProduct(
+		@RequestParam List<String> productUuidList,
+		@RequestParam() String topCategoryName,
+		@RequestParam(value = "lastId", required = false) Long lastId,
+		@RequestParam(value = "pageSize", required = false) Integer pageSize,
+		@RequestParam(value = "page", required = false) Integer page
+	) {
+		return new BaseResponse<>(
+			productListByCategoryService.getProductByCategoryOfSearchedProducts(
+				productUuidList, topCategoryName, lastId, pageSize, page)
 		);
 	}
 

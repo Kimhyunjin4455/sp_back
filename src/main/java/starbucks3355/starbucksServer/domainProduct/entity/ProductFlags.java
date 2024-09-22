@@ -20,7 +20,9 @@ public class ProductFlags {
 	@Column(nullable = false)
 	private boolean isNew;
 	@Column(nullable = false)
-	private boolean isBest;
+	private boolean isBest; // 전체 상품 중 10개 뽑기
+	@Column(nullable = false)
+	private boolean isLimited;
 	@Column(nullable = false)
 	private String productUuid;
 

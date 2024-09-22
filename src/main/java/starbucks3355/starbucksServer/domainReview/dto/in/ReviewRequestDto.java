@@ -35,12 +35,12 @@ public class ReviewRequestDto {
 			.build();
 	}
 
-	public static ReviewRequestDto of(ReviewRequestVo reviewRequestVo) {
+	public static ReviewRequestDto of(ReviewRequestVo reviewRequestVo, String authorName) {
 		return ReviewRequestDto.builder()
 			.content(reviewRequestVo.getContent())
 			.reviewScore(reviewRequestVo.getReviewScore())
 			.productUuid(reviewRequestVo.getProductUuid())
-			.authorName(reviewRequestVo.getAuthorName())
+			.authorName(authorName)
 			.build();
 	}
 }

@@ -120,23 +120,21 @@ public class ProductController {
 		);
 	}
 
-	// @GetMapping("/search/{searchInfo}")
-	// @Operation(summary = "상품 검색(상품명, 태그)을 통힌 정보 조회")
-	// public CommonResponseEntity<List<ProductInfoResponseVo>> getProductSearchInfo(
-	// 	@PathVariable String searchInfo
-	// ) {
-	// 	List<ProductInfoResponseDto> productsInfoDtoList = productService.getProductsInfo(searchInfo);
-	//
-	// 	List<ProductInfoResponseVo> productsInfoVoList = productsInfoDtoList.stream()
-	// 		.map(ProductInfoResponseDto::dtoToResponseVo)
-	// 		.collect(Collectors.toList());
-	//
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		productsInfoVoList
-	// 	);
-	// }
+	@GetMapping("/search")
+	@Operation(summary = "상품 검색")
+	public CommonResponseEntity<CursorPage<String>> searchProduct(
+		@RequestParam String keyword,
+		@RequestParam(value = "lastId", required = false) Long lastId,
+		@RequestParam(value = "pageSize", required = false) Integer pageSize,
+		@RequestParam(value = "page", required = false) Integer page
+	) {
+		CursorPage<String> productResponseDto = productService.getSearchedProductList(keyword, lastId, pageSize, page);
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			productResponseDto
+		);
+	}
 
 	@PostMapping("/add")
 	@Operation(summary = "상품 추가")
@@ -144,7 +142,7 @@ public class ProductController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ProductRequestVo productRequestVo
 	) {
-		
+
 		productService.addProduct(ProductRequestDto.of(productRequestVo));
 
 		return new BaseResponse<>(

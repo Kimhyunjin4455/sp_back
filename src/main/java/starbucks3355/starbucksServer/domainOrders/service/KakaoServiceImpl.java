@@ -113,4 +113,31 @@ public class KakaoServiceImpl implements KakaoService {
 			throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
 		}
 	}
+	//
+	// // 구매하기 -> 주문생성으로 값 전달
+	// @Override
+	// public KakaoRequestCartDto createKakaoRequestReadyDto(List<WishList> wishLists, String orderId, String userId) {
+	// 	int totalAmount = wishLists.stream()
+	// 		.mapToInt(item -> item.getCurrentQuantity() * item.getLimitQuantity())
+	// 		.sum();
+	// 	String itemName = wishLists.get(0).getProductUuid(); // 대표 상품명 설정? (첫 번째 상품명)
+	// 	// 장바구니 총 갯수
+	// 	int totalQuantity = wishLists.stream()
+	// 		.mapToInt(WishList::getCurrentQuantity)
+	// 		.sum();
+	//
+	// 	return KakaoRequestCartDto.builder()
+	// 		.cid(kakaoProperties.getCid())
+	// 		.partnerOrderId(orderId)
+	// 		.partnerUserId(userId)
+	// 		.itemName(itemName)
+	// 		.quantity(totalQuantity)
+	// 		.totalAmount(totalAmount)
+	// 		.taxFreeAmount(0)
+	// 		.approvalUrl(
+	// 			"http://localhost:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken")
+	// 		.cancelUrl("http://localhost:8080/cancel")
+	// 		.failUrl("http://localhost:8080/fail")
+	// 		.build();
+	// }
 }

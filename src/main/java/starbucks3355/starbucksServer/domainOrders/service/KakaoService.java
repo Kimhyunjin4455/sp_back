@@ -9,4 +9,6 @@ public interface KakaoService {
 	KakaoResponseReadyDto getKakaoPayReady(KakaoRequestReadyDto kakaoRequestReadyDto);
 
 	KakaoResponseApproveDto getKakaoPayApprove(KakaoRequestApproveDto kakaoRequestApproveDto);
+
+	//KakaoRequestCartDto createKakaoRequestReadyDto(List<WishList> wishLists, String orderId, String userId);
 }

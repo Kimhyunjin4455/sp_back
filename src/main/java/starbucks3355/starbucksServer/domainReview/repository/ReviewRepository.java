@@ -14,8 +14,6 @@ import starbucks3355.starbucksServer.domainReview.entity.Review;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Optional<Review> findByReviewUuid(String reviewUuid);
 
-	List<Review> findByProductUuid(String productUuid);
-
 	List<Review> findByAuthorName(String authorName);
 
 	Slice<Review> findPageByProductUuid(String productUuid, Pageable pageable);

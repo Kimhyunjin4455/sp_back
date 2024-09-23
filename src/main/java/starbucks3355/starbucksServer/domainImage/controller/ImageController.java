@@ -17,8 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
-import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
-import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
+import starbucks3355.starbucksServer.common.entity.BaseResponse;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.domainImage.dto.out.ImageResponseDto;
 import starbucks3355.starbucksServer.domainImage.service.ImageService;
 import starbucks3355.starbucksServer.domainImage.vo.in.ImageRequestVo;
@@ -34,14 +34,16 @@ public class ImageController {
 
 	@GetMapping("/{otherUuid}/allMedias")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 목록 이미지 조회")
-	public CommonResponseEntity<List<ImageResponseVo>> getImages(
+	public BaseResponse<List<ImageResponseVo>> getImages(
 		@PathVariable String otherUuid
 	) {
 		List<ImageResponseDto> imageDtoList = imageService.getImages(otherUuid);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			imageDtoList.stream()
 				.map(ImageResponseDto::dtoToResponseVo)
 				.toList()
@@ -50,21 +52,23 @@ public class ImageController {
 
 	@GetMapping("/{otherUuid}/mainMedia")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 메인 이미지 조회")
-	public CommonResponseEntity<ImageResponseVo> getMainImage(
+	public BaseResponse<ImageResponseVo> getMainImage(
 		@PathVariable String otherUuid
 	) {
 		ImageResponseDto imageDto = imageService.getMainImage(otherUuid, true);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			imageDto.dtoToResponseVo()
 		);
 	}
 
 	@PostMapping("/{otherUuid}/addMedia")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 추가")
-	public CommonResponseEntity<Void> addImages(
+	public BaseResponse<Void> addImages(
 		@RequestBody List<ImageRequestVo> imageRequestVoList,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
@@ -73,24 +77,28 @@ public class ImageController {
 			.toList()
 		);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			null
 		);
 	}
 
 	@DeleteMapping("/{otherUuid}/deleteMedia/{id}")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 삭제")
-	public CommonResponseEntity<Void> deleteImage(
+	public BaseResponse<Void> deleteImage(
 		@PathVariable Long id, String otherUuid,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
 		imageService.deleteImage(id, otherUuid);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			null
 		);
 	}
@@ -98,15 +106,17 @@ public class ImageController {
 	@DeleteMapping("/{otherUuid}/deleteAllMedia")
 	// 개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제(수정의 경우 기존 등록된 모든 이미지리스트를 삭제하고 새 리스트을 입력할 것)
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제")
-	public CommonResponseEntity<Void> deleteAllImage(
+	public BaseResponse<Void> deleteAllImage(
 		@PathVariable String otherUuid,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail햣
 	) {
 		imageService.deleteAllImages(otherUuid);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			null
 		);
 	}

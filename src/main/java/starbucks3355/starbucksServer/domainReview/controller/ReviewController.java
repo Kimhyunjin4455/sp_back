@@ -22,9 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
-import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
-import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
-import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
+import starbucks3355.starbucksServer.common.entity.CommonResponsePagingEntity;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
@@ -51,7 +49,7 @@ public class ReviewController {
 
 	@GetMapping("/{productUuid}/allReviewsOfProduct")
 	@Operation(summary = "상품별 리뷰 전체 조회")
-	public CommonResponseSliceEntity<List<ReviewProductResponseVo>> getProductReviews(
+	public CommonResponsePagingEntity<List<ReviewProductResponseVo>> getProductReviews(
 		@PathVariable String productUuid,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "20") int size) {
@@ -62,9 +60,11 @@ public class ReviewController {
 			.map(ReviewProductResponseDto::dtoToResponseVo)
 			.toList();
 
-		return new CommonResponseSliceEntity<>(
+		return new CommonResponsePagingEntity<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			responseVoList,
 			productReviewResponseDtoSlice.hasNext()
 		);
@@ -79,6 +79,10 @@ public class ReviewController {
 		@RequestParam(value = "page", required = false) Integer page) {
 
 		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			reviewService.getProductReviewsHaveMedia(productUuid, lastId, pageSize, page)
 		);
 	}
@@ -91,13 +95,17 @@ public class ReviewController {
 		@RequestParam(value = "page", required = false) Integer page) {
 
 		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			reviewService.getBestReviews(lastId, pageSize, page)
 		);
 	}
 
 	@GetMapping("/allReviewsOfMyPage")
 	@Operation(summary = "나의 리뷰 전체 조회")
-	public CommonResponseEntity<List<UserReviewResponseVo>> getMemberReviews(
+	public BaseResponse<List<UserReviewResponseVo>> getMemberReviews(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
 		// 로그인된 사용자의 UUID 가져와서 그 사용자의 닉네임 찾기
@@ -106,9 +114,11 @@ public class ReviewController {
 		// 수정 필요
 		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(username);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			memberReviewsDto.stream()
 				.map(UserReviewResponseDto::dtoToResponseVo)
 				.toList()
@@ -119,14 +129,16 @@ public class ReviewController {
 	@GetMapping("/{authorName}/allReviewsOfUser")
 	@Operation(summary = "작성자의 리뷰 전체 조회")
 	// 상품상세 페이지에서 이용할 용도(페이지 생성여부에 따라 갈림)
-	public CommonResponseEntity<List<UserReviewResponseVo>> getUserReviews(
+	public BaseResponse<List<UserReviewResponseVo>> getUserReviews(
 		@PathVariable String authorName
 	) {
 		List<UserReviewResponseDto> userReviews = reviewService.getUserReviews(authorName);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			userReviews.stream()
 				.map(UserReviewResponseDto::dtoToResponseVo)
 				.toList()
@@ -136,15 +148,17 @@ public class ReviewController {
 
 	@GetMapping("/{reviewUuid}")
 	@Operation(summary = "리뷰 한개 조회")
-	public CommonResponseEntity<ReviewResponseVo> getReview(
+	public BaseResponse<ReviewResponseVo> getReview(
 		@PathVariable String reviewUuid
 	) {
 		ReviewResponseDto reviewResponseDto = reviewService.getReview(reviewUuid);
 		reviewService.addReviewViewCount(reviewUuid);
 
-		return new CommonResponseEntity<ReviewResponseVo>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			reviewResponseDto.dtoToResponseVo()
 		);
 	}
@@ -176,7 +190,11 @@ public class ReviewController {
 		reviewService.addReview(ReviewRequestDto.of(reviewRequestVo, authorName));
 
 		return new BaseResponse<>(
-			BaseResponseStatus.SUCCESS
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			null
 		);
 	}
 
@@ -191,22 +209,28 @@ public class ReviewController {
 		reviewService.modifyReview(ReviewModifyRequestDto.of(reviewModifyRequestVo), reviewUuid);
 
 		return new BaseResponse<>(
-			BaseResponseStatus.SUCCESS
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			null
 		);
 
 	}
 
 	@DeleteMapping("/{id}/reviewDelete")
 	@Operation(summary = "댓글 삭제", description = "작성했던 리뷰를 삭제합니다.")
-	public CommonResponseEntity<Void> deleteReview(
+	public BaseResponse<Void> deleteReview(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable Long id) {
 
 		reviewService.deleteReview(id);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			null
 		);
 	}

@@ -12,11 +12,11 @@ public class CartRequestDto {
 	private String productUuid;
 	private String memberUuid;
 	private boolean isChecked;
-	private Integer limitQuantity;
+	;
 	private Integer currentQuantity;
 	private LocalDateTime regDate, modDate;
 
-	public Cart toEntity(String productUuid, String memberUuid) {
+	public Cart toEntity(String productUuid, String memberUuid, Integer limitQuantity) {
 		return Cart.builder()
 			.productUuid(productUuid)
 			.memberUuid(memberUuid)

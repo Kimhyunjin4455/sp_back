@@ -12,16 +12,19 @@ import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
 @NoArgsConstructor
 public class ReviewResponseDto { // 상품 한개에 대한 리뷰 응답 dto
 	private String content;
+	private String authorName;
 	private Integer reivewScore;
 	private LocalDateTime regDate, modDate;
 
 	@Builder
 	public ReviewResponseDto(
 		String content,
+		String authorName,
 		Integer reivewScore,
 		LocalDateTime regDate,
 		LocalDateTime modDate) {
 		this.content = content;
+		this.authorName = authorName;
 		this.reivewScore = reivewScore;
 		this.regDate = regDate;
 		this.modDate = modDate;
@@ -30,6 +33,7 @@ public class ReviewResponseDto { // 상품 한개에 대한 리뷰 응답 dto
 	public static ReviewResponseDto from(Review review) {
 		return ReviewResponseDto.builder()
 			.content(review.getContent())
+			.authorName(review.getAuthorName())
 			.reivewScore(review.getReviewScore())
 			.regDate(review.getRegDate())
 			.modDate(review.getModDate())
@@ -39,6 +43,7 @@ public class ReviewResponseDto { // 상품 한개에 대한 리뷰 응답 dto
 	public ReviewResponseVo dtoToResponseVo() {
 		return ReviewResponseVo.builder()
 			.content(content)
+			.authorName(authorName)
 			.reviewScore(reivewScore)
 			.regDate(getRegDate())
 			.modDate(getModDate())

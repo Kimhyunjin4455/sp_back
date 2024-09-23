@@ -14,6 +14,7 @@ import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingModifyRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingOneResponseDto;
 import starbucks3355.starbucksServer.shipping.entity.ShippingAddress;
 import starbucks3355.starbucksServer.shipping.repository.ShippingRepository;
 
@@ -111,6 +112,27 @@ public class ShippingServiceImpl implements ShippingService {
 
 	}
 
+	@Override
+	public ShippingOneResponseDto getShippingOne(String uuid, Long deliveryId) {
+
+		ShippingAddress shippingAddress = shippingRepository.findById(deliveryId)
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.SHIPPING_ADDRESS_NOT_FOUND));
+
+		return ShippingOneResponseDto.builder()
+			.deliveryId(shippingAddress.getDeliveryId())
+			.detailAddress(shippingAddress.getDetailAddress())
+			.address(shippingAddress.getAddress())
+			.nickname(shippingAddress.getNickname())
+			.phone1(shippingAddress.getPhone1())
+			.phone2(shippingAddress.getPhone2())
+			.postNumber(shippingAddress.getPostNumber())
+			.baseAddress(shippingAddress.isBaseAddress())
+			.receiver(shippingAddress.getReceiver())
+			.message(shippingAddress.getMessage())
+			.build();
+
+	}
+
 	//배송지 목록 조회
 	@Override
 	@Transactional(readOnly = true)
@@ -139,6 +161,7 @@ public class ShippingServiceImpl implements ShippingService {
 			.orElseThrow(() -> new BaseException(BaseResponseStatus.SHIPPING_ADDRESS_NOT_FOUND));
 
 		shippingRepository.deleteById(shippingAddress.getDeliveryId());
+
 	}
 
 	// // 모든 배송지 조회

@@ -31,6 +31,7 @@ import starbucks3355.starbucksServer.shipping.vo.request.ShippingAddRequestVo;
 import starbucks3355.starbucksServer.shipping.vo.request.ShippingModifyRequestVo;
 import starbucks3355.starbucksServer.shipping.vo.response.ShippingBaseResponseVo;
 import starbucks3355.starbucksServer.shipping.vo.response.ShippingListResponseVo;
+import starbucks3355.starbucksServer.shipping.vo.response.ShippingOneResponseVo;
 
 @RestController
 @RequestMapping("/api/v1/shipping")
@@ -192,5 +193,17 @@ public class ShippingController {
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
 			null);
+	}
+
+	@GetMapping("/shipping-only/{deliveryId}")
+	@Operation(summary = "배송지 단일 조회", description = "등록된 배송지를 조회합니다.")
+	public CommonResponseEntity<ShippingOneResponseVo> getShippingOne(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@PathVariable Long deliveryId) {
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			shippingService.getShippingOne(authUserDetail.getUuid(), deliveryId).toVo());
 	}
 }

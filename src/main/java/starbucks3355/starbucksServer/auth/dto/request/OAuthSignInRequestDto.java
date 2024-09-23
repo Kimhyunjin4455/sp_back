@@ -29,7 +29,7 @@ public class OAuthSignInRequestDto {
 		return OAuth.builder()
 			.provider(provider)
 			.providerId(providerId)
-			.userUuid(userUuid)
+			.email(email)
 			.build();
 	}
 

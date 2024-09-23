@@ -86,29 +86,6 @@ public class MemberController {
 
 	@GetMapping("/likeslist")
 	@Operation(summary = "찜한 상품 목록 조회")
-// 	public CommonResponseSliceEntity<List<LikesProductResponseVo>> getLikesListByUuid(
-// 		@RequestHeader("Authorization") String accessToken, String productUuid,
-// 		@RequestParam(defaultValue = "0") int page,
-// 		@RequestParam(defaultValue = "20") int size
-// 	) {
-// 		log.info("accesstoken : {}", accessToken);
-// 		String uuid = provider.parseUuid(accessToken);
-//
-// 		Slice<LikesProductResponseDto> likesProductResponseDtos = memberService.getLikesListByUuid(uuid, page, size);
-//
-// 		List<LikesProductResponseVo> likesProductResponseVos = likesProductResponseDtos.stream()
-// 			.map(LikesProductResponseDto::toVo)
-// 			.collect(Collectors.toList());
-//
-// 		return new CommonResponseSliceEntity<>(
-// 			HttpStatus.OK,
-// 			CommonResponseMessage.SUCCESS.getMessage(),
-// 			likesProductResponseVos,
-// 			likesProductResponseDtos.hasNext()
-// 		);
-//
-// 	}
-// }
 	public CommonResponseEntity<CursorPage<String>> getLikes(
 		@RequestHeader("Authorization") String accessToken, String productUuid,
 		@RequestParam(value = "lastId", required = false) Long lastId,

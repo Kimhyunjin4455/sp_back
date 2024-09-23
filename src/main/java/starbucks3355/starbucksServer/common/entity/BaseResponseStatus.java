@@ -78,6 +78,7 @@ public enum BaseResponseStatus {
 	NO_EXIST_OPTION(HttpStatus.NOT_FOUND, false, 3002, "존재하지 않는 옵션입니다"),
 	NO_EXIST_DISCOUNT(HttpStatus.NOT_FOUND, false, 3004, "할인 정책이 존재하지 않습니다"),
 	FAILED_TO_ADD_REVIEWS(HttpStatus.INTERNAL_SERVER_ERROR, false, 3003, "리뷰 등록에 실패했습니다."),
+	NO_EXIST_REVIEW(HttpStatus.NOT_FOUND, false, 3005, "해당 리뷰가 존재하지 않습니다."),
 
 	/**
 	 * 4000: comment service error

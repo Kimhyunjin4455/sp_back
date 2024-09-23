@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductResponseDto getProduct(String productUuid) {
 
 		return ProductResponseDto.from(productRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다.")));
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT)));
 
 	}
 
@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDetailsPriceResponseDto getProductPrice(String productUuid) {
 
 		return ProductDetailsPriceResponseDto.from(productDetailsRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다.")));
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT)));
 
 	}
 
@@ -82,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductFlagsResponseDto getProductFlags(String productUuid) {
 
 		return ProductFlagsResponseDto.from(flagsRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품정보가 존재하지 않습니다.")));
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT)));
 
 	}
 

@@ -6,6 +6,7 @@ import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingModifyRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingOneResponseDto;
 
 public interface ShippingService {
 	//void createAddDelivery(DeliveryAddRequestDto deliveryAddRequestDto);
@@ -34,5 +35,8 @@ public interface ShippingService {
 	void createShipping(String memberUuid, ShippingAddRequestDto shippingAddRequestDto);
 
 	void modifyShipping(String memberUuid, Long deliveryId, ShippingModifyRequestDto shippingModifyRequestDto);
+
+	// 단일 배송지 조회
+	ShippingOneResponseDto getShippingOne(String uuid, Long deliveryId);
 
 }

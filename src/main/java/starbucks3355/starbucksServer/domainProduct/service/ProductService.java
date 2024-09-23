@@ -23,8 +23,12 @@ public interface ProductService {
 		Integer page
 	);
 
-	// public Slice<ProductsResponseDto> getProductsByCategoryInfo(int page, int size, Integer majorCategoryId,
-	// 	Integer middleCategoryId);
+	CursorPage<String> getSearchedProductList(
+		String keyword,
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	);
 
 	public ProductResponseDto getProduct(String productUuid);
 

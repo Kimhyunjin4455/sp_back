@@ -55,30 +55,10 @@ public class ProductServiceImpl implements ProductService {
 		return productListRepositoryCustom.getProductList(lastId, pageSize, page);
 	}
 
-	// @Override
-	// public Slice<ProductsResponseDto> getProductsByCategoryInfo(int page, int size, Long majorCategoryId,
-	// 	Long middleCategoryId) {
-	// 	Pageable pageable = PageRequest.of(page, size);
-	//
-	// 	if (middleCategoryId == null) {
-	// 		Slice<Product> productsInCategory = categoryListRepository.findByMajorCategoryId(majorCategoryId, pageable);
-	// 		return productsInCategory.map(product -> ProductsResponseDto.builder()
-	// 			.productUuid(product.getProductUuid())
-	// 			.productName(product.getProductName())
-	// 			.productDescription(product.getProductDescription())
-	// 			.productInfo(product.getProductInfo())
-	// 			.build());
-	// 	}else {
-	// 		Slice<Product> productsInCategory = categoryListRepositoryRepository.findByMajorCategoryIdAndMiddleCategoryId(majorCategoryId, middleCategoryId, pageable);
-	// 		return productsInCategory.map(product -> ProductsResponseDto.builder()
-	// 			.productUuid(product.getProductUuid())
-	// 			.productName(product.getProductName())
-	// 			.productDescription(product.getProductDescription())
-	// 			.productInfo(product.getProductInfo())
-	// 			.build());
-	// 	}
-	//
-	// }
+	@Override
+	public CursorPage<String> getSearchedProductList(String keyword, Long lastId, Integer pageSize, Integer page) {
+		return productListRepositoryCustom.getSearchedProductList(keyword, lastId, pageSize, page);
+	}
 
 	@Override
 	public ProductResponseDto getProduct(String productUuid) {
@@ -87,28 +67,6 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다.")));
 
 	}
-
-	// @Override
-	// public List<ProductInfoResponseDto> getProductsInfo(String productSearchInfo) {
-	// 	// 검색어 첫글자가 # 이면 findByTagNameContaining, 이외에는 findByProductNameContaining
-	// 	// 상품의 이름이나 태그를 통해서 상품의 uuid 값 반환
-	// 	if (productSearchInfo.startsWith("#")) {
-	// 		List<ProductTag> tagUuidList = productTagRepository.findByTagNameContaining(productSearchInfo);
-	// 		return tagUuidList.stream()
-	// 			.map(tagOfProductUuid -> ProductInfoResponseDto.builder()
-	// 				.productUuid(tagOfProductUuid.getProductUuid())
-	// 				.build()
-	// 			).toList();
-	//
-	// 	} // else 사용할 이유가 없음, if 에서 미리 반환됨, 검색 로직 개선
-	// 	List<Product> nameUuidList = productRepository.findByProductNameContaining(productSearchInfo);
-	// 	return nameUuidList.stream()
-	// 		.map(nameOfProductUuid -> ProductInfoResponseDto.builder()
-	// 			.productUuid(nameOfProductUuid.getProductUuid())
-	// 			.build()
-	// 		).toList();
-	//
-	// }
 
 	@Override
 	public ProductDetailsPriceResponseDto getProductPrice(String productUuid) {

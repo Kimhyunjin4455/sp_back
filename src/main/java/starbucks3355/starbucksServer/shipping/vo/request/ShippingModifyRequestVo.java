@@ -1,15 +1,12 @@
-package starbucks3355.starbucksServer.shipping.vo.response;
+package starbucks3355.starbucksServer.shipping.vo.request;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
-@ToString
-public class ShippingBaseResponseVo {
-	private Long deliveryId;
+public class ShippingModifyRequestVo {
+	private String nickname;
 	private String address;
 	private String detailAddress;
 	private String phone1;
@@ -18,12 +15,10 @@ public class ShippingBaseResponseVo {
 	private boolean baseAddress;
 	private String postNumber;
 	private String receiver;
-	private String nickname;
 
-	@Builder
-	public ShippingBaseResponseVo(Long deliveryId, String address, String detailAddress, String phone1, String phone2,
-		String message, boolean baseAddress, String postNumber, String receiver, String nickname) {
-		this.deliveryId = deliveryId;
+	public ShippingModifyRequestVo(String nickname, String address, String detailAddress, String phone1, String phone2,
+		String message, boolean baseAddress, String postNumber, String receiver) {
+		this.nickname = nickname;
 		this.address = address;
 		this.detailAddress = detailAddress;
 		this.phone1 = phone1;
@@ -32,7 +27,5 @@ public class ShippingBaseResponseVo {
 		this.baseAddress = baseAddress;
 		this.postNumber = postNumber;
 		this.receiver = receiver;
-		this.nickname = nickname;
 	}
-
 }

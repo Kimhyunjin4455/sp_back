@@ -10,6 +10,7 @@ import starbucks3355.starbucksServer.domainOrders.entity.Amount;
 @NoArgsConstructor
 @ToString
 public class KakaoResponseApproveDto {
+	// 응답 값
 	private String aid;
 	private String tid;
 	private String cid;
@@ -18,10 +19,13 @@ public class KakaoResponseApproveDto {
 	private String partnerUserId;
 	private String paymentMethodType;
 	private Amount amount;
+	private String productName; // 상품 이름
+	private Integer productQuantity; // 상품 수량
 
 	@Builder
 	public KakaoResponseApproveDto(String aid, String tid, String cid, String sid, String partnerOrderId,
-		String partnerUserId, String paymentMethodType, Amount amount) {
+		String partnerUserId, String paymentMethodType, Amount amount,
+		String productName, Integer productQuantity) {
 		this.aid = aid;
 		this.tid = tid;
 		this.cid = cid;
@@ -30,5 +34,7 @@ public class KakaoResponseApproveDto {
 		this.partnerUserId = partnerUserId;
 		this.paymentMethodType = paymentMethodType;
 		this.amount = amount;
+		this.productName = productName;
+		this.productQuantity = productQuantity;
 	}
 }

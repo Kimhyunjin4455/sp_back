@@ -15,6 +15,7 @@ import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestApprov
 import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestReadyDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseApproveDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseReadyDto;
+import starbucks3355.starbucksServer.domainOrders.repository.KakaoRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class KakaoServiceImpl implements KakaoService {
 
 	// KakaoProperties 클래스를 주입받아 사용,
 	private final KakaoProperties kakaoProperties;
+	private final KakaoRepository kakaoRepository;
 
 	@Override
 	// 카카오페이의 결제 준비
@@ -43,6 +45,19 @@ public class KakaoServiceImpl implements KakaoService {
 				requestEntity, // 두 번째 인자는 실제 요청 데이터(requestEntity)로, 요청 본문과 헤더가 포함되어 있음.
 				KakaoResponseReadyDto.class); // 카카오페이 API 응답 데이터를 해당 DTO 객체로 변환하여 반환함.
 			System.out.println(response);
+
+			// KakaoPay kakaoPay = KakaoPay.builder()
+			// 	.cid(kakaoRequestReadyDto.getCid())
+			// 	.partnerOrderId(kakaoRequestReadyDto.getPartnerOrderId())
+			// 	.partnerUserId(kakaoRequestReadyDto.getPartnerUserId())
+			// 	.itemName(kakaoRequestReadyDto.getItemName())
+			// 	.quantity(kakaoRequestReadyDto.getQuantity())
+			// 	.totalAmount(kakaoRequestReadyDto.getTotalAmount())
+			// 	.taxFreeAmount(kakaoRequestReadyDto.getTaxFreeAmount())
+			// 	.build();
+			//
+			// kakaoRepository.save(kakaoPay);
+
 			return response; // 결제 준비 API의 응답을 반환.
 
 		} catch (HttpClientErrorException e) {
@@ -94,6 +109,9 @@ public class KakaoServiceImpl implements KakaoService {
 		parameters.put("partner_user_id", kakaoRequestApproveDto.getPartnerUserId());
 		parameters.put("partner_order_id", kakaoRequestApproveDto.getPartnerOrderId());
 		parameters.put("pg_token", kakaoRequestApproveDto.getPgToken());
+		// parameters.put("total_amount", kakaoRequestApproveDto.getTotalAmount().toString());
+		// parameters.put("product_name", kakaoRequestApproveDto.getProductName());
+		// parameters.put("quantity", kakaoRequestApproveDto.getProductQuantity().toString());
 		return parameters;
 	}
 
@@ -113,31 +131,4 @@ public class KakaoServiceImpl implements KakaoService {
 			throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
 		}
 	}
-	//
-	// // 구매하기 -> 주문생성으로 값 전달
-	// @Override
-	// public KakaoRequestCartDto createKakaoRequestReadyDto(List<WishList> wishLists, String orderId, String userId) {
-	// 	int totalAmount = wishLists.stream()
-	// 		.mapToInt(item -> item.getCurrentQuantity() * item.getLimitQuantity())
-	// 		.sum();
-	// 	String itemName = wishLists.get(0).getProductUuid(); // 대표 상품명 설정? (첫 번째 상품명)
-	// 	// 장바구니 총 갯수
-	// 	int totalQuantity = wishLists.stream()
-	// 		.mapToInt(WishList::getCurrentQuantity)
-	// 		.sum();
-	//
-	// 	return KakaoRequestCartDto.builder()
-	// 		.cid(kakaoProperties.getCid())
-	// 		.partnerOrderId(orderId)
-	// 		.partnerUserId(userId)
-	// 		.itemName(itemName)
-	// 		.quantity(totalQuantity)
-	// 		.totalAmount(totalAmount)
-	// 		.taxFreeAmount(0)
-	// 		.approvalUrl(
-	// 			"http://localhost:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken")
-	// 		.cancelUrl("http://localhost:8080/cancel")
-	// 		.failUrl("http://localhost:8080/fail")
-	// 		.build();
-	// }
 }

@@ -11,8 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderCreateRequestVo {
 	// 회원한테 받아 올 데이터(프론트)
-
-	private String productName; // 상품명
-	private Integer quantity; // 수량
+	//private String orderId; // 주문번호
+	private String productUuid; // 상품명
+	private Integer productQuantity; // 수량
 	private Integer totalAmount; // 총액
+	private String address;
+	private String detailAddress;
+	private String phone1;
+	private String userName;
 }

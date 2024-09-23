@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
+import starbucks3355.starbucksServer.shipping.dto.request.ShippingModifyRequestDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseDto;
 import starbucks3355.starbucksServer.shipping.entity.ShippingAddress;
 import starbucks3355.starbucksServer.shipping.repository.ShippingRepository;
@@ -66,6 +68,47 @@ public class ShippingServiceImpl implements ShippingService {
 				.baseAddress(true)
 				.uuid(memberUuid)
 				.build());
+	}
+
+	// 배송지 수정
+	@Override
+	public void modifyShipping(String memberUuid, Long deliveryId, ShippingModifyRequestDto shippingModifyRequestDto) {
+		ShippingAddress shippingAddress = shippingRepository.findById(deliveryId)
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.SHIPPING_ID_NOT_EXIST));
+
+		Optional<ShippingAddress> existingAddress = shippingRepository.findBaseAddressByUuid(memberUuid);
+		existingAddress.ifPresent(shippingAddress2 -> {
+
+			ShippingAddress updateAddress = ShippingAddress.builder()
+				.deliveryId(shippingAddress2.getDeliveryId())
+				.address(shippingAddress2.getAddress())
+				.detailAddress(shippingAddress2.getDetailAddress())
+				.phone1(shippingAddress2.getPhone1())
+				.phone2(shippingAddress2.getPhone2())
+				.receiver(shippingAddress2.getReceiver())
+				.message(shippingAddress2.getMessage())
+				.nickname(shippingAddress2.getNickname())
+				.postNumber(shippingAddress2.getPostNumber())
+				.uuid(shippingAddress2.getUuid())
+				.baseAddress(false)
+				.build();
+			shippingRepository.save(updateAddress);
+		});
+
+		shippingRepository.save(ShippingAddress.builder()
+			.deliveryId(shippingAddress.getDeliveryId()) // 기존id 값 유지
+			.address(shippingModifyRequestDto.getAddress())
+			.detailAddress(shippingModifyRequestDto.getDetailAddress())
+			.phone1(shippingModifyRequestDto.getPhone1())
+			.phone2(shippingModifyRequestDto.getPhone2())
+			.receiver(shippingModifyRequestDto.getReceiver())
+			.message(shippingModifyRequestDto.getMessage())
+			.nickname(shippingModifyRequestDto.getNickname())
+			.postNumber(shippingModifyRequestDto.getPostNumber())
+			.uuid(memberUuid)
+			.baseAddress(true)
+			.build());
+
 	}
 
 	//배송지 목록 조회
@@ -162,4 +205,26 @@ public class ShippingServiceImpl implements ShippingService {
 			.baseAddress(true)
 			.build());
 	}
+
+	@Override
+	public ShippingBaseResponseDto getBaseShippingAddress(String uuid) {
+
+		ShippingAddress shippingAddress = shippingRepository.findBaseAddressByUuid(uuid)
+			.orElseThrow(() -> new IllegalArgumentException("기본 배송지가 없습니다. "));
+
+		return ShippingBaseResponseDto.builder()
+			.deliveryId(shippingAddress.getDeliveryId())
+			.address(shippingAddress.getAddress())
+			.detailAddress(shippingAddress.getDetailAddress())
+			.phone1(shippingAddress.getPhone1())
+			.phone2(shippingAddress.getPhone2())
+			.receiver(shippingAddress.getReceiver())
+			.message(shippingAddress.getMessage())
+			.nickname(shippingAddress.getNickname())
+			.postNumber(shippingAddress.getPostNumber())
+			.baseAddress(shippingAddress.isBaseAddress())
+			.build();
+
+	}
+
 }

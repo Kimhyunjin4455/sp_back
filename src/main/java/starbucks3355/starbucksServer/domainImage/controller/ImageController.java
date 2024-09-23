@@ -72,6 +72,16 @@ public class ImageController {
 		@RequestBody List<ImageRequestVo> imageRequestVoList,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		imageService.addImages(imageRequestVoList.stream()
 			.map(ImageRequestVo::voToDto)
 			.toList()
@@ -92,6 +102,16 @@ public class ImageController {
 		@PathVariable Long id, String otherUuid,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		imageService.deleteImage(id, otherUuid);
 
 		return new BaseResponse<>(
@@ -108,8 +128,19 @@ public class ImageController {
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 모든 이미지 삭제")
 	public BaseResponse<Void> deleteAllImage(
 		@PathVariable String otherUuid,
-		@AuthenticationPrincipal AuthUserDetail authUserDetail햣
+		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
+
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		imageService.deleteAllImages(otherUuid);
 
 		return new BaseResponse<>(

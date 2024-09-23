@@ -12,13 +12,13 @@ public class SignInResponseVo {
 	private String userId;
 	private String uuid;
 
-	private boolean isRegsitered;
+	private boolean isRegistered;
 
 	@Builder
-	public SignInResponseVo(String accessToken, String userId, String uuid, boolean isRegsitered) {
+	public SignInResponseVo(String accessToken, String userId, String uuid, boolean isRegistered) {
 		this.accessToken = accessToken;
 		this.userId = userId;
 		this.uuid = uuid;
-		this.isRegsitered = isRegsitered;
+		this.isRegistered = isRegistered;
 	}
 }

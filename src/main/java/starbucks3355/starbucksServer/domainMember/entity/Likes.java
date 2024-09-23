@@ -38,7 +38,7 @@ public class Likes {
 		Long id,
 		String uuid,
 		String productUuid,
-		Boolean isLiked
+		boolean isLiked
 	) {
 		this.id = id;
 		this.uuid = uuid;

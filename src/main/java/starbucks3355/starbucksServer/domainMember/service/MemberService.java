@@ -18,6 +18,7 @@ public interface MemberService {
 	// Slice<LikesProductResponseDto> getLikesListByUuid(String uuid);
 	// public LikesProductResponseDto getLikesListByUuid(String uuid);
 	CursorPage<String> getLikesList(
+		String userUuid,
 		Long lastId,
 		Integer pageSize,
 		Integer page

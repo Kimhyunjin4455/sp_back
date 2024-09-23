@@ -61,8 +61,8 @@ public class MemberServiceImpl implements MemberService {
 	// }
 
 	@Override
-	public CursorPage<String> getLikesList(Long lastId, Integer pageSize, Integer page) {
-		return likeProductRepositoryCustom.getLikesList(lastId, pageSize, page);
+	public CursorPage<String> getLikesList(String userUuid, Long lastId, Integer pageSize, Integer page) {
+		return likeProductRepositoryCustom.getLikesList(userUuid, lastId, pageSize, page);
 	}
 
 	// 찜하기 여부 정하면서 history 쌓았음 (리팩토링 필요), else문 사용하지 않기

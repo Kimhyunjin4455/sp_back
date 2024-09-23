@@ -92,11 +92,11 @@ public class AuthServiceImpl implements AuthService{
 	@Override
 	public SignInResponseDto oAuthSignIn(OAuthSignInRequestDto oAuthSignInRequestDto) {
 
-		Member member = memberRepository.findByEmail(oAuthSignInRequestDto.getEmail()).orElseThrow(
+		Member member = memberRepository.findByEmail(oAuthSignInRequestDto.getProviderEmail()).orElseThrow(
 			() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
 		);
 
-		oAuthRepository.findByUserUuid(member.getUuid()).orElseGet(
+		oAuthRepository.findByproviderEmail(member.getEmail()).orElseGet(
 			() -> oAuthRepository.save(oAuthSignInRequestDto.toEntity(member.getUuid()))
 		);
 

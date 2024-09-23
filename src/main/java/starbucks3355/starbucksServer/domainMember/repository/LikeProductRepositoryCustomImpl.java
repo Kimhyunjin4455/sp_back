@@ -23,6 +23,7 @@ public class LikeProductRepositoryCustomImpl implements LikeProductRepositoryCus
 
 	@Override
 	public CursorPage<String> getLikesList(
+		String userUuid,
 		Long lastId,
 		Integer pageSize,
 		Integer page) {
@@ -30,6 +31,8 @@ public class LikeProductRepositoryCustomImpl implements LikeProductRepositoryCus
 		// 찜한 상품 목록 조회
 		QLikes likes = QLikes.likes;
 		BooleanBuilder builder = new BooleanBuilder();
+
+		builder.and(likes.uuid.eq(userUuid));
 
 		// 마지막 ID 커서 적용
 		Optional.ofNullable(lastId)
@@ -61,12 +64,12 @@ public class LikeProductRepositoryCustomImpl implements LikeProductRepositoryCus
 			nextCursor = content.get(content.size() - 1).getId();
 		}
 		// productCode 리스트로 변환
-		List<String> productCodes = content.stream()
-			.map(Likes::getProductUuid) // Likes 엔티티에서 productUuid를 가져오는 메서드
+		List<String> productUuid = content.stream()
+			.map(Likes::getProductUuid) // Likes 엔티티에서 회원 Uuid를 가져오는 메서드
 			.toList();
 
 		// CursorPage 객체 반환
-		return new CursorPage<>(productCodes, nextCursor, hasNext, currentPageSize, currentPage);
+		return new CursorPage<>(productUuid, nextCursor, hasNext, currentPageSize, currentPage);
 	}
 
 }

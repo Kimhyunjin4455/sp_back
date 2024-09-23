@@ -87,12 +87,15 @@ public class MemberController {
 	@GetMapping("/likeslist")
 	@Operation(summary = "찜한 상품 목록 조회")
 	public CommonResponseEntity<CursorPage<String>> getLikes(
-		@RequestHeader("Authorization") String accessToken, String productUuid,
+		@RequestHeader("Authorization") String accessToken,
 		@RequestParam(value = "lastId", required = false) Long lastId,
 		@RequestParam(value = "pageSize", required = false) Integer pageSize,
 		@RequestParam(value = "page", required = false) Integer page
 	) {
-		CursorPage<String> likesProductResponseDtos = memberService.getLikesList(lastId, pageSize, page);
+
+		String userUuid = provider.parseUuid(accessToken);
+
+		CursorPage<String> likesProductResponseDtos = memberService.getLikesList(userUuid, lastId, pageSize, page);
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),

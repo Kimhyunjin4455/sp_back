@@ -3,6 +3,8 @@ package starbucks3355.starbucksServer.shipping.service;
 import java.util.List;
 
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
+import starbucks3355.starbucksServer.shipping.dto.request.ShippingModifyRequestDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseDto;
 
 public interface ShippingService {
@@ -12,7 +14,7 @@ public interface ShippingService {
 	//List<ShippingAllResponseDto> getAllShippingAddress();
 
 	// 기본 배송지 조회
-	//ShippingBaseResponseDto getBaseShippingAddress(String uuid);
+	ShippingBaseResponseDto getBaseShippingAddress(String uuid);
 
 	// 배송지 추가(생성)
 	//void createShipping(String memberUuid, ShippingAddRequestDto shippingAddRequestDto);
@@ -30,5 +32,7 @@ public interface ShippingService {
 	void deleteShipping(String uuid, Long deliveryId);
 
 	void createShipping(String memberUuid, ShippingAddRequestDto shippingAddRequestDto);
+
+	void modifyShipping(String memberUuid, Long deliveryId, ShippingModifyRequestDto shippingModifyRequestDto);
 
 }

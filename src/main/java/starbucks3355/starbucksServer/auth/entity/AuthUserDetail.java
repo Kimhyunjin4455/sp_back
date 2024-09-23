@@ -23,6 +23,7 @@ public class AuthUserDetail implements UserDetails {
 
 	private String nickname;
 	private String email;
+	private String userId;
 
 	public AuthUserDetail(Member member) {
 		this.uuid = member.getUuid();
@@ -30,6 +31,7 @@ public class AuthUserDetail implements UserDetails {
 		this.userId = member.getUserId();
 		this.nickname = member.getNickname();
 		this.email = member.getEmail();
+		this.userId = member.getUserId();
 	}
 
 	@Override

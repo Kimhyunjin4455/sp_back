@@ -23,9 +23,13 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
+import starbucks3355.starbucksServer.shipping.dto.request.ShippingModifyRequestDto;
+import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseDto;
 import starbucks3355.starbucksServer.shipping.service.ShippingService;
 import starbucks3355.starbucksServer.shipping.vo.request.ShippingAddRequestVo;
+import starbucks3355.starbucksServer.shipping.vo.request.ShippingModifyRequestVo;
+import starbucks3355.starbucksServer.shipping.vo.response.ShippingBaseResponseVo;
 import starbucks3355.starbucksServer.shipping.vo.response.ShippingListResponseVo;
 
 @RestController
@@ -104,22 +108,22 @@ public class ShippingController {
 	// 			.collect(Collectors.toList()));
 	// }
 
-	// @GetMapping("/base")
-	// @Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
-	// public CommonResponseEntity<ShippingBaseResponseVo> getBaseDelivery(
-	// 	//밑에 @쓰면 AuthUserDetail것을 가져와서 사용 가능
-	// 	@AuthenticationPrincipal AuthUserDetail authUserDetail) {
-	//
-	// 	//인증된 사용자의 uuid를 가져와서 사용 가능
-	// 	String userUuid = authUserDetail.getUuid();
-	// 	ShippingBaseResponseDto shippingBaseResponseDto = shippingService.getBaseShippingAddress(userUuid);
-	//
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		shippingBaseResponseDto.toVo()
-	// 	);
-	// }
+	@GetMapping("/base")
+	@Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
+	public CommonResponseEntity<ShippingBaseResponseVo> getBaseDelivery(
+		//밑에 @쓰면 AuthUserDetail것을 가져와서 사용 가능
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		//인증된 사용자의 uuid를 가져와서 사용 가능
+		String userUuid = authUserDetail.getUuid();
+		ShippingBaseResponseDto shippingBaseResponseDto = shippingService.getBaseShippingAddress(userUuid);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			shippingBaseResponseDto.toVo()
+		);
+	}
 
 	@PutMapping("/base/{deliveryId}/set-default")
 	@Operation(summary = "기본 배송지 변경", description = "기본 배송지를 설정합니다.")
@@ -163,4 +167,30 @@ public class ShippingController {
 
 	}
 
+	@PutMapping("/modify/{deliveryId}")
+	@Operation(summary = "배송지 수정", description = "배송지를 수정합니다.")
+	public CommonResponseEntity<Void> modifyDelivery(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@PathVariable Long deliveryId,
+		@RequestBody ShippingModifyRequestVo shippingAddRequestVo) {
+
+		ShippingModifyRequestDto shippingModifyRequestDto = ShippingModifyRequestDto.builder()
+			.address(shippingAddRequestVo.getAddress())
+			.detailAddress(shippingAddRequestVo.getDetailAddress())
+			.nickname(shippingAddRequestVo.getNickname())
+			.postNumber(shippingAddRequestVo.getPostNumber())
+			.phone1(shippingAddRequestVo.getPhone1())
+			.phone2(shippingAddRequestVo.getPhone2())
+			.message(shippingAddRequestVo.getMessage())
+			.baseAddress(shippingAddRequestVo.isBaseAddress())
+			.receiver(shippingAddRequestVo.getReceiver())
+			.build();
+
+		shippingService.modifyShipping(authUserDetail.getUuid(), deliveryId, shippingModifyRequestDto);
+
+		return new CommonResponseEntity<>(
+			HttpStatus.OK,
+			CommonResponseMessage.SUCCESS.getMessage(),
+			null);
+	}
 }

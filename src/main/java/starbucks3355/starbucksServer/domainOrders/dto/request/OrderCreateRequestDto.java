@@ -3,36 +3,61 @@ package starbucks3355.starbucksServer.domainOrders.dto.request;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
+import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 
 @Getter
 @NoArgsConstructor
 public class OrderCreateRequestDto {
-	private String cid; // 가맹점 코드
-	private String partnerOrderId; // 주문번호
-	private String partnerUserId; // 회원번호
-	private String productName; // 상품명
-	private Integer quantity; // 수량
-	private Integer totalAmount; // 총액
-	private Integer taxFreeAmount; // 비과세 금액
-	private String approvalUrl;     // 결제 성공 시 Redirect URL
-	private String cancelUrl;       // 결제 취소 시 Redirect URL
-	private String failUrl;         // 결제 실패 시 Redirect URL
+	private String orderId;
+	private String userId;
+	private Integer totalAmount;
+	private String productName;
+	private Integer productQuantity;
+	private String productUuid;
+	private String address;
+	private String detailAddress;
+	private String phone1;
+	private OrderStatus orderStatus;
+	private String userName;
 
 	@Builder
-	public OrderCreateRequestDto(String cid, String partnerOrderId, String partnerUserId, String productName,
-		Integer quantity, Integer totalAmount, Integer taxFreeAmount, String approvalUrl, String cancelUrl,
-		String failUrl) {
-		this.cid = cid;
-		this.partnerOrderId = partnerOrderId;
-		this.partnerUserId = partnerUserId;
-		this.productName = productName;
-		this.quantity = quantity;
+	public OrderCreateRequestDto(String orderId, String userId, Integer totalAmount, String productName,
+		Integer productQuantity, String productUuid, String address, String detailAddress, String phone1,
+		OrderStatus orderStatus, String userName) {
+		this.orderId = orderId;
+		this.userId = userId;
 		this.totalAmount = totalAmount;
-		this.taxFreeAmount = taxFreeAmount;
-		this.approvalUrl = approvalUrl;
-		this.cancelUrl = cancelUrl;
-		this.failUrl = failUrl;
+		this.productName = productName;
+		this.productQuantity = productQuantity;
+		this.productUuid = productUuid;
+		this.address = address;
+		this.detailAddress = detailAddress;
+		this.phone1 = phone1;
+		this.orderStatus = orderStatus;
+		this.userName = userName;
 	}
 
-	// Dto를 Order 엔티티로 변환 toEntity 메서드
+	// // 결제 완료 후 totalAmount와 productName 값을 받아와서 설정할 수 있는 메서드
+	// public void updatePaymentInfo(Integer totalAmount, String productName, Integer productQuantity, String orderId) {
+	// 	this.totalAmount = totalAmount;
+	// 	this.productName = productName;
+	// 	this.productQuantity = productQuantity;
+	// 	this.orderId = orderId;
+	// }
+
+	public Orders toEntity(OrderCreateRequestDto orderCreateRequestDto, String userId) {
+		return Orders.builder()
+			.orderId(orderCreateRequestDto.getOrderId())
+			.userId(userId)
+			.totalAmount(orderCreateRequestDto.getTotalAmount())
+			.productUuid(orderCreateRequestDto.getProductUuid())
+			.productQuantity(orderCreateRequestDto.getProductQuantity())
+			.address(orderCreateRequestDto.getAddress())
+			.detailAddress(orderCreateRequestDto.getDetailAddress())
+			.phone1(orderCreateRequestDto.getPhone1())
+			.orderStatus(orderCreateRequestDto.getOrderStatus())
+			.userName(orderCreateRequestDto.getUserName())
+			.build();
+	}
 }

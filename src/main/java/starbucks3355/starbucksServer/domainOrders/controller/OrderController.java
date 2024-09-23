@@ -1,6 +1,6 @@
 package starbucks3355.starbucksServer.domainOrders.controller;
 
-import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
-import starbucks3355.starbucksServer.domainOrders.service.KakaoService;
+import starbucks3355.starbucksServer.domainOrders.dto.request.OrderCreateRequestDto;
+import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 import starbucks3355.starbucksServer.domainOrders.service.OrderService;
 import starbucks3355.starbucksServer.domainOrders.vo.request.OrderCreateRequestVo;
 
@@ -28,25 +29,31 @@ import starbucks3355.starbucksServer.domainOrders.vo.request.OrderCreateRequestV
 public class OrderController {
 
 	private final OrderService orderService;
-	private final KakaoService kakaoService;
 
 	//주문 생성 ModelMapper 미사용, 이거 다음 Controller에서  생성할 듯
 	// OrderRequestVo를 OrderRequestDto로 변환
 	@PostMapping("/createOrder")
 	@Operation(summary = "주문 생성")
-	public CommonResponseEntity<String> createOrders(
+	public CommonResponseEntity<Void> createOrders(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
-		@RequestBody List<OrderCreateRequestVo> orderCreateRequestVoList) {
+		@RequestBody OrderCreateRequestVo orderCreateRequestVo) {
 
-		String redirectUrl = orderService.prepareOrderWithKakaoPay(orderCreateRequestVoList, authUserDetail.getUuid());
+		OrderCreateRequestDto orderCreateRequestDto = OrderCreateRequestDto.builder()
+			.orderId(UUID.randomUUID().toString()) // 백에서 orderId uuid로 생성
+			.productUuid(orderCreateRequestVo.getProductUuid())
+			.productQuantity(orderCreateRequestVo.getProductQuantity())
+			.totalAmount(orderCreateRequestVo.getTotalAmount())
+			.address(orderCreateRequestVo.getAddress())
+			.detailAddress(orderCreateRequestVo.getDetailAddress())
+			.phone1(orderCreateRequestVo.getPhone1())
+			.orderStatus(OrderStatus.COMPLETE)
+			.build();
 
-		// dto 값을 service로 넘겨줌
-		// service를 이용해서 db에 dto 값을 저장하기 위함
+		orderService.createOrder(orderCreateRequestDto, authUserDetail.getUserId());
 		return new CommonResponseEntity<>(
 			HttpStatus.OK,
 			CommonResponseMessage.SUCCESS.getMessage(),
-			redirectUrl);
-
+			null);
 	}
 
 	//주문 목록 조회

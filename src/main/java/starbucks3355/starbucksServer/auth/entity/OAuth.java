@@ -19,7 +19,7 @@ public class OAuth {
 	private Long id;
 
 	@Column(nullable = false, length = 50)
-	private String userUuid;
+	private String providerEmail;
 	@Column(nullable = false, length = 50)
 	private String provider;
 	@Column(nullable = false, length = 50)
@@ -27,11 +27,11 @@ public class OAuth {
 
 	@Builder
 	public OAuth(
-		String userUuid,
+		String providerEmail,
 		String provider,
 		String providerId
 	) {
-		this.userUuid = userUuid;
+		this.providerEmail = providerEmail;
 		this.provider = provider;
 		this.providerId = providerId;
 	}

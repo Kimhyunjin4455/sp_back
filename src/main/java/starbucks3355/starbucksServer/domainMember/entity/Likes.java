@@ -38,11 +38,18 @@ public class Likes {
 		Long id,
 		String uuid,
 		String productUuid,
-		Boolean isLiked
+		boolean isLiked
 	) {
 		this.id = id;
 		this.uuid = uuid;
 		this.productUuid = productUuid;
 		this.isLiked = isLiked;
+	}
+	public static Likes create(String uuid, String productUuid, boolean isLiked) {
+		return Likes.builder()
+			.uuid(uuid)
+			.productUuid(productUuid)
+			.isLiked(isLiked)
+			.build();
 	}
 }

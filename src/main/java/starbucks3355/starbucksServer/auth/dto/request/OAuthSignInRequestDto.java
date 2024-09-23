@@ -12,24 +12,24 @@ public class OAuthSignInRequestDto {
 
 	private String provider;
 	private String providerId;
-	private String email;
+	private String providerEmail;
 
 	@Builder
 	public OAuthSignInRequestDto(
 		String provider,
 		String providerId,
-		String email
+		String providerEmail
 	) {
 		this.provider = provider;
 		this.providerId = providerId;
-		this.email = email;
+		this.providerEmail = providerEmail;
 	}
 
 	public OAuth toEntity(String userUuid) {
 		return OAuth.builder()
 			.provider(provider)
 			.providerId(providerId)
-			.userUuid(userUuid)
+			.providerEmail(providerEmail)
 			.build();
 	}
 
@@ -37,7 +37,7 @@ public class OAuthSignInRequestDto {
 		return OAuthSignInRequestDto.builder()
 			.provider(vo.getProvider())
 			.providerId(vo.getProviderId())
-			.email(vo.getProviderEmail())
+			.providerEmail(vo.getProviderEmail())
 			.build();
 	}
 

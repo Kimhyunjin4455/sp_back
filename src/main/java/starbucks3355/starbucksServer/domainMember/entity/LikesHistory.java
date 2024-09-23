@@ -42,5 +42,14 @@ public class LikesHistory {
 		this.isLiked = isLiked;
 		this.timestamp = timestamp;
 	}
+
+	public static LikesHistory create(String uuid, String productUuid, boolean isLiked) {
+		return LikesHistory.builder()
+			.uuid(uuid)
+			.productUuid(productUuid)
+			.isLiked(isLiked)
+			.timestamp(LocalDateTime.now())
+			.build();
+	}
 }
 

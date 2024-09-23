@@ -41,6 +41,16 @@ public class CartController {
 	public BaseResponse<List<CartResponseVo>> getMyWishList(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
 
 		List<CartResponseDto> wishListRequestDtoList = wishListService.getMyWishListItems(memberUuid);
@@ -62,6 +72,16 @@ public class CartController {
 	public BaseResponse<Integer> getMyWishListCount(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
 
 		int count = wishListService.getMyWishListItems(memberUuid).size();
@@ -78,6 +98,16 @@ public class CartController {
 	@Operation(summary = "나의 상품 장바구니 품목의 총 가격, 총 할인액 조회")
 	public BaseResponse<TotalInfoResponseVo> getMyWishListTotalInfo(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
 
 		String memberUuid = authUserDetail.getUuid(); // 로그인된 사용자의 UUID 가져오기
 
@@ -97,6 +127,16 @@ public class CartController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody CartRequestVo wishListRequestVo,
 		@PathVariable int quantity) {
+
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
 
 		String memberUuid = authUserDetail.getUuid();
 
@@ -124,6 +164,16 @@ public class CartController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable String productUuid) {
 
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.modifyAddWishList(memberUuid, productUuid);
@@ -141,6 +191,16 @@ public class CartController {
 	public BaseResponse<Void> subtractProductFromWishList(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable String productUuid) {
+
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
 
 		String memberUuid = authUserDetail.getUuid();
 
@@ -160,6 +220,16 @@ public class CartController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable String productUuid) {
 
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.modifyWishListCheck(memberUuid, productUuid);
@@ -176,6 +246,16 @@ public class CartController {
 	@Operation(summary = "장바구니 전체 체크")
 	public BaseResponse<Void> checkAllProductFromWishList(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
 
 		String memberUuid = authUserDetail.getUuid();
 
@@ -195,6 +275,16 @@ public class CartController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable String productUuid) {
 
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.deleteWishList(memberUuid, productUuid);
@@ -212,6 +302,16 @@ public class CartController {
 	public BaseResponse<Void> deleteAllProductFromWishList(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		String memberUuid = authUserDetail.getUuid();
 
 		wishListService.deleteWishListAll(memberUuid);
@@ -228,6 +328,16 @@ public class CartController {
 	@Operation(summary = "장바구니 체크된 품목 삭제")
 	public BaseResponse<Void> deleteCheckedProductFromWishList(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
 
 		String memberUuid = authUserDetail.getUuid();
 

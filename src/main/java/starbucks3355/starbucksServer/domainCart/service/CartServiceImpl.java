@@ -94,7 +94,7 @@ public class CartServiceImpl implements CartService {
 					cart.updateCurrentQuantity(cart.getCurrentQuantity() + 1);
 					wishListRepository.save(cart);
 				} else {
-					throw new RuntimeException("상품의 최대 수량을 초과할 수 없습니다.");
+					throw new BaseException(BaseResponseStatus.COUNT_OVER);
 				}
 			});
 	}
@@ -108,7 +108,7 @@ public class CartServiceImpl implements CartService {
 					cart.updateCurrentQuantity(cart.getCurrentQuantity() - 1);
 					wishListRepository.save(cart);
 				} else {
-					throw new RuntimeException("상품의 최소 수량은 1개입니다.");
+					throw new BaseException(BaseResponseStatus.COUNT_UNDER_ONE);
 				}
 			});
 	}
@@ -116,7 +116,12 @@ public class CartServiceImpl implements CartService {
 	@Override
 	@Transactional
 	public void modifyWishListCheck(String memberUuid, String productUuid) {
+
 		Optional<Cart> result = wishListRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid);
+
+		if (!result.isPresent()) {
+			throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
+		}
 
 		Cart cart = result.get();
 
@@ -176,11 +181,11 @@ public class CartServiceImpl implements CartService {
 
 		ProductDetails detail = productDetailsRepository.findByProductUuid(wishListRequestDto.getProductUuid())
 			.orElseThrow(
-				() -> new RuntimeException("Product not found for UUID: " + wishListRequestDto.getProductUuid()));
+				() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
 
 		// memberUuid에 대해 productUuid는 최대 20개까지 추가 가능
 		if (carts.size() >= 20) {
-			throw new RuntimeException("하나의 memberUuid에 대해 최대 20개까지 상품을 추가할 수 있습니다.");
+			throw new BaseException(BaseResponseStatus.COUNT_OVER_20);
 		}
 
 		Optional<Cart> existingWishList = wishListRepository.findByMemberUuidAndProductUuid(
@@ -215,7 +220,7 @@ public class CartServiceImpl implements CartService {
 			if (cart.isChecked() == true) {
 				ProductDetails details = productDetailsRepository.findByProductUuid(cart.getProductUuid())
 					.orElseThrow(
-						() -> new RuntimeException("Product not found for UUID: " + cart.getProductUuid()));
+						() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
 
 				int productPrice = details.getProductPrice();
 

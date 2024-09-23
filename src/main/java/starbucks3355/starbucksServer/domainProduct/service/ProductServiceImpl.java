@@ -119,7 +119,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void addRecentlyViewed(String productUuid, String memberUuid) {
+	public void addRecentlyViewed(String memberUuid, String productUuid
+	) {
 		String key = RECENTLY_VIEWED_PREFIX + memberUuid;
 
 		// 비회원의 경우, TTL을 설정하여 임시로 저장

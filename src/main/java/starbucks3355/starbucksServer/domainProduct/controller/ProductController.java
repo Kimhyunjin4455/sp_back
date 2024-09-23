@@ -1,6 +1,7 @@
 package starbucks3355.starbucksServer.domainProduct.controller;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Slice;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
@@ -50,8 +52,24 @@ public class ProductController {
 	@GetMapping("/{productUuid}")
 	@Operation(summary = "상품 조회")
 	public BaseResponse<ProductResponseVo> getProduct(
-		@PathVariable String productUuid) {
+		@PathVariable String productUuid,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		HttpSession session
+	) {
 		ProductResponseDto productResponseDto = productService.getProduct(productUuid);
+		String memberUuid;
+
+		if (authUserDetail != null) {
+			memberUuid = authUserDetail.getUuid();
+		} else {
+			memberUuid = (String)session.getAttribute("tempMemberUuid");
+			if (memberUuid == null) {
+				memberUuid = "temp:" + UUID.randomUUID().toString(); // 임시 UUID 생성
+				session.setAttribute("tempMemberUuid", memberUuid); // 세션에 저장
+			}
+		}
+
+		productService.addRecentlyViewed(memberUuid, productUuid);
 
 		return new BaseResponse<>(
 			HttpStatus.OK,
@@ -62,11 +80,49 @@ public class ProductController {
 		);
 	}
 
+	@GetMapping("/recentlyViewed")
+	@Operation(summary = "최근 본 상품 목록 조회")
+	public BaseResponse<CursorPage<String>> getRecentlyViewed(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		HttpSession session,
+		@RequestParam(defaultValue = "1") int page
+	) {
+		String memberUuid;
+
+		if (authUserDetail != null) {
+			memberUuid = authUserDetail.getUuid();
+		} else {
+			memberUuid = (String)session.getAttribute("tempMemberUuid");
+			if (memberUuid == null) {
+				memberUuid = "temp:" + UUID.randomUUID().toString(); // 임시 UUID 생성
+				session.setAttribute("tempMemberUuid", memberUuid); // 세션에 저장
+			}
+		}
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			productService.getRecentlyViewed(memberUuid, 20, page)
+		);
+	}
+
 	@GetMapping("/{productUuid}/productDetails")
 	@Operation(summary = "상품 가격만 조회")
 	public BaseResponse<ProductDetailsPriceResponseVo> getProductDetails(
 		@PathVariable String productUuid) {
 		ProductDetailsPriceResponseDto productDetails = productService.getProductPrice(productUuid);
+
+		if (productDetails == null) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.getCode(),
+				null
+			);
+		}
 
 		return new BaseResponse<>(
 			HttpStatus.OK,

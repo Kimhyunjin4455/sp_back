@@ -46,7 +46,7 @@ public interface ProductService {
 		Integer page
 	);
 
-	void addRecentlyViewed(String productUuid, String memberUuid);
+	void addRecentlyViewed(String memberUuid, String productUuid);
 
 	public void updateProduct(ProductRequestDto productRequestDto);
 

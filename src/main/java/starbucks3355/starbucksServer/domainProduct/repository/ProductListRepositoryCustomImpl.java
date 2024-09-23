@@ -140,9 +140,5 @@ public class ProductListRepositoryCustomImpl implements ProductListRepositoryCus
 		return new CursorPage<>(productCodes, nextCursor, hasNext, currentPageSize, currentPage);
 
 	}
-	// 이 상품 목록에 대해 그 상품들이 속한 카테고리와 몇개가 그 카테고리에 속해있는지 반환
-
-	// 이 상품 목록에 대해 그 상품들이 속한 프로모션을 반환
-	// 현재 상품목록의 uuid 를 넘겨서 카테고리명과 프로모션명에 대해서 필터링 적용하는 메소드
 
 }

@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
+import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.domainCart.dto.in.CartRequestDto;
 import starbucks3355.starbucksServer.domainCart.dto.out.CartResponseDto;
 import starbucks3355.starbucksServer.domainCart.dto.out.TotalInfoResponseDto;
@@ -53,8 +55,9 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public void addWishList(CartRequestDto wishListRequestDto) {
-		wishListRepository.save(
-			wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid()));
+
+		// wishListRepository.save(
+		// 	wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid()));
 	}
 
 	@Override
@@ -171,6 +174,10 @@ public class CartServiceImpl implements CartService {
 
 		List<Cart> carts = wishListRepository.findByMemberUuid(wishListRequestDto.getMemberUuid());
 
+		ProductDetails detail = productDetailsRepository.findByProductUuid(wishListRequestDto.getProductUuid())
+			.orElseThrow(
+				() -> new RuntimeException("Product not found for UUID: " + wishListRequestDto.getProductUuid()));
+
 		// memberUuid에 대해 productUuid는 최대 20개까지 추가 가능
 		if (carts.size() >= 20) {
 			throw new RuntimeException("하나의 memberUuid에 대해 최대 20개까지 상품을 추가할 수 있습니다.");
@@ -182,16 +189,17 @@ public class CartServiceImpl implements CartService {
 
 		if (existingWishList.isPresent()) {
 			Cart cart = existingWishList.get();
-			if (cart.getCurrentQuantity() + quantity <= cart.getLimitQuantity()) {
+			if (cart.getCurrentQuantity() + quantity <= detail.getQuantityLimit()) {
 				cart.updateCurrentQuantity(cart.getCurrentQuantity() + quantity);
 				wishListRepository.save(cart);
 			} else {
-				throw new RuntimeException("상품의 최대 수량을 초과할 수 없습니다.");
+				throw new BaseException(BaseResponseStatus.COUNT_OVER);
 			}
 		} else {
 			wishListRequestDto.updateCurrentQuantity(quantity);
 			wishListRepository.save(
-				wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid()));
+				wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid(),
+					detail.getQuantityLimit()));
 		}
 	}
 

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
+import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
@@ -88,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 	public DiscountResponseDto getDiscountInfo(String productUuid) {
 
 		return DiscountResponseDto.from(discountRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 할인타입이 존재하지 않습니다.")));
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DISCOUNT)));
 
 	}
 

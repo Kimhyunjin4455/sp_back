@@ -1,9 +1,10 @@
 package starbucks3355.starbucksServer.common.entity;
 
+import static starbucks3355.starbucksServer.common.entity.BaseResponseStatus.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
-import static starbucks3355.starbucksServer.common.entity.BaseResponseStatus.SUCCESS;
 public record BaseResponse<T>(HttpStatusCode httpStatus, Boolean isSuccess, String message, int code, T result) {
 
 	/**

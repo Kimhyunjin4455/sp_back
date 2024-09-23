@@ -9,6 +9,7 @@ import lombok.Getter;
 @Builder
 public class ReviewResponseVo {
 	private String content;
+	private String authorName;
 	private Integer reviewScore;
 	private LocalDateTime regDate, modDate;
 }

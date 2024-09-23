@@ -118,6 +118,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
 		return new ReviewResponseDto(
 			reviewEntity.getReviewUuid(),
+			reviewEntity.getAuthorName(),
 			reviewEntity.getReviewScore(),
 			reviewEntity.getRegDate(),
 			reviewEntity.getModDate()

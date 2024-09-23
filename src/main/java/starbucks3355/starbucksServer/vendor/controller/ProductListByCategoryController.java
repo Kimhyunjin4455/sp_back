@@ -1,5 +1,6 @@
 package starbucks3355.starbucksServer.vendor.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.vendor.service.ProductListByCategoryService;
 
@@ -30,13 +32,18 @@ public class ProductListByCategoryController {
 		@RequestParam(required = false, defaultValue = "10") Integer pageSize,
 		@RequestParam(required = false, defaultValue = "1") Integer page
 	) {
-		return new BaseResponse<>(productListByCategoryService.getProductsByCategoryList(
-			majorCategoryName,
-			middleCategoryName,
-			lastId,
-			pageSize,
-			page
-		));
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			productListByCategoryService.getProductsByCategoryList(
+				majorCategoryName,
+				middleCategoryName,
+				lastId,
+				pageSize,
+				page
+			));
 	}
 
 }

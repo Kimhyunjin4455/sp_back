@@ -21,9 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
-import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
-import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
-import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
+import starbucks3355.starbucksServer.common.entity.CommonResponsePagingEntity;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
@@ -51,33 +49,37 @@ public class ProductController {
 
 	@GetMapping("/{productUuid}")
 	@Operation(summary = "상품 조회")
-	public CommonResponseEntity<ProductResponseVo> getProduct(
+	public BaseResponse<ProductResponseVo> getProduct(
 		@PathVariable String productUuid) {
 		ProductResponseDto productResponseDto = productService.getProduct(productUuid);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			productResponseDto.dtoToResponseVo()
 		);
 	}
 
 	@GetMapping("/{productUuid}/productDetails")
 	@Operation(summary = "상품 가격만 조회")
-	public CommonResponseEntity<ProductDetailsPriceResponseVo> getProductDetails(
+	public BaseResponse<ProductDetailsPriceResponseVo> getProductDetails(
 		@PathVariable String productUuid) {
 		ProductDetailsPriceResponseDto productDetails = productService.getProductPrice(productUuid);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			productDetails.dtoToResponseVo()
 		);
 	}
 
 	@GetMapping("/listWithPageable")
 	@Operation(summary = "상품 목록 조회 (무한 스크롤 페이지 처리)")
-	public CommonResponseSliceEntity<List<ProductsResponseVo>> getProducts(
+	public CommonResponsePagingEntity<List<ProductsResponseVo>> getProducts(
 
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "20") int size
@@ -88,9 +90,11 @@ public class ProductController {
 			.map(ProductsResponseDto::dtoToResponseVo)
 			.collect(Collectors.toList());
 
-		return new CommonResponseSliceEntity<>(
+		return new CommonResponsePagingEntity<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			productResponseVos,
 			productResponseDtos.hasNext()
 		);
@@ -98,28 +102,32 @@ public class ProductController {
 
 	@GetMapping("/listWithQueryDSL")
 	@Operation(summary = "상품 목록 조회 2 (커서 페이지 처리)")
-	public CommonResponseEntity<CursorPage<String>> getProducts(
+	public BaseResponse<CursorPage<String>> getProducts(
 		@RequestParam(value = "lastId", required = false) Long lastId,
 		@RequestParam(value = "pageSize", required = false) Integer pageSize,
 		@RequestParam(value = "page", required = false) Integer page
 	) {
 		CursorPage<String> productResponseDtos = productService.getProductList(lastId, pageSize, page);
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			productResponseDtos
 		);
 	}
 
 	@GetMapping("/{productUuid}/productDiscountInfo")
 	@Operation(summary = "상품 할인 정보 조회")
-	public CommonResponseEntity<DiscountResponseVo> getProductRateDiscountInfo(
+	public BaseResponse<DiscountResponseVo> getProductRateDiscountInfo(
 		@PathVariable String productUuid) {
 		DiscountResponseDto discountRateResponseDto = productService.getDiscountInfo(productUuid);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			discountRateResponseDto.dtoToResponseVo()
 		);
 	}

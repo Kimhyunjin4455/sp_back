@@ -226,5 +226,6 @@ public class ShippingServiceImpl implements ShippingService {
 			.build();
 
 	}
+	//주석처리
 
 }

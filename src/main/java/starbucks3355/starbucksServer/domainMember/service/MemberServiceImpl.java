@@ -45,65 +45,30 @@ public class MemberServiceImpl implements MemberService {
 		));
 	}
 
-
-	// // 찜한 상품 목록 조회 (라스트 값 뽑기)
-	// @Override
-	// public Slice<LikesProductResponseDto> getLikesListByUuid(String uuid, int page, int size) {
-	// 	Pageable pageable = PageRequest.of(page, size);
-	// 	Slice<Likes> likes = likeProductRepository.findByUuid(uuid, pageable);
-	//
-	// 	return likes.map(like -> LikesProductResponseDto.builder()
-	// 			.id(like.getId())
-	// 			.uuid(like.getUuid())
-	// 			.productUuid(like.getProductUuid())
-	// 			.isLiked(like.isLiked())
-	// 			.build());
-	// }
-
 	@Override
 	public CursorPage<String> getLikesList(String userUuid, Long lastId, Integer pageSize, Integer page) {
 		return likeProductRepositoryCustom.getLikesList(userUuid, lastId, pageSize, page);
 	}
 
-	// 찜하기 여부 정하면서 history 쌓았음 (리팩토링 필요), else문 사용하지 않기
 	@Override
 	public LikesProductResponseDto LikeStatus(String uuid, String productUuid) {
 		Optional<Likes> optionalLikes = likeProductRepository.findByUuidAndProductUuid(uuid, productUuid);
 
-		if(optionalLikes.isPresent()) {
-			// 찜이 되어 있는 경우, 찜 취소
-			Likes like = optionalLikes.get();
-			likeProductRepository.delete(like);
-
-			// 찜 취소 이력 저장
-			LikesHistory history = LikesHistory.builder()
-				.uuid(uuid)
-				.productUuid(productUuid)
-				.isLiked(false)
-				.timestamp(LocalDateTime.now())
-				.build();
-			likesHistoryRepository.save(history);
-			return LikesProductResponseDto.builder()
-				.id(like.getId())
-				.uuid(like.getUuid())
-				.productUuid(like.getProductUuid())
-				.isLiked(false) // 취소된 경우 false
-				.build();
-		} else {
+		Likes like = optionalLikes.orElseGet(() -> {
 			// 찜이 되어 있지 않은 경우, 찜 추가
-			Likes newLike = Likes.builder()
-				.uuid(uuid)
-				.productUuid(productUuid)
-				.isLiked(true)
-				.build();
+			Likes newLike = Likes.create(uuid, productUuid, true);
 			likeProductRepository.save(newLike);
-			return LikesProductResponseDto.builder()
-				.id(newLike.getId())
-				.uuid(newLike.getUuid())
-				.productUuid(newLike.getProductUuid())
-				.isLiked(true) // 추가된 경우 true
-				.build();
+			likesHistoryRepository.save(LikesHistory.create(uuid, productUuid, true));
+			return newLike;
+		});
+
+		// 찜이 되어 있는 경우, 찜 취소
+		if (optionalLikes.isPresent()) {
+			likeProductRepository.delete(like);
+			likesHistoryRepository.save(LikesHistory.create(uuid, productUuid, false));
 		}
+
+		return new LikesProductResponseDto(like.getId(), like.getUuid(), like.getProductUuid(), !optionalLikes.isPresent());
 	}
 
 }

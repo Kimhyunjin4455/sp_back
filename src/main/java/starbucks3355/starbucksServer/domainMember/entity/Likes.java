@@ -45,4 +45,11 @@ public class Likes {
 		this.productUuid = productUuid;
 		this.isLiked = isLiked;
 	}
+	public static Likes create(String uuid, String productUuid, boolean isLiked) {
+		return Likes.builder()
+			.uuid(uuid)
+			.productUuid(productUuid)
+			.isLiked(isLiked)
+			.build();
+	}
 }

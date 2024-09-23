@@ -76,7 +76,8 @@ public class AuthServiceImpl implements AuthService{
 		try
 		{
 			String token = createToken(authenticate(member, signInRequestDto.getPassword()));
-			return SignInResponseDto.from(member, token);
+			boolean isRegistered = true;
+			return SignInResponseDto.from(member, token, isRegistered);
 
 		} catch (Exception e) {
 			throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
@@ -92,9 +93,12 @@ public class AuthServiceImpl implements AuthService{
 	@Override
 	public SignInResponseDto oAuthSignIn(OAuthSignInRequestDto oAuthSignInRequestDto) {
 
-		Member member = memberRepository.findByEmail(oAuthSignInRequestDto.getProviderEmail()).orElseThrow(
-			() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
-		);
+		Member member = memberRepository.findByEmail(oAuthSignInRequestDto.getProviderEmail()).orElse(null);
+
+		// 회원 정보가 없으면 false를 반환
+		if (member == null) {
+			return SignInResponseDto.from(null, null, false); // 회원 정보 없음
+		}
 
 		oAuthRepository.findByproviderEmail(member.getEmail()).orElseGet(
 			() -> oAuthRepository.save(oAuthSignInRequestDto.toEntity(member.getUuid()))
@@ -102,7 +106,7 @@ public class AuthServiceImpl implements AuthService{
 
 		String token = createToken(oAuthAuthenticate(member.getEmail()));
 		log.info("token : {}", token);
-		return SignInResponseDto.from(member, token);
+		return SignInResponseDto.from(member, token, true);
 
 	}
 

@@ -40,6 +40,14 @@ public interface ProductService {
 
 	public DiscountResponseDto getDiscountInfo(String productUuid);
 
+	CursorPage<String> getRecentlyViewed(
+		String memberUuid,
+		Integer pageSize,
+		Integer page
+	);
+
+	void addRecentlyViewed(String memberUuid, String productUuid);
+
 	public void updateProduct(ProductRequestDto productRequestDto);
 
 	public void deleteProduct(String uuid);

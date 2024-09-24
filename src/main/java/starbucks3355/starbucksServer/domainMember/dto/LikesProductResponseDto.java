@@ -12,6 +12,7 @@ public class LikesProductResponseDto {
 
 	private Long id;
 	private String uuid;
+
 	private String productUuid;
 	private boolean isLiked;
 
@@ -34,7 +35,6 @@ public class LikesProductResponseDto {
 	public static LikesProductResponseDto from(Likes likes) {
 		return LikesProductResponseDto.builder()
 			.id(likes.getId())
-			.uuid(likes.getUuid())
 			.productUuid(likes.getProductUuid())
 			.isLiked(likes.isLiked())
 			.build();

@@ -28,6 +28,8 @@ public enum BaseResponseStatus {
 	SHIPPING_ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, false, 406, "배송지 정보를 찾을 수 없습니다."),
 	DUPLICATE_ADDRESS(HttpStatus.CONFLICT, false, 407, "이미 존재하는 배송지입니다."),
 	COUNT_OVER(HttpStatus.BAD_REQUEST, false, 408, "최대 개수를 초과하였습니다."),
+	COUNT_OVER_20(HttpStatus.BAD_REQUEST, false, 416, "장바구니에는 20개의 품목까지 등록가능합니다."),
+	COUNT_UNDER_ONE(HttpStatus.BAD_REQUEST, false, 417, "장바구니에는 20개의 품목까지 등록가능합니다."),
 	SHIPPING_ADDRESS_ENROLL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 409, "배송지 등록에 실패했습니다."),
 	SHIPPING_ADDRESS_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 410, "배송지 삭제에 실패했습니다."),
 	SHIPPING_ADDRESS_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 411, "배송지 수정에 실패했습니다."),
@@ -78,6 +80,8 @@ public enum BaseResponseStatus {
 	NO_EXIST_OPTION(HttpStatus.NOT_FOUND, false, 3002, "존재하지 않는 옵션입니다"),
 	NO_EXIST_DISCOUNT(HttpStatus.NOT_FOUND, false, 3004, "할인 정책이 존재하지 않습니다"),
 	FAILED_TO_ADD_REVIEWS(HttpStatus.INTERNAL_SERVER_ERROR, false, 3003, "리뷰 등록에 실패했습니다."),
+	NO_EXIST_REVIEW(HttpStatus.NOT_FOUND, false, 3005, "해당 리뷰가 존재하지 않습니다."),
+	NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3006, "해당 상품의 상세정보가 존재하지 않습니다."),
 
 	/**
 	 * 4000: comment service error

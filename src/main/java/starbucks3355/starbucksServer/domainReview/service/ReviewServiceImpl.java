@@ -82,7 +82,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public ReviewResponseDto getReview(String reviewUuid) {
 		Review review = reviewRepository.findByReviewUuid(reviewUuid)
-			.orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다."));
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_REVIEW));
 
 		reviewRepositoryCustom.updateReviewAggregate(review);
 

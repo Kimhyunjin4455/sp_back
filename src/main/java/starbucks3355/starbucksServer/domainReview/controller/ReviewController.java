@@ -108,6 +108,16 @@ public class ReviewController {
 	public BaseResponse<List<UserReviewResponseVo>> getMemberReviews(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		// 로그인된 사용자의 UUID 가져와서 그 사용자의 닉네임 찾기
 		String username = authUserDetail.getNickname();
 
@@ -205,6 +215,16 @@ public class ReviewController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ReviewModifyRequestVo reviewModifyRequestVo) {
 
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		// authorName이 같으먄 수정가능
 		reviewService.modifyReview(ReviewModifyRequestDto.of(reviewModifyRequestVo), reviewUuid);
 
@@ -223,6 +243,16 @@ public class ReviewController {
 	public BaseResponse<Void> deleteReview(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable Long id) {
+
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
 
 		reviewService.deleteReview(id);
 

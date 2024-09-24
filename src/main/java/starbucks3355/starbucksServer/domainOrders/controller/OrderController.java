@@ -1,9 +1,11 @@
 package starbucks3355.starbucksServer.domainOrders.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +20,10 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainOrders.dto.request.OrderCreateRequestDto;
 import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
+import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 import starbucks3355.starbucksServer.domainOrders.service.OrderService;
 import starbucks3355.starbucksServer.domainOrders.vo.request.OrderCreateRequestVo;
+import starbucks3355.starbucksServer.domainOrders.vo.response.OrderResponseVo;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,27 +61,28 @@ public class OrderController {
 	}
 
 	//주문 목록 조회
-	// @GetMapping("/list")
-	// @Operation(summary = "주문 목록 조회")
-	// public ResponseEntity<List<OrderResponseVo>> getAllOrders() {
-	// 	// 서비스에서 목록 가져오기
-	// 	List<Orders> ordersList = orderService.getAllOrders();
-	// 	// 주문 목록을 OrderResponseVo로 변환
-	// 	List<OrderResponseVo> orderResponseVoList = ordersList.stream()
-	// 		.map(order -> OrderResponseVo.builder()
-	// 			.orderDate(order.getOrderDate())
-	// 			.totalAmount(order.getTotalAmount())
-	// 			.uuId(order.getUuid())
-	// 			.userName(order.getUserName())
-	// 			.userPhoneNumber(order.getUserPhoneNumber())
-	// 			.userAddress(order.getUserAddress())
-	// 			.build())
-	// 		.collect(Collectors.toList());
-	// 	// 변환된 목록을 반환
-	// 	return new ResponseEntity<List<OrderResponseVo>>(
-	// 		orderResponseVoList,
-	// 		HttpStatus.OK);
-	// }
+	@GetMapping("/list")
+	@Operation(summary = "주문 목록 조회")
+	public CommonResponseEntity<List<OrderResponseVo>> getAllOrders() {
+		// 서비스에서 목록 가져오기
+		List<Orders> ordersList = orderService.getAllOrders();
+		// 주문 목록을 OrderResponseVo로 변환
+		// List<OrderResponseVo> orderResponseVoList = ordersList.stream()
+		// 	.map(order -> OrderResponseVo.builder()
+		// 		.id(order.getId())
+		// 		.orderStatus(order.getOrderStatus())
+		// 		.orderId(order.getOrderId())
+		// 		.userId(order.getUserId())
+		//
+		// 	.collect(Collectors.toList());
+		// 변환된 목록을 반환
+		// return new CommonResponseEntity<>(
+		// 	HttpStatus.OK,
+		// 	CommonResponseMessage.SUCCESS.getMessage(),
+		//
+		// )
+		return null;
+	}
 
 	// 주문 상태 변경
 	// @PutMapping("/modify/status")

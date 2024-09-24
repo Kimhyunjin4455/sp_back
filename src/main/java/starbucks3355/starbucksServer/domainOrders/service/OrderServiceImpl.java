@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainOrders.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -43,10 +45,10 @@ public class OrderServiceImpl implements OrderService {
 
 	// 주문 요약 정보 계산
 
-	// 주문 목록 조회
-	// public List<Orders> getAllOrders() {
-	// 	return orderRepository.findAll();
-	// }
+	//주문 목록 조회
+	public List<Orders> getAllOrders() {
+		return orderRepository.findAll();
+	}
 
 	// // 주문 상태 변경  -> 주문 취소 api
 	// @Transactional

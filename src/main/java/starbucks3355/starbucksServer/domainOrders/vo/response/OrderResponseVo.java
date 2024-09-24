@@ -1,23 +1,26 @@
 package starbucks3355.starbucksServer.domainOrders.vo.response;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 
 @Getter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
 public class OrderResponseVo {
-	private LocalDateTime orderDate;
+	private Long id;
+	private String address;
+	private String detailAddress;
+	private String orderId;
+	private String userId;
+	private String userName; // 배송 보낼때 이름 다르게 할 수 있으니
+	private Integer productQuantity;
+	private String productUuid;
 	private Integer totalAmount;
-	private UUID uuId;
-	private String userName;
-	private String userPhoneNumber;
-	private String userAddress;
+	private OrderStatus orderStatus;
+	private String phone1;
 }
 

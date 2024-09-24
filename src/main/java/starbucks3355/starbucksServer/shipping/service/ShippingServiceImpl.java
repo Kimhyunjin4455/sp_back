@@ -38,37 +38,65 @@ public class ShippingServiceImpl implements ShippingService {
 		// 기본 배송지 있는지 유무
 		// 있으면 기본 배송지로 설정
 		// 기존 값 False로 바꾸기
-		Optional<ShippingAddress> existingAddress = shippingRepository.findBaseAddressByUuid(memberUuid);
-		existingAddress.ifPresent(shippingAddress -> {
-			ShippingAddress updateAddress = ShippingAddress.builder()
-				.deliveryId(shippingAddress.getDeliveryId())
-				.address(shippingAddress.getAddress())
-				.detailAddress(shippingAddress.getDetailAddress())
-				.phone1(shippingAddress.getPhone1())
-				.phone2(shippingAddress.getPhone2())
-				.receiver(shippingAddress.getReceiver())
-				.message(shippingAddress.getMessage())
-				.nickname(shippingAddress.getNickname())
-				.postNumber(shippingAddress.getPostNumber())
-				.uuid(shippingAddress.getUuid())
-				.baseAddress(false)
-				.build();
-			shippingRepository.save(updateAddress);
-		});
+		// if 문으로 if(deliveryid = true 로 들어오면 ) -> false로 바꾸기
+		// 아니면
+		// base값이 true일때 -> false로 변경
+		if (shippingAddRequestDto.isBaseAddress()) {
+			// 원래 있던애 false 새로 등록하는애 true
+			Optional<ShippingAddress> existingAddress = shippingRepository.findBaseAddressByUuid(memberUuid);
+			existingAddress.ifPresent(shippingAddress -> {
+				ShippingAddress updateAddress = ShippingAddress.builder()
+					.deliveryId(shippingAddress.getDeliveryId())
+					.address(shippingAddress.getAddress())
+					.detailAddress(shippingAddress.getDetailAddress())
+					.phone1(shippingAddress.getPhone1())
+					.phone2(shippingAddress.getPhone2())
+					.receiver(shippingAddress.getReceiver())
+					.message(shippingAddress.getMessage())
+					.nickname(shippingAddress.getNickname())
+					.postNumber(shippingAddress.getPostNumber())
+					.uuid(shippingAddress.getUuid())
+					.baseAddress(false)
+					.build();
+				shippingRepository.save(updateAddress);
+			});
+
+			ShippingAddress newAddress = shippingRepository.save(
+				ShippingAddress.builder()
+					.nickname(shippingAddRequestDto.getNickname())
+					.postNumber(shippingAddRequestDto.getPostNumber())
+					.address(shippingAddRequestDto.getAddress())
+					.detailAddress(shippingAddRequestDto.getDetailAddress())
+					.phone1(shippingAddRequestDto.getPhone1())
+					.phone2(shippingAddRequestDto.getPhone2())
+					.message(shippingAddRequestDto.getMessage())
+					.receiver(shippingAddRequestDto.getReceiver())
+					.baseAddress(true)
+					.uuid(memberUuid)
+					.build());
+		} else {
+			// 기존 배송지가 있고 ->
+			ShippingAddress newAddress = shippingRepository.save(
+				ShippingAddress.builder()
+					.nickname(shippingAddRequestDto.getNickname())
+					.postNumber(shippingAddRequestDto.getPostNumber())
+					.address(shippingAddRequestDto.getAddress())
+					.detailAddress(shippingAddRequestDto.getDetailAddress())
+					.phone1(shippingAddRequestDto.getPhone1())
+					.phone2(shippingAddRequestDto.getPhone2())
+					.message(shippingAddRequestDto.getMessage())
+					.receiver(shippingAddRequestDto.getReceiver())
+					.baseAddress(false)
+					.uuid(memberUuid)
+					.build());
+			// 새로 등록하는애 false
+			shippingRepository.save(newAddress);
+		}
+		// 지금 로직 true인 값이 무조건 있으면 -> false로 바뀜 => 스웨거에 false로 넣어도 디비 true인 값이면 그 값도 false로 바꿔버림
+		// false로 넣어도 true인 값 유지하게
+
 		// 새로운 배송지 추가 -> 기본 배송지로 설정
-		ShippingAddress newAddress = shippingRepository.save(
-			ShippingAddress.builder()
-				.nickname(shippingAddRequestDto.getNickname())
-				.postNumber(shippingAddRequestDto.getPostNumber())
-				.address(shippingAddRequestDto.getAddress())
-				.detailAddress(shippingAddRequestDto.getDetailAddress())
-				.phone1(shippingAddRequestDto.getPhone1())
-				.phone2(shippingAddRequestDto.getPhone2())
-				.message(shippingAddRequestDto.getMessage())
-				.receiver(shippingAddRequestDto.getReceiver())
-				.baseAddress(true)
-				.uuid(memberUuid)
-				.build());
+
 	}
 
 	// 배송지 수정

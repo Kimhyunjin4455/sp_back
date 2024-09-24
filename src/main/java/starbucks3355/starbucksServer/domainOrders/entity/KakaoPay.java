@@ -33,12 +33,12 @@ public class KakaoPay {
 	private Integer total_amount; // 상품 총액
 	@Column(nullable = false)
 	private Integer tax_free_amount; // 상품 비과세 금액
-	@Column(nullable = false, length = 300)
-	private String approve_url; // 결제 성공 시 Redirect URL. 최대 255자
-	@Column(nullable = false, length = 300)
-	private String cancel_url; // 결제 취소 시 Redirect URL. 최대 255자
-	@Column(nullable = false, length = 300)
-	private String fail_url; // 결제 실패 시 Redirect URL. 최대 255자
+	// @Column(length = 300)
+	// private String approve_url; // 결제 성공 시 Redirect URL. 최대 255자
+	// @Column(length = 300)
+	// private String cancel_url; // 결제 취소 시 Redirect URL. 최대 255자
+	// @Column(length = 300)
+	// private String fail_url; // 결제 실패 시 Redirect URL. 최대 255자
 
 	@Builder
 	public KakaoPay(Long id, String cid, String partner_order_id, String partner_user_id, String item_Name,
@@ -52,9 +52,9 @@ public class KakaoPay {
 		this.quantity = quantity;
 		this.total_amount = total_amount;
 		this.tax_free_amount = tax_free_amount;
-		this.approve_url = approve_url;
-		this.cancel_url = cancel_url;
-		this.fail_url = fail_url;
+		// this.approve_url = approve_url;
+		// this.cancel_url = cancel_url;
+		// this.fail_url = fail_url;
 	}
 
 }

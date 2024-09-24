@@ -86,12 +86,12 @@ public class KakaoServiceImpl implements KakaoService {
 		Map<String, String> parameters = new HashMap<>();
 
 		parameters.put("cid", kakaoProperties.getCid());
-		parameters.put("partner_order_id", kakaoRequestReadyDto.getPartnerOrderId());
-		parameters.put("partner_user_id", kakaoRequestReadyDto.getPartnerUserId());
-		parameters.put("item_name", kakaoRequestReadyDto.getItemName());
+		parameters.put("partner_order_id", kakaoRequestReadyDto.getPartner_order_id());
+		parameters.put("partner_user_id", kakaoRequestReadyDto.getPartner_user_id());
+		parameters.put("item_name", kakaoRequestReadyDto.getItem_name());
 		parameters.put("quantity", kakaoRequestReadyDto.getQuantity().toString());
-		parameters.put("total_amount", kakaoRequestReadyDto.getTotalAmount().toString());
-		parameters.put("tax_free_amount", kakaoRequestReadyDto.getTaxFreeAmount().toString());
+		parameters.put("total_amount", kakaoRequestReadyDto.getTotal_amount().toString());
+		parameters.put("tax_free_amount", kakaoRequestReadyDto.getTax_free_amount().toString());
 		//url은 Redirect URL로 결제 완료 후 이동할 URL을 설정합니다.
 		parameters.put("approval_url",
 			"http://localhost:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
@@ -106,8 +106,8 @@ public class KakaoServiceImpl implements KakaoService {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("cid", kakaoProperties.getCid());
 		parameters.put("tid", kakaoRequestApproveDto.getTid());
-		parameters.put("partner_user_id", kakaoRequestApproveDto.getPartnerUserId());
-		parameters.put("partner_order_id", kakaoRequestApproveDto.getPartnerOrderId());
+		parameters.put("partner_user_id", kakaoRequestApproveDto.getPartner_user_id());
+		parameters.put("partner_order_id", kakaoRequestApproveDto.getPartner_order_id());
 		parameters.put("pg_token", kakaoRequestApproveDto.getPgToken());
 		// parameters.put("total_amount", kakaoRequestApproveDto.getTotalAmount().toString());
 		// parameters.put("product_name", kakaoRequestApproveDto.getProductName());

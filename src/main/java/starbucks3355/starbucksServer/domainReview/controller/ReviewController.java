@@ -2,7 +2,6 @@ package starbucks3355.starbucksServer.domainReview.controller;
 
 import java.util.List;
 
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,19 +21,16 @@ import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
-import starbucks3355.starbucksServer.common.entity.CommonResponsePagingEntity;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.service.ReviewService;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewModifyRequestVo;
 import starbucks3355.starbucksServer.domainReview.vo.in.ReviewRequestVo;
-import starbucks3355.starbucksServer.domainReview.vo.out.ReviewProductResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.ReviewScoreResponseVo;
 import starbucks3355.starbucksServer.domainReview.vo.out.UserReviewResponseVo;
@@ -47,27 +43,22 @@ import starbucks3355.starbucksServer.domainReview.vo.out.UserReviewResponseVo;
 public class ReviewController {
 	private final ReviewService reviewService;
 
-	@GetMapping("/{productUuid}/allReviewsOfProduct")
+	@GetMapping("/allReviewsOfProduct")
 	@Operation(summary = "상품별 리뷰 전체 조회")
-	public CommonResponsePagingEntity<List<ReviewProductResponseVo>> getProductReviews(
-		@PathVariable String productUuid,
+	public BaseResponse<CursorPage<String>> getProductReviews(
+		@RequestParam String productUuid,
+		@RequestParam(required = false) Long lastId,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "20") int size) {
-		Slice<ReviewProductResponseDto> productReviewResponseDtoSlice = reviewService.getProductReviews(productUuid,
-			page, size);
 
-		List<ReviewProductResponseVo> responseVoList = productReviewResponseDtoSlice.stream()
-			.map(ReviewProductResponseDto::dtoToResponseVo)
-			.toList();
-
-		return new CommonResponsePagingEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			responseVoList,
-			productReviewResponseDtoSlice.hasNext()
+			reviewService.getProductReviews(productUuid, lastId, page, size)
 		);
+
 	}
 
 	@GetMapping("/allReviewsHaveMediaOfProduct")

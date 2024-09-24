@@ -12,6 +12,13 @@ import starbucks3355.starbucksServer.domainReview.entity.Review;
 public interface ReviewRepositoryCustom {
 	ReviewScoreResponseDto getReviewScore(String productUuid);
 
+	CursorPage<String> getReviewsOfProduct(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	);
+
 	CursorPage<String> getProductReviewsHaveMedia(
 		String productUuid,
 		Long lastId,

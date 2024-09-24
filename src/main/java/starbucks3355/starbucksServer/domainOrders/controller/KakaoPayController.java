@@ -55,14 +55,14 @@ public class KakaoPayController {
 		// 결제 승인할 때 필수적으로 확인이 필요한 파라미터들
 		@RequestParam("pg_token") String pgToken,
 		@RequestParam("tid") String tid,
-		@RequestParam("partner_order_id") String partnerOrderId,
-		@RequestParam("partner_user_id") String partnerUserId) {
+		@RequestParam("partner_order_id") String partner_order_id,
+		@RequestParam("partner_user_id") String partner_user_id) {
 		//@RequestParam("pg_token") String pgToken
 		KakaoRequestApproveDto kakaoRequestApproveDto = KakaoRequestApproveDto.builder()
 			.tid(tid)
 			.pgToken(pgToken)
-			.partnerUserId(partnerUserId)
-			.partnerOrderId(partnerOrderId)
+			.partner_order_id(partner_order_id)
+			.partner_user_id(partner_user_id)
 			.build();
 
 		KakaoResponseApproveDto response = kakaoService.getKakaoPayApprove(kakaoRequestApproveDto);
@@ -72,5 +72,5 @@ public class KakaoPayController {
 			CommonResponseMessage.SUCCESS.getMessage(),
 			response);
 	}
-	
+
 }

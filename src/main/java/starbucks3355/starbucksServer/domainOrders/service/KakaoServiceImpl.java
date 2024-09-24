@@ -15,6 +15,7 @@ import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestApprov
 import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestReadyDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseApproveDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseReadyDto;
+import starbucks3355.starbucksServer.domainOrders.entity.KakaoPay;
 import starbucks3355.starbucksServer.domainOrders.repository.KakaoRepository;
 
 @Service
@@ -77,7 +78,6 @@ public class KakaoServiceImpl implements KakaoService {
 		// 이 헤더는 서버에 클라이언트의 인증 정보(카카오페이 adminKey)를 전달합니다.
 		httpHeaders.set("Authorization", auth);
 		httpHeaders.set("Content-type", "application/json");
-
 		return httpHeaders;
 	}
 
@@ -86,18 +86,17 @@ public class KakaoServiceImpl implements KakaoService {
 		Map<String, String> parameters = new HashMap<>();
 
 		parameters.put("cid", kakaoProperties.getCid());
-		parameters.put("partner_order_id", kakaoRequestReadyDto.getPartnerOrderId());
-		parameters.put("partner_user_id", kakaoRequestReadyDto.getPartnerUserId());
-		parameters.put("item_name", kakaoRequestReadyDto.getItemName());
+		parameters.put("partner_order_id", kakaoRequestReadyDto.getPartner_order_id());
+		parameters.put("partner_user_id", kakaoRequestReadyDto.getPartner_user_id());
+		parameters.put("item_name", kakaoRequestReadyDto.getItem_name());
 		parameters.put("quantity", kakaoRequestReadyDto.getQuantity().toString());
-		parameters.put("total_amount", kakaoRequestReadyDto.getTotalAmount().toString());
-		parameters.put("tax_free_amount", kakaoRequestReadyDto.getTaxFreeAmount().toString());
+		parameters.put("total_amount", kakaoRequestReadyDto.getTotal_amount().toString());
+		parameters.put("tax_free_amount", kakaoRequestReadyDto.getTax_free_amount().toString());
 		//url은 Redirect URL로 결제 완료 후 이동할 URL을 설정합니다.
 		parameters.put("approval_url",
 			"http://localhost:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
 		parameters.put("cancel_url", "http://localhost:8080/cancel");
 		parameters.put("fail_url", "http://localhost:8080/fail");
-
 		return parameters;
 	}
 
@@ -106,12 +105,9 @@ public class KakaoServiceImpl implements KakaoService {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("cid", kakaoProperties.getCid());
 		parameters.put("tid", kakaoRequestApproveDto.getTid());
-		parameters.put("partner_user_id", kakaoRequestApproveDto.getPartnerUserId());
-		parameters.put("partner_order_id", kakaoRequestApproveDto.getPartnerOrderId());
+		parameters.put("partner_user_id", kakaoRequestApproveDto.getPartner_user_id());
+		parameters.put("partner_order_id", kakaoRequestApproveDto.getPartner_order_id());
 		parameters.put("pg_token", kakaoRequestApproveDto.getPgToken());
-		// parameters.put("total_amount", kakaoRequestApproveDto.getTotalAmount().toString());
-		// parameters.put("product_name", kakaoRequestApproveDto.getProductName());
-		// parameters.put("quantity", kakaoRequestApproveDto.getProductQuantity().toString());
 		return parameters;
 	}
 
@@ -125,6 +121,15 @@ public class KakaoServiceImpl implements KakaoService {
 				"https://open-api.kakaopay.com/online/v1/payment/approve",
 				requestEntity,
 				KakaoResponseApproveDto.class);
+
+			KakaoPay kakaoPay = KakaoPay.builder()
+				.cid(kakaoProperties.getCid())
+				.partner_order_id(kakaoRequestApproveDto.getPartner_order_id())
+				.partner_user_id(kakaoRequestApproveDto.getPartner_user_id())
+				.item_Name(response.getItem_name())
+				.quantity(response.getQuantity())
+				.total_amount(response.getAmount().getTotal())
+				.build();
 
 			return response;
 		} catch (HttpClientErrorException e) {

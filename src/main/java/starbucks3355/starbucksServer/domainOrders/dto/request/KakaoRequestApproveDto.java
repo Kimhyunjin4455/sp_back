@@ -12,23 +12,25 @@ public class KakaoRequestApproveDto {
 	// 결제 승인 요청 값
 	private String cid;
 	private String tid;
-	private String partnerOrderId;
-	private String partnerUserId;
+	private String partner_order_id;
+	private String partner_user_id;
 	private String pgToken;
-	private String productName;
-	private Integer productQuantity;
-	private Integer totalAmount;
+	private String item_name;
+	private Integer quantity;
+	private Integer total_Amount;
 
 	@Builder
-	public KakaoRequestApproveDto(String tid, String partnerOrderId, String partnerUserId,
-		String pgToken, String cid, String productName, Integer productQuantity, Integer totalAmount) {
+	public KakaoRequestApproveDto(String cid, String tid, String partner_order_id, String partner_user_id,
+		String pgToken,
+		String item_name, Integer quantity, Integer total_Amount) {
 		this.cid = cid;
 		this.tid = tid;
-		this.partnerOrderId = partnerOrderId;
-		this.partnerUserId = partnerUserId;
+		this.partner_order_id = partner_order_id;
+		this.partner_user_id = partner_user_id;
 		this.pgToken = pgToken;
-		this.productName = productName;
-		this.productQuantity = productQuantity;
-		this.totalAmount = totalAmount;
+		this.item_name = item_name;
+		this.quantity = quantity;
+		this.total_Amount = total_Amount;
 	}
+
 }

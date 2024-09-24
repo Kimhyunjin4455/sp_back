@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import starbucks3355.starbucksServer.auth.entity.OAuth;
 
 public interface OAuthRepository extends JpaRepository<OAuth, Long> {
-	Optional<OAuth> findByproviderEmail(String providerEmail);
+	//Optional<OAuth> findByProviderEmail(String providerEmail);
+
+	Optional<OAuth> existsByProviderEmail(String providerEmail);
 	Optional<OAuth> findByProviderAndProviderId(String provider, String providerId);
 }

@@ -5,6 +5,7 @@ import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.OAuthSignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
 
 public interface AuthService {
@@ -56,6 +57,6 @@ public interface AuthService {
 	 * @param oAuthSignInRequestDto
 	 * return SignInResponseDto
 	 */
-	SignInResponseDto oAuthSignIn(OAuthSignInRequestDto oAuthSignInRequestDto);
+	OAuthSignInResponseDto oAuthSignIn(OAuthSignInRequestDto oAuthSignInRequestDto);
 
 }

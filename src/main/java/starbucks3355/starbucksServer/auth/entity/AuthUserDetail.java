@@ -23,7 +23,6 @@ public class AuthUserDetail implements UserDetails {
 
 	private String nickname;
 	private String email;
-	private String userId;
 
 	public AuthUserDetail(Member member) {
 		this.uuid = member.getUuid();

@@ -78,6 +78,10 @@ public class AuthController {
 		);
 	}
 
+	// @Operation(summary = "SignOut API", description = "SignOut API 입니다.", tags = {"AuthUserDetail"})
+	// @PostMapping("/sign-out")
+
+
 	/**
 	 * 소셜로그인
 	 * @param oAuthSignInRequestVo OAuthSignInRequestVo

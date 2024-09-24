@@ -8,15 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LikesProductResponseVo {
 	private Long id;
-	private String uuid;
-	private String productUuid;
 	private boolean isLiked;
 
 	@Builder
-	public LikesProductResponseVo(Long id, String uuid, String productUuid, boolean isLiked) {
+	public LikesProductResponseVo(Long id, boolean isLiked) {
 		this.id = id;
-		this.uuid = uuid;
-		this.productUuid = productUuid;
 		this.isLiked = isLiked;
 	}
 }

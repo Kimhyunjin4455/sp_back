@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
@@ -72,21 +73,33 @@ public class MemberController {
 
 	@PostMapping("/likes")
 	@Operation(summary = "찜하기, 찜하기 취소")
-	public ResponseEntity<LikesProductResponseDto> likeProduct(@RequestHeader("Authorization") String accessToken,
+	public BaseResponse<LikesProductResponseDto> likeProduct(@RequestHeader("Authorization") String accessToken,
 		String productUuid) {
 		String uuid = provider.parseUuid(accessToken);
 
 		if (uuid == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // UUID가 없을 경우
+			return new BaseResponse<>(
+				BaseResponseStatus.NO_SIGN_IN.getHttpStatusCode(), // HTTP 상태 코드
+				BaseResponseStatus.NO_SIGN_IN.isSuccess(), // 성공 여부
+				BaseResponseStatus.NO_SIGN_IN.getMessage(), // 메시지
+				BaseResponseStatus.NO_SIGN_IN.getCode(),
+				null
+			); // UUID가 없을 경우
 		}
 
 		LikesProductResponseDto response = memberService.LikeStatus(uuid, productUuid);
-		return ResponseEntity.ok(response);
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			response
+    );
 	}
 
 	@GetMapping("/likeslist")
 	@Operation(summary = "찜한 상품 목록 조회")
-	public CommonResponseEntity<CursorPage<String>> getLikes(
+	public BaseResponse<CursorPage<String>> getLikes(
 		@RequestHeader("Authorization") String accessToken,
 		@RequestParam(value = "lastId", required = false) Long lastId,
 		@RequestParam(value = "pageSize", required = false) Integer pageSize,
@@ -96,9 +109,11 @@ public class MemberController {
 		String userUuid = provider.parseUuid(accessToken);
 
 		CursorPage<String> likesProductResponseDtos = memberService.getLikesList(userUuid, lastId, pageSize, page);
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			likesProductResponseDtos
 		);
 	}

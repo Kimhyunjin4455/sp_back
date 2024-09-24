@@ -68,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
 			likesHistoryRepository.save(LikesHistory.create(uuid, productUuid, false));
 		}
 
-		return new LikesProductResponseDto(like.getId(), like.getUuid(), like.getProductUuid(), !optionalLikes.isPresent());
+		return new LikesProductResponseDto(like.getId(), !optionalLikes.isPresent());
 	}
 
 }

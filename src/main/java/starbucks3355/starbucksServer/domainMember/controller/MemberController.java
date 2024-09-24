@@ -47,8 +47,9 @@ public class MemberController {
 	/**
 	 * api/v1/member
 	 * 1. 회원 정보 조회
-	 * 2. 회원 정보 수정
-	 * 3. 회원 탈퇴
+	 * 2. 찜하기
+	 * 3. 찜한 상품 조회
+	 * 4. 상품 uuid 조회 시 찜 여부 파악
 	 */
 
 	/**
@@ -115,6 +116,36 @@ public class MemberController {
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
 			likesProductResponseDtos
+		);
+	}
+
+	@GetMapping("/{productUuid}/like-status")
+	@Operation(summary = "상품의 찜 여부 조회", description = "productUuid를 통해 찜 여부 확인")
+	public BaseResponse<Boolean> checkLikeStatus(
+		@RequestHeader("Authorization") String accessToken,
+		@PathVariable String productUuid) {
+
+		String uuid = provider.parseUuid(accessToken);
+
+		if (uuid == null) {
+			return new BaseResponse<>(
+				BaseResponseStatus.NO_SIGN_IN.getHttpStatusCode(),
+				BaseResponseStatus.NO_SIGN_IN.isSuccess(),
+				BaseResponseStatus.NO_SIGN_IN.getMessage(),
+				BaseResponseStatus.NO_SIGN_IN.getCode(),
+				null
+			);
+		}
+
+		// 찜 여부 확인
+		LikesProductResponseDto response = memberService.checkLikeStatus(uuid, productUuid);
+		// 찜 여부만 포함된 응답 반환
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			response.isLiked() // 찜 여부만 반환
 		);
 	}
 }

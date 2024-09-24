@@ -35,20 +35,21 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 		BooleanBuilder builder = new BooleanBuilder();
 
 		// 상품의 uuid에 대해 리뷰 점수의 평균 조회
-		String reviewScore = jpaQueryFactory
+		Double reviewScore = jpaQueryFactory
 			.select(review.reviewScore.avg())
 			.from(review)
 			.where(review.productUuid.eq(productUuid))
-			.fetchOne().toString();
+			.fetchOne();
 
 		// 상품의 uuid에 대해 리뷰의 개수 조회
-		String reviewCount = jpaQueryFactory
+		Long reviewCount = jpaQueryFactory
 			.select(review.reviewUuid.count())
 			.from(review)
 			.where(review.productUuid.eq(productUuid))
-			.fetchOne().toString();
+			.fetchOne();
 
-		return reviewScore == null ? null : new ReviewScoreResponseDto(reviewScore, reviewCount);
+		return (reviewScore == null || reviewCount == null) ? null :
+			new ReviewScoreResponseDto(reviewScore.toString(), reviewCount.toString());
 	}
 
 	@Override

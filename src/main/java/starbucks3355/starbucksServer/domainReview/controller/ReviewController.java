@@ -180,6 +180,16 @@ public class ReviewController {
 	) {
 		ReviewScoreResponseDto reviewScoreResponseDto = reviewService.getReviewScore(productUuid);
 
+		if (reviewScoreResponseDto == null) {
+			return new BaseResponse<>(
+				HttpStatus.BAD_REQUEST,
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),

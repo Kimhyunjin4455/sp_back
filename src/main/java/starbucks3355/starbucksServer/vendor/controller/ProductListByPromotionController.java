@@ -1,11 +1,9 @@
 package starbucks3355.starbucksServer.vendor.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,9 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
-import starbucks3355.starbucksServer.vendor.dto.out.ProductListByPromotionResponseDto;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.vendor.service.ProductListByPromotionService;
-import starbucks3355.starbucksServer.vendor.vo.out.ProductListByPromotionResponseVo;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,42 +24,44 @@ public class ProductListByPromotionController {
 	private final ProductListByPromotionService productListByPromotionService;
 
 	// 기획전의 uuid를 받아 상품 목록을 조회
-	@GetMapping("/{promotionUuid}/products")
+	@GetMapping("/productsOfPromotion")
 	@Operation(summary = "기획전별 상품 목록 조회")
-	public BaseResponse<List<ProductListByPromotionResponseVo>> getProductListByPromotion(
-		@PathVariable String promotionUuid
+	public BaseResponse<CursorPage<String>> getProductListByPromotion(
+		@RequestParam String promotionUuid,
+		@RequestParam(required = false) Long lastId,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "20") int size
 	) {
-		List<ProductListByPromotionResponseDto> productListByPromotion = productListByPromotionService.getProductListByPromotion(
-			promotionUuid);
+		CursorPage<String> productListByPromotion = productListByPromotionService.getProductListByPromotion(
+			promotionUuid, lastId, page, size);
 
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			productListByPromotion.stream()
-				.map(ProductListByPromotionResponseDto::dtoToResponseVo)
-				.toList()
+			productListByPromotion
 
 		);
 	}
 
-	@GetMapping("/{productUuid}/samePromotionProducts")
+	@GetMapping("/samePromotionProducts")
 	@Operation(summary = "현재 상품과 같은 기획전 인 상품 목록 조회")
-	public BaseResponse<List<ProductListByPromotionResponseVo>> getProductsBySamePromotion(
-		@PathVariable String productUuid
+	public BaseResponse<CursorPage<String>> getProductsBySamePromotion(
+		@RequestParam String productUuid,
+		@RequestParam(required = false) Long lastId,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "20") int size
 	) {
-		List<ProductListByPromotionResponseDto> productListByPromotion = productListByPromotionService.getProductsBySamePromotion(
-			productUuid);
+		CursorPage<String> productListByPromotion = productListByPromotionService.getProductsBySamePromotion(
+			productUuid, lastId, page, size);
 
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			productListByPromotion.stream()
-				.map(ProductListByPromotionResponseDto::dtoToResponseVo)
-				.toList()
+			productListByPromotion
 
 		);
 	}

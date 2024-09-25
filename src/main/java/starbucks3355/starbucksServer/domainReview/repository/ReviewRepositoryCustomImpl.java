@@ -53,6 +53,48 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 	}
 
 	@Override
+	public CursorPage<String> getUserReviews(
+		String authorName,
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	) {
+		QReview review = QReview.review;
+		BooleanBuilder builder = new BooleanBuilder();
+
+		Optional.ofNullable(lastId)
+			.ifPresent(id -> builder.and(review.id.lt(id)));
+
+		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
+		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
+
+		List<Review> userReviews = jpaQueryFactory
+			.select(review)
+			.from(review)
+			.where(review.authorName.eq(authorName)
+				.and(builder))
+			.orderBy(review.reviewUuid.asc())
+			.limit(currentPageSize + 1)
+			.fetch();
+
+		Long nextCursor = null;
+		boolean hasNext = false;
+
+		if (userReviews.size() > currentPageSize) {
+			hasNext = true;
+			userReviews = userReviews.subList(0, currentPageSize);
+			nextCursor = userReviews.get(userReviews.size() - 1).getId();
+		}
+
+		List<String> userReviewList = userReviews.stream()
+			.map(Review::getReviewUuid)
+			.toList();
+
+		return new CursorPage<>(userReviewList, nextCursor, hasNext, currentPageSize, currentPage);
+
+	}
+
+	@Override
 	public CursorPage<String> getReviewsOfProduct(
 		String productUuid,
 		Long lastId,

@@ -1,14 +1,20 @@
 package starbucks3355.starbucksServer.vendor.repository;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
-import starbucks3355.starbucksServer.vendor.dto.out.ProductListByPromotionResponseDto;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 
 @Repository
 public interface ProductListByPromotionRepositoryCustom {
-	List<ProductListByPromotionResponseDto> getProductByPromotionList(String promotionUuid);
+	CursorPage<String> getProductByPromotionList(
+		String promotionUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page);
 
-	List<ProductListByPromotionResponseDto> getProductsBySamePromotion(String productUuid);
+	CursorPage<String> getProductsBySamePromotion(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page);
 }

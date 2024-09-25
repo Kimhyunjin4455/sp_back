@@ -2,11 +2,8 @@ package starbucks3355.starbucksServer.common.S3.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
@@ -41,9 +39,10 @@ public class AwsFileServiceImpl implements FileService {
 	private final AmazonS3 amazonS3;
 
 	@Override
-	public String saveMedia(MultipartFile multipartFile, String uuid) {
+	public String saveMedia(MultipartFile multipartFile, String uuid, String fileName) {
 
-		String fileName = createFileName(multipartFile.getOriginalFilename());
+		// String fileName = createFileName(multipartFile.getOriginalFilename());
+		log.info("fileName: {}", fileName);
 		ObjectMetadata objectMetadata = new ObjectMetadata();
 		objectMetadata.setContentLength(multipartFile.getSize());
 		objectMetadata.setContentType(multipartFile.getContentType());
@@ -75,6 +74,18 @@ public class AwsFileServiceImpl implements FileService {
 		// // }
 		// // 		);
 		// return null;
+	}
+
+	@Override
+	public void deleteMedia(String fileName) {
+		try {
+			log.info("미디어 삭제 - 삭제전");
+			amazonS3.deleteObject(new DeleteObjectRequest(s3Config.getBucket(), fileName));
+			log.info("미디어 삭제 - 삭제후");
+		} catch (Exception e) {
+			log.error("S3에서 파일 삭제 중 오류 발생: {}", e.getMessage());
+			throw new BaseException(BaseResponseStatus.DELETE_MEDIA_FAILED);
+		}
 	}
 
 	// 파일명 난수화 (이전에 올린 이미지 또 올릴수도)
@@ -116,12 +127,12 @@ public class AwsFileServiceImpl implements FileService {
 	}
 
 	// S3로 파일 업로드하기
-	private String upload(File uploadFile, String dirName, String uuid) {
-		String fileName = dirName + uuid + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
-		String uploadImageUrl = putS3(uploadFile, fileName); // S3로 업로드
-		removeNewFile(uploadFile);
-		return uploadImageUrl;
-	}
+	// private String upload(File uploadFile, String dirName, String uuid) {
+	// 	String fileName = dirName + uuid + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
+	// 	String uploadImageUrl = putS3(uploadFile, fileName); // S3로 업로드
+	// 	removeNewFile(uploadFile);
+	// 	return uploadImageUrl;
+	// }
 
 	// S3로 업로드
 	private String putS3(File uploadFile, String fileName) {
@@ -134,26 +145,26 @@ public class AwsFileServiceImpl implements FileService {
 	}
 
 	// 로컬에 저장된 이미지 지우기
-	private void removeNewFile(File targetFile) {
-		if (targetFile.delete()) {
-			log.info("File delete success");
-		} else {
-			log.info("File delete fail");
-		}
-	}
-
-	// 로컬에 파일 업로드 하기
-	private Optional<File> convert(MultipartFile file) throws IOException {
-		log.info("convert");
-		Date date = new Date();
-		File convertFile = new File(file.getOriginalFilename() + date.toString());
-		log.info("convertFile: {}", convertFile);
-		if (convertFile.createNewFile()) { // 지정한 경로에 파일 생성
-			log.info("File create success");
-			try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-				fos.write(file.getBytes());
-			}
-		}
-		return Optional.of(convertFile);
-	}
+	// private void removeNewFile(File targetFile) {
+	// 	if (targetFile.delete()) {
+	// 		log.info("File delete success");
+	// 	} else {
+	// 		log.info("File delete fail");
+	// 	}
+	// }
+	//
+	// // 로컬에 파일 업로드 하기
+	// private Optional<File> convert(MultipartFile file) throws IOException {
+	// 	log.info("convert");
+	// 	Date date = new Date();
+	// 	File convertFile = new File(file.getOriginalFilename() + date.toString());
+	// 	log.info("convertFile: {}", convertFile);
+	// 	if (convertFile.createNewFile()) { // 지정한 경로에 파일 생성
+	// 		log.info("File create success");
+	// 		try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+	// 			fos.write(file.getBytes());
+	// 		}
+	// 	}
+	// 	return Optional.of(convertFile);
+	// }
 }

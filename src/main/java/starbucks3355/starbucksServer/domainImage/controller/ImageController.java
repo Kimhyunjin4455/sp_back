@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
+import starbucks3355.starbucksServer.common.S3.service.AwsFileServiceImpl;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.domainImage.dto.out.ImageResponseDto;
@@ -32,6 +33,7 @@ import starbucks3355.starbucksServer.domainImage.vo.out.ImageResponseVo;
 @Tag(name = "Product", description = "이미지 조회 API")
 public class ImageController {
 	private final ImageService imageService;
+	private final AwsFileServiceImpl awsFileServiceImpl;
 
 	@GetMapping("/{otherUuid}/allMedias")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 목록 이미지 조회")
@@ -102,7 +104,8 @@ public class ImageController {
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 삭제")
 	public BaseResponse<Void> deleteImage(
 		@PathVariable String otherUuid,
-		@RequestParam String s3url,
+		//@RequestParam String s3url,
+		@RequestParam String fileName,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
 		if (authUserDetail == null) {
@@ -115,7 +118,8 @@ public class ImageController {
 			);
 		}
 
-		imageService.deleteImage(s3url, otherUuid); // -> 이미지 url 통해 삭제 <- s3 삭제
+		imageService.deleteImage(fileName, otherUuid); // -> 이미지 url 통해 db에서 삭제
+		awsFileServiceImpl.deleteMedia(fileName); // -> 이미지이름 통해 s3에서 삭제
 
 		return new BaseResponse<>(
 			HttpStatus.OK,

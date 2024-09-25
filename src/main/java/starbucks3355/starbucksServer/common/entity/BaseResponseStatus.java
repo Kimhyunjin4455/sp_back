@@ -45,6 +45,7 @@ public enum BaseResponseStatus {
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, 900, "Internal server error"),
 	SSE_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, false, 901, "알림 전송에 실패하였습니다."),
 	SAVE_MEDIA_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 902, "S3 미디어 등록에 실패하였습니다."),
+	DELETE_MEDIA_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 903, "S3 미디어 삭제에 실패하였습니다."),
 
 	/**
 	 * 2000: users service error

@@ -68,10 +68,11 @@ public class ImageServiceImpl implements ImageService {
 
 		//받은 데이터를 s3 저장하고 imageRepository에 저장(첫번째 요소는 메인이미지로 설정
 		for (int i = 0; i < file.size(); i++) {
-			String result = saveImageToS3(file.get(i), otherUuid);
+			String fileName = file.get(i).getOriginalFilename();
+			String result = saveImageToS3(file.get(i), otherUuid, fileName);
 			imageRepository.save(Image.builder()
 				.s3url(result)
-				.imageName(file.get(i).getOriginalFilename())
+				.imageName(fileName)
 				.imageUuid(UUID.randomUUID().toString())
 				.otherUuid(otherUuid)
 				.isMainImage(i == 0)
@@ -122,9 +123,9 @@ public class ImageServiceImpl implements ImageService {
 
 	}
 
-	private String saveImageToS3(MultipartFile file, String otherUuid) {
+	private String saveImageToS3(MultipartFile file, String otherUuid, String fileName) {
 		try {
-			return fileService.saveMedia(file, otherUuid); // S3에 파일 저장 후 URL 반환
+			return fileService.saveMedia(file, otherUuid, fileName); // S3에 파일 저장 후 URL 반환
 		} catch (RuntimeException e) {
 			throw new BaseException(BaseResponseStatus.FAILED_TO_ADD_S3);
 		}
@@ -137,8 +138,8 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public void deleteImage(String s3url, String otherUuid) {
-		imageRepository.deleteByS3url(s3url);
+	public void deleteImage(String imageName, String otherUuid) {
+		imageRepository.deleteByImageNameAndOtherUuid(imageName, otherUuid);
 		// 남은 이미지가 존재할 경우 그 이미지중 첫번째가 메인이미지가 되도록 설정
 		if (imageRepository.findByOtherUuid(otherUuid).size() > 0) {
 			Image image = imageRepository.findByOtherUuid(otherUuid).get(0);

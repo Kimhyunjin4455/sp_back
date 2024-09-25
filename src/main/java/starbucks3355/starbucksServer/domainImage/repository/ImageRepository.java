@@ -18,5 +18,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
 	void deleteByOtherUuid(String otherUuid);
 
-	void deleteByS3url(String s3url);
+	void deleteByImageNameAndOtherUuid(String imageName, String otherUuid);
 }

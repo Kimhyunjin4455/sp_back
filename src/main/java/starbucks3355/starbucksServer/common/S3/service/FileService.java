@@ -4,7 +4,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileService {
 
-	String saveMedia(MultipartFile multipartFile, String uuid);
+	String saveMedia(MultipartFile multipartFile, String uuid, String fileName);
+
+	void deleteMedia(String fileName);
 
 	// 멤버 이미지 저장
 	//String savePhoto(MultipartFile multipartFile, String uuid) throws IOException;

@@ -17,6 +17,7 @@ import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseAppr
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseReadyDto;
 import starbucks3355.starbucksServer.domainOrders.entity.KakaoPay;
 import starbucks3355.starbucksServer.domainOrders.repository.KakaoRepository;
+import starbucks3355.starbucksServer.shipping.repository.ShippingRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class KakaoServiceImpl implements KakaoService {
 	// KakaoProperties 클래스를 주입받아 사용,
 	private final KakaoProperties kakaoProperties;
 	private final KakaoRepository kakaoRepository;
+	private final ShippingRepository shippingRepository;
 
 	@Override
 	// 카카오페이의 결제 준비
@@ -129,7 +131,11 @@ public class KakaoServiceImpl implements KakaoService {
 				.item_Name(response.getItem_name())
 				.quantity(response.getQuantity())
 				.total_amount(response.getAmount().getTotal())
+				.tax_free_amount(response.getTax_free_amount() != null ? response.getTax_free_amount() : 0)
+				.approved_at(response.getApproved_at())// null 체크 후 기본값 설정
+				.created_at(response.getCreated_at())
 				.build();
+			kakaoRepository.save(kakaoPay);
 
 			return response;
 		} catch (HttpClientErrorException e) {

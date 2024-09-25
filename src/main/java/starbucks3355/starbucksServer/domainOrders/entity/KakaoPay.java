@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainOrders.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,6 +35,10 @@ public class KakaoPay {
 	private Integer total_amount; // 상품 총액
 	@Column(nullable = false)
 	private Integer tax_free_amount; // 상품 비과세 금액
+	@Column(nullable = false, length = 100)
+	private LocalDateTime created_at; // 결제 준비 요청 시각
+	@Column(nullable = false, length = 100)
+	private LocalDateTime approved_at; // 결제 승인 시각
 	// @Column(length = 300)
 	// private String approve_url; // 결제 성공 시 Redirect URL. 최대 255자
 	// @Column(length = 300)
@@ -43,7 +49,7 @@ public class KakaoPay {
 	@Builder
 	public KakaoPay(Long id, String cid, String partner_order_id, String partner_user_id, String item_Name,
 		Integer quantity, Integer total_amount, Integer tax_free_amount, String approve_url, String cancel_url,
-		String fail_url) {
+		String fail_url, LocalDateTime created_at, LocalDateTime approved_at) {
 		this.id = id;
 		this.cid = cid;
 		this.partner_order_id = partner_order_id;
@@ -52,6 +58,8 @@ public class KakaoPay {
 		this.quantity = quantity;
 		this.total_amount = total_amount;
 		this.tax_free_amount = tax_free_amount;
+		this.created_at = created_at;
+		this.approved_at = approved_at;
 		// this.approve_url = approve_url;
 		// this.cancel_url = cancel_url;
 		// this.fail_url = fail_url;

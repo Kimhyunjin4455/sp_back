@@ -37,13 +37,15 @@ public enum BaseResponseStatus {
 	SHIPPING_ID_NOT_EXIST(HttpStatus.NOT_FOUND, false, 413, "존재하지 않는 배송지 ID입니다."),
 	BASE_ADDRESS_EXIST(HttpStatus.BAD_REQUEST, false, 414, "기본 배송지가 이미 존재합니다."),
 	DUPLICATE_ID(HttpStatus.BAD_REQUEST, false, 415, "id 값이 중복됩니다."),
-	NO_EXIST_UUID_IN_DELIVERY(HttpStatus.NOT_FOUND, false, 416, "배송지에 해당하는 uuid가 존재하지 않습니다."),
+
 
 	/**
 	 * 900: 기타 에러
 	 */
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, 900, "Internal server error"),
 	SSE_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, false, 901, "알림 전송에 실패하였습니다."),
+	SAVE_MEDIA_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 902, "S3 미디어 등록에 실패하였습니다."),
+	DELETE_MEDIA_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 903, "S3 미디어 삭제에 실패하였습니다."),
 
 	/**
 	 * 2000: users service error
@@ -83,6 +85,8 @@ public enum BaseResponseStatus {
 	FAILED_TO_ADD_REVIEWS(HttpStatus.INTERNAL_SERVER_ERROR, false, 3003, "리뷰 등록에 실패했습니다."),
 	NO_EXIST_REVIEW(HttpStatus.NOT_FOUND, false, 3005, "해당 리뷰가 존재하지 않습니다."),
 	NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3006, "해당 상품의 상세정보가 존재하지 않습니다."),
+	FAILED_TO_ADD_S3(HttpStatus.INTERNAL_SERVER_ERROR, false, 3007, "AWS S3에 이미지 저장을 실패했습니다."),
+	NO_EXIST_S3_IMAGE(HttpStatus.NOT_FOUND, false, 3008, "AWS S3에 해당 이미지가 존재하지 않습니다."),
 
 	/**
 	 * 4000: comment service error

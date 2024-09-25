@@ -23,7 +23,7 @@ public class Image {
 	private Long id;
 	@Column(nullable = false, length = 200)
 	private String s3url;
-	@Column(nullable = false, length = 200, unique = true)
+	@Column(nullable = false, length = 200)
 	private String imageName; // 삭제될 수도 있는 컬럼
 	@Column(length = 250)
 	private String thumbnailPath;

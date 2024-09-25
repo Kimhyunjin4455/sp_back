@@ -34,23 +34,28 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 			.toList();
 	}
 
+	// 상품에 대한 연관상품(기획전)
 	@Override
 	public List<ProductListByPromotionResponseDto> getProductsBySamePromotion(String productUuid) {
 
 		QProductByPromotionList qProductByPromotionList = QProductByPromotionList.productByPromotionList;
 		BooleanBuilder builder = new BooleanBuilder();
 
+		// 나라면 상품1의 uuid로 기획전 리스트를 뽑을거야
+
 		// 상품 uuid를 통해 기획전 uuid를 조회
-		List<String> promotionUuidList = jpaQueryFactory
+		List<String> promotionUuidList = jpaQueryFactory // 여름기획전, 가을기획전
 			.select(qProductByPromotionList.promotionUuid)
 			.from(qProductByPromotionList)
 			.where(qProductByPromotionList.productUuid.eq(productUuid))
 			.fetch();
 
-		List<String> productUuidList = jpaQueryFactory
+		List<String> productUuidList = jpaQueryFactory // 여름기획전에 속한 상품들
 			.select(qProductByPromotionList.productUuid)
 			.from(qProductByPromotionList)
-			.where(qProductByPromotionList.promotionUuid.eq(promotionUuidList.get(0)))
+			//.where(qProductByPromotionList.promotionUuid.eq(promotionUuidList.get(0)))
+			.where(qProductByPromotionList.promotionUuid.in(promotionUuidList)) // 중복 데이터 조회
+			.groupBy(qProductByPromotionList.productUuid)
 			.fetch();
 
 		// 현재 상품의 uuid를 제외한 상품 목록을 조회

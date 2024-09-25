@@ -2,13 +2,10 @@ package starbucks3355.starbucksServer.domainReview.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Slice;
-
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
@@ -16,7 +13,11 @@ import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
 public interface ReviewService {
 	public List<UserReviewResponseDto> getUserReviews(String memberUuid);
 
-	public Slice<ReviewProductResponseDto> getProductReviews(String productUuid, int page, int size);
+	CursorPage<String> getProductReviews(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page);
 
 	CursorPage<String> getProductReviewsHaveMedia(
 		String productUuid,

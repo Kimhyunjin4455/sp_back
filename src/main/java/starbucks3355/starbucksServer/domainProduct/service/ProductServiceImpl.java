@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 	private final RedisTemplate<String, String> redisTemplate;
 
 	private static final String RECENTLY_VIEWED_PREFIX = "recently_viewed:";
-	private static final int MAX_SIZE = 100;
+	private static final int MAX_SIZE = 40;
 
 	@Override
 	public void addProduct(ProductRequestDto productRequestDto) {
@@ -132,6 +132,7 @@ public class ProductServiceImpl implements ProductService {
 			// 회원의 경우 영구적으로 저장
 			redisTemplate.opsForList().remove(key, 0, productUuid); // 중복 제거
 			redisTemplate.opsForList().leftPush(key, productUuid); // 추가
+			redisTemplate.expire(key, 30, TimeUnit.DAYS); // 30일간 유지
 		}
 
 		// 최대 크기 초과 시 가장 오래된 상품 제거

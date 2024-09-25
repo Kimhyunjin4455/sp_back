@@ -3,9 +3,6 @@ package starbucks3355.starbucksServer.domainReview.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +13,6 @@ import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewModifyRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.in.ReviewRequestDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.BestReviewResponseDto;
-import starbucks3355.starbucksServer.domainReview.dto.out.ReviewProductResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.ReviewScoreResponseDto;
 import starbucks3355.starbucksServer.domainReview.dto.out.UserReviewResponseDto;
@@ -55,19 +51,14 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Slice<ReviewProductResponseDto> getProductReviews(String productUuid, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
-		Slice<Review> productReviews = reviewRepository.findPageByProductUuid(productUuid, pageable);
+	public CursorPage<String> getProductReviews(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	) {
+		return reviewRepositoryCustom.getReviewsOfProduct(productUuid, lastId, pageSize, page);
 
-		return productReviews.map(review -> ReviewProductResponseDto.builder()
-			.content(review.getContent())
-			.reviewScore(review.getReviewScore())
-			.reviewUuid(review.getReviewUuid())
-			.productUuid(review.getProductUuid())
-			.authorName(review.getAuthorName())
-			.regDate(review.getRegDate())
-			.modDate(review.getModDate())
-			.build());
 	}
 
 	@Override
@@ -98,27 +89,6 @@ public class ReviewServiceImpl implements ReviewService {
 	public CursorPage<BestReviewResponseDto> getBestReviews(Long lastId, Integer pageSize, Integer page) {
 		return reviewRepositoryCustom.getBestReviews(lastId, pageSize, page);
 	}
-
-	// @Override
-	// public List<ReviewResponseDto> getBestReviews(String productUuid) {
-	// 	// 상품의 리뷰들 중 평점과 조회수 높은 리뷰들을 5개까지 반환
-	//
-	// 	List<Review> productReviews = reviewRepository.findTop5ByProductUuidOrderByReviewScoreDescReviewViewCountDesc(
-	// 		productUuid); // 새 테이블을 만들어 값을 넣어놓는게
-	//
-	// 	if (productReviews != null) {
-	// 		return productReviews.stream()
-	// 			.map(productReview -> ReviewResponseDto.builder()
-	// 				.content(productReview.getContent())
-	// 				.reivewScore(productReview.getReviewScore())
-	// 				.regDate(productReview.getRegDate())
-	// 				.modDate(productReview.getModDate())
-	// 				.build()
-	// 			).toList();
-	// 	}
-	//
-	// 	return List.of();
-	// }
 
 	@Override
 	public void addReview(ReviewRequestDto reviewRequestDto) {

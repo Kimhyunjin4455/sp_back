@@ -222,7 +222,7 @@ public class ShippingController {
 	}
 
 	@PutMapping("/agreeCancel")
-	@Operation(summary = "배송지 동의 취소", description = "배송지 동의를 취소합니다.")
+	@Operation(summary = "배송지 동의 약관", description = "배송지 동의 약관")
 	public BaseResponse<Boolean> agreeShippingCancel(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 		boolean updateAgreeStatus = shippingService.agreeShippingCancel(authUserDetail.getUuid());

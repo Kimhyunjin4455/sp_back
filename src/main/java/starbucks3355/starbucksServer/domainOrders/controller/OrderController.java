@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainOrders.controller;
 
+import static starbucks3355.starbucksServer.common.entity.BaseResponseStatus.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -16,8 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
+import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
-import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.domainOrders.dto.request.OrderCreateRequestDto;
 import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 import starbucks3355.starbucksServer.domainOrders.entity.Orders;
@@ -38,7 +40,7 @@ public class OrderController {
 	// OrderRequestVo를 OrderRequestDto로 변환
 	@PostMapping("/createOrder")
 	@Operation(summary = "주문 생성")
-	public CommonResponseEntity<Void> createOrders(
+	public BaseResponse<Void> createOrders(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody OrderCreateRequestVo orderCreateRequestVo) {
 
@@ -54,9 +56,12 @@ public class OrderController {
 			.build();
 
 		orderService.createOrder(orderCreateRequestDto, authUserDetail.getUserId());
-		return new CommonResponseEntity<>(
+
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
 	}
 

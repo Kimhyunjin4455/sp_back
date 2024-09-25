@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.shipping.controller;
 
+import static starbucks3355.starbucksServer.common.entity.BaseResponseStatus.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
+import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
@@ -111,7 +114,7 @@ public class ShippingController {
 
 	@GetMapping("/base")
 	@Operation(summary = "기본 배송지 조회", description = "등록된 기본 배송지를 조회합니다.")
-	public CommonResponseEntity<ShippingBaseResponseVo> getBaseDelivery(
+	public BaseResponse<ShippingBaseResponseVo> getBaseDelivery(
 		//밑에 @쓰면 AuthUserDetail것을 가져와서 사용 가능
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
 
@@ -119,34 +122,39 @@ public class ShippingController {
 		String userUuid = authUserDetail.getUuid();
 		ShippingBaseResponseDto shippingBaseResponseDto = shippingService.getBaseShippingAddress(userUuid);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			shippingBaseResponseDto.toVo()
-		);
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			shippingBaseResponseDto.toVo());
 	}
 
 	@PutMapping("/base/{deliveryId}/set-default")
 	@Operation(summary = "기본 배송지 변경", description = "기본 배송지를 설정합니다.")
-	public CommonResponseEntity<Void> setDefaultDelivery(
+	public BaseResponse<Void> setDefaultDelivery(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable Long deliveryId) {
 
 		shippingService.modifyBaseAddress(authUserDetail.getUuid(), deliveryId);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
 	}
 
 	@GetMapping("/shipping-list")
 	@Operation(summary = "배송지 목록 조회", description = "등록된 배송지 목록을 조회합니다.")
-	public CommonResponseEntity<List<ShippingListResponseVo>> getShippingList(
+	public BaseResponse<List<ShippingListResponseVo>> getShippingList(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			shippingService.getShippingList(authUserDetail.getUuid())
 				.stream()
 				.map(ShippingListResponseDto::toVo)
@@ -155,22 +163,24 @@ public class ShippingController {
 
 	@DeleteMapping("/delete/{deliveryId}")
 	@Operation(summary = "배송지 삭제", description = "배송지를 삭제합니다.")
-	public CommonResponseEntity<Void> deleteDelivery(
+	public BaseResponse<Void> deleteDelivery(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable Long deliveryId) {
 
 		shippingService.deleteShipping(authUserDetail.getUuid(), deliveryId);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
 
 	}
 
 	@PutMapping("/modify/{deliveryId}")
 	@Operation(summary = "배송지 수정", description = "배송지를 수정합니다.")
-	public CommonResponseEntity<Void> modifyDelivery(
+	public BaseResponse<Void> modifyDelivery(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable Long deliveryId,
 		@RequestBody ShippingModifyRequestVo shippingAddRequestVo) {
@@ -189,21 +199,25 @@ public class ShippingController {
 
 		shippingService.modifyShipping(authUserDetail.getUuid(), deliveryId, shippingModifyRequestDto);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
 	}
 
 	@GetMapping("/shipping-only/{deliveryId}")
 	@Operation(summary = "배송지 단일 조회", description = "등록된 배송지를 조회합니다.")
-	public CommonResponseEntity<ShippingOneResponseVo> getShippingOne(
+	public BaseResponse<ShippingOneResponseVo> getShippingOne(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable Long deliveryId) {
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			shippingService.getShippingOne(authUserDetail.getUuid(), deliveryId).toVo());
 	}
 }

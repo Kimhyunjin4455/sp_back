@@ -28,6 +28,7 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.entity.CommonResponseSliceEntity;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
+import starbucks3355.starbucksServer.domainMember.dto.LikeStatusResponseDto;
 import starbucks3355.starbucksServer.domainMember.dto.LikesProductResponseDto;
 import starbucks3355.starbucksServer.domainMember.dto.MemberReviewResponseDto;
 import starbucks3355.starbucksServer.domainMember.service.MemberService;
@@ -74,7 +75,7 @@ public class MemberController {
 
 	@PostMapping("/likes")
 	@Operation(summary = "찜하기, 찜하기 취소")
-	public BaseResponse<LikesProductResponseDto> likeProduct(@RequestHeader("Authorization") String accessToken,
+	public BaseResponse<Void> likeProduct(@RequestHeader("Authorization") String accessToken,
 		String productUuid) {
 		String uuid = provider.parseUuid(accessToken);
 
@@ -88,14 +89,8 @@ public class MemberController {
 			); // UUID가 없을 경우
 		}
 
-		LikesProductResponseDto response = memberService.LikeStatus(uuid, productUuid);
-		return new BaseResponse<>(
-			HttpStatus.OK,
-			BaseResponseStatus.SUCCESS.isSuccess(),
-			BaseResponseStatus.SUCCESS.getMessage(),
-			BaseResponseStatus.SUCCESS.getCode(),
-			response
-    );
+		memberService.LikeStatus(uuid, productUuid);
+		return new BaseResponse<>();
 	}
 
 	@GetMapping("/likeslist")
@@ -121,7 +116,7 @@ public class MemberController {
 
 	@GetMapping("/{productUuid}/like-status")
 	@Operation(summary = "상품의 찜 여부 조회", description = "productUuid를 통해 찜 여부 확인")
-	public BaseResponse<Boolean> checkLikeStatus(
+	public BaseResponse<LikeStatusResponseDto> checkLikeStatus(
 		@RequestHeader("Authorization") String accessToken,
 		@PathVariable String productUuid) {
 
@@ -138,14 +133,20 @@ public class MemberController {
 		}
 
 		// 찜 여부 확인
-		LikesProductResponseDto response = memberService.checkLikeStatus(uuid, productUuid);
+		boolean isLiked = memberService.checkLikeStatus(uuid, productUuid).isLiked();
+
+		// LikesProductResponseDto 생성
+		LikeStatusResponseDto response = LikeStatusResponseDto.builder()
+			.isLiked(isLiked)
+			.build();
+
 		// 찜 여부만 포함된 응답 반환
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			response.isLiked() // 찜 여부만 반환
+			response // 찜 여부만 반환
 		);
 	}
 }

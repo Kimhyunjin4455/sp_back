@@ -25,7 +25,6 @@ import starbucks3355.starbucksServer.domainOrders.dto.request.OrderCreateRequest
 import starbucks3355.starbucksServer.domainOrders.dto.response.OrderResponseDto;
 import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 import starbucks3355.starbucksServer.domainOrders.service.OrderService;
-import starbucks3355.starbucksServer.domainOrders.vo.request.OrderCancelRequestVo;
 import starbucks3355.starbucksServer.domainOrders.vo.request.OrderCreateRequestVo;
 import starbucks3355.starbucksServer.domainOrders.vo.response.OrderResponseVo;
 
@@ -69,11 +68,10 @@ public class OrderController {
 	}
 
 	//주문 목록 조회
-	@GetMapping("/list/{userId}")
+	@GetMapping("/list")
 	@Operation(summary = "주문 목록 조회", description = "주문 목록 조회")
 	public BaseResponse<List<OrderResponseVo>> getAllOrders(
-		@AuthenticationPrincipal AuthUserDetail authUserDetail,
-		@PathVariable("userId") String userId
+		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
 		// 서비스에서 목록 가져오기
 		//List<Orders> ordersList = orderService.getAllOrders(authUserDetail.getUserId());
@@ -89,11 +87,10 @@ public class OrderController {
 
 	}
 
-	@GetMapping("/getOrderOne/{userId}/{orderId}")
+	@GetMapping("/getOrderOne/{orderId}")
 	@Operation(summary = "단일 주문 조회", description = "단일 주문 조회")
 	public BaseResponse<OrderResponseVo> getOneOrder(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
-		@PathVariable("userId") String userId,
 		@PathVariable("orderId") String orderId
 	) {
 		return new BaseResponse<>(
@@ -105,12 +102,11 @@ public class OrderController {
 	}
 
 	// 주문 상태 변경
-	@PutMapping("/cancelOrder/{userId}/{orderId}")
+	@PutMapping("/cancelOrder/{orderId}")
 	@Operation(summary = "주문 취소", description = "주문 취소")
-	public BaseResponse<Void> CacncelOrderStatus(
-		@RequestBody OrderCancelRequestVo orderCancelRequestVo,
+	public BaseResponse<Void> cancelOrderStatus(
+		//@RequestBody OrderCancelRequestVo orderCancelRequestVo,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
-		@PathVariable("userId") String userId,
 		@PathVariable("orderId") String orderId) {
 
 		// OrderCancelRequestDto orderCancelRequestDto = OrderCancelRequestDto.builder()

@@ -96,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
 			.phone1(order.getPhone1())
 			.address(order.getAddress())
 			.detailAddress(order.getDetailAddress())
+			.productUuid(order.getProductUuid())
 			.orderStatus(OrderStatus.CANCEL)
 			.build());
 

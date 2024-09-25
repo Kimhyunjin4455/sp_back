@@ -23,7 +23,7 @@ public interface OrderService {
 	public OrderResponseDto getOneOrder(String userId, String orderId);
 
 	//주문 상태 변경
-	//public void updateOrderStatus(OrderUpdateRequestDto orderUpdateRequestDto);
+	void cancelOrderStatus(String userId, String orderId);
 
 	// 주문 생성 및 카카오페이 결제 준비 로직 통합
 	//String prepareOrderWithKakaoPay(List<OrderCreateRequestVo> orderCreateRequestVoList, String uuid);

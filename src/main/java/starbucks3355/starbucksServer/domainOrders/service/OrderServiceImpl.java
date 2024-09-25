@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainOrders.dto.request.OrderCreateRequestDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.OrderResponseDto;
+import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 import starbucks3355.starbucksServer.domainOrders.repository.OrderRepository;
 
@@ -79,23 +81,24 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	// // 주문 상태 변경  -> 주문 취소 api
-	// @Transactional
-	// public void updateOrderStatus(OrderUpdateRequestDto orderUpdateRequestDto) {
-	// 	log.info("서비스-uuid:" + orderUpdateRequestDto.getUuid());
-	// 	Orders order = orderRepository.findByUuid(orderUpdateRequestDto.getUuid())
-	// 		.orElseThrow(() -> new IllegalArgumentException("해당 주문이 없습니다."));
-	// 	// 주문 상태 변경
-	// 	//builder를 통한 상태 업데이트
-	// 	orderRepository.save(Orders.builder()
-	// 		.id(order.getId())
-	// 		.orderDate(order.getOrderDate())
-	// 		.totalAmount(order.getTotalAmount())
-	// 		.uuid(order.getUuid())
-	// 		.userName(order.getUserName())
-	// 		.userPhoneNumber(order.getUserPhoneNumber())
-	// 		.userAddress(order.getUserAddress())
-	// 		.orderStatus(OrderStatus.CANCEL)
-	// 		.build());
-	// }
+	@Transactional
+	public void cancelOrderStatus(String userId, String orderId) {
+		Orders order = orderRepository.findByUserIdAndOrderId(userId, orderId);
+		// 주문 상태 변경
+		//builder를 통한 상태 업데이트
+		orderRepository.save(Orders.builder()
+			.id(order.getId())
+			.totalAmount(order.getTotalAmount())
+			.userName(order.getUserName())
+			.orderId(order.getOrderId())
+			.userId(order.getUserId())
+			.productQuantity(order.getProductQuantity())
+			.phone1(order.getPhone1())
+			.address(order.getAddress())
+			.detailAddress(order.getDetailAddress())
+			.orderStatus(OrderStatus.CANCEL)
+			.build());
+
+	}
 }
 

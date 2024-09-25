@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ import starbucks3355.starbucksServer.domainOrders.dto.request.OrderCreateRequest
 import starbucks3355.starbucksServer.domainOrders.dto.response.OrderResponseDto;
 import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
 import starbucks3355.starbucksServer.domainOrders.service.OrderService;
+import starbucks3355.starbucksServer.domainOrders.vo.request.OrderCancelRequestVo;
 import starbucks3355.starbucksServer.domainOrders.vo.request.OrderCreateRequestVo;
 import starbucks3355.starbucksServer.domainOrders.vo.response.OrderResponseVo;
 
@@ -103,17 +105,29 @@ public class OrderController {
 	}
 
 	// 주문 상태 변경
-	// @PutMapping("/modify/status")
-	// @Operation(summary = "주문 상태 변경")
-	// public ResponseEntity<Void> updateOrderStatus(@RequestBody OrderUpdateRequestVo orderUpdateRequestVo) {
-	//
-	// 	OrderUpdateRequestDto orderUpdateRequestDto = OrderUpdateRequestDto.builder()
-	// 		.uuid(orderUpdateRequestVo.getUuid())
-	// 		.build();
-	//
-	// 	log.info(orderUpdateRequestDto.getUuid().toString());
-	// 	orderService.updateOrderStatus(orderUpdateRequestDto);
-	// 	return new ResponseEntity<Void>(HttpStatus.OK);
-	// }
+	@PutMapping("/cancelOrder/{userId}/{orderId}")
+	@Operation(summary = "주문 취소", description = "주문 취소")
+	public BaseResponse<Void> CacncelOrderStatus(
+		@RequestBody OrderCancelRequestVo orderCancelRequestVo,
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@PathVariable("userId") String userId,
+		@PathVariable("orderId") String orderId) {
+
+		// OrderCancelRequestDto orderCancelRequestDto = OrderCancelRequestDto.builder()
+		// 	.orderId(orderId)
+		// 		.userId(userId)
+		// 			.orderStatus(OrderStatus.CANCEL)
+		// 	.productName(orderCancelRequestVo.getProductName())
+		// 	.
+		// 				.build();
+		//
+		orderService.cancelOrderStatus(authUserDetail.getUserId(), orderId);
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			null);
+	}
 
 }

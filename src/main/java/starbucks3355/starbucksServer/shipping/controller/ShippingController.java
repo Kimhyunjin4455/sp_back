@@ -183,18 +183,18 @@ public class ShippingController {
 	public BaseResponse<Void> modifyDelivery(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable Long deliveryId,
-		@RequestBody ShippingModifyRequestVo shippingAddRequestVo) {
+		@RequestBody ShippingModifyRequestVo shippingModifyRequestVo) {
 
 		ShippingModifyRequestDto shippingModifyRequestDto = ShippingModifyRequestDto.builder()
-			.address(shippingAddRequestVo.getAddress())
-			.detailAddress(shippingAddRequestVo.getDetailAddress())
-			.nickname(shippingAddRequestVo.getNickname())
-			.postNumber(shippingAddRequestVo.getPostNumber())
-			.phone1(shippingAddRequestVo.getPhone1())
-			.phone2(shippingAddRequestVo.getPhone2())
-			.message(shippingAddRequestVo.getMessage())
-			.baseAddress(shippingAddRequestVo.isBaseAddress())
-			.receiver(shippingAddRequestVo.getReceiver())
+			.address(shippingModifyRequestVo.getAddress())
+			.detailAddress(shippingModifyRequestVo.getDetailAddress())
+			.nickname(shippingModifyRequestVo.getNickname())
+			.postNumber(shippingModifyRequestVo.getPostNumber())
+			.phone1(shippingModifyRequestVo.getPhone1())
+			.phone2(shippingModifyRequestVo.getPhone2())
+			.message(shippingModifyRequestVo.getMessage())
+			.baseAddress(shippingModifyRequestVo.isBaseAddress())
+			.receiver(shippingModifyRequestVo.getReceiver())
 			.build();
 
 		shippingService.modifyShipping(authUserDetail.getUuid(), deliveryId, shippingModifyRequestDto);
@@ -219,5 +219,18 @@ public class ShippingController {
 			SUCCESS.getMessage(),
 			SUCCESS.getCode(),
 			shippingService.getShippingOne(authUserDetail.getUuid(), deliveryId).toVo());
+	}
+
+	@PutMapping("/agreeCancel")
+	@Operation(summary = "배송지 동의 취소", description = "배송지 동의를 취소합니다.")
+	public BaseResponse<Void> agreeShippingCancel(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+		shippingService.agreeShippingCancel(authUserDetail.getUuid());
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			null);
 	}
 }

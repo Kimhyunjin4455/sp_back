@@ -37,6 +37,7 @@ public enum BaseResponseStatus {
 	SHIPPING_ID_NOT_EXIST(HttpStatus.NOT_FOUND, false, 413, "존재하지 않는 배송지 ID입니다."),
 	BASE_ADDRESS_EXIST(HttpStatus.BAD_REQUEST, false, 414, "기본 배송지가 이미 존재합니다."),
 	DUPLICATE_ID(HttpStatus.BAD_REQUEST, false, 415, "id 값이 중복됩니다."),
+	NO_EXIST_UUID_IN_DELIVERY(HttpStatus.NOT_FOUND, false, 416, "배송지에 해당하는 uuid가 존재하지 않습니다."),
 
 	/**
 	 * 900: 기타 에러

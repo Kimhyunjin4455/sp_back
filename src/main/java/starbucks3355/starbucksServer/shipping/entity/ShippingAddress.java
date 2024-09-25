@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,9 +39,17 @@ public class ShippingAddress {
 	@Column(nullable = false, length = 30)
 	private String receiver;
 
+	@Column(nullable = false, length = 20)
+	private boolean agree;
+
+	@PrePersist
+	public void prePersist() {
+		this.agree = true;
+	}
+
 	@Builder
 	public ShippingAddress(Long deliveryId, String nickname, String postNumber, String address, String detailAddress,
-		String phone1, String phone2, String message, boolean baseAddress, String uuid, String receiver
+		String phone1, String phone2, String message, boolean baseAddress, String uuid, String receiver, boolean agree
 	) {
 		this.deliveryId = deliveryId;
 		this.nickname = nickname;
@@ -53,6 +62,7 @@ public class ShippingAddress {
 		this.baseAddress = baseAddress;
 		this.uuid = uuid;
 		this.receiver = receiver;
+		this.agree = agree;
 	}
 
 }

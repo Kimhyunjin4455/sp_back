@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.auth.service;
 
+import java.util.Optional;
+
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +18,7 @@ import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.OAuthSignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.auth.repository.OAuthRepository;
@@ -76,8 +79,7 @@ public class AuthServiceImpl implements AuthService{
 		try
 		{
 			String token = createToken(authenticate(member, signInRequestDto.getPassword()));
-			boolean isRegistered = true;
-			return SignInResponseDto.from(member, token, isRegistered);
+			return SignInResponseDto.from(member, token);
 
 		} catch (Exception e) {
 			throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
@@ -90,23 +92,22 @@ public class AuthServiceImpl implements AuthService{
 
 	}
 
+
 	@Override
-	public SignInResponseDto oAuthSignIn(OAuthSignInRequestDto oAuthSignInRequestDto) {
+	public OAuthSignInResponseDto oAuthSignIn(OAuthSignInRequestDto oAuthSignInRequestDto) {
 
-		Member member = memberRepository.findByEmail(oAuthSignInRequestDto.getProviderEmail()).orElse(null);
+		Optional<Member> member = memberRepository.findByEmail(oAuthSignInRequestDto.getProviderEmail());
 
-		// 회원 정보가 없으면 false를 반환
-		if (member == null) {
-			return SignInResponseDto.from(null, null, false); // 회원 정보 없음
+
+		if (member.isEmpty()) {
+			// oAuthRepository.save(oAuthSignInRequestDto.toEntity(member.get().getUuid()));
+			return OAuthSignInResponseDto.from(false);
 		}
 
-		oAuthRepository.findByproviderEmail(member.getEmail()).orElseGet(
-			() -> oAuthRepository.save(oAuthSignInRequestDto.toEntity(member.getUuid()))
-		);
-
-		String token = createToken(oAuthAuthenticate(member.getEmail()));
+		String token = createToken(oAuthAuthenticate(member.get().getEmail()));
 		log.info("token : {}", token);
-		return SignInResponseDto.from(member, token, true);
+
+		return OAuthSignInResponseDto.from(member.get(), token, true);
 
 	}
 
@@ -125,11 +126,11 @@ public class AuthServiceImpl implements AuthService{
 	}
 
 	private Authentication oAuthAuthenticate(String email) {
+		Member member = memberRepository.findByEmail(email).get();
 		log.info("email : {}", email);
 		return authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(
-				email,
-				null
+				email, null
 			)
 		);
 	}

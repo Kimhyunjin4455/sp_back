@@ -1,13 +1,7 @@
 package starbucks3355.starbucksServer.domainMember.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -17,10 +11,8 @@ import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainMember.dto.LikesProductResponseDto;
 import starbucks3355.starbucksServer.domainMember.dto.MemberInfoResponseDto;
-import starbucks3355.starbucksServer.domainMember.dto.MemberReviewResponseDto;
 import starbucks3355.starbucksServer.domainMember.entity.Likes;
 import starbucks3355.starbucksServer.domainMember.entity.LikesHistory;
-import starbucks3355.starbucksServer.domainMember.entity.Member;
 import starbucks3355.starbucksServer.domainMember.repository.LikeProductRepository;
 import starbucks3355.starbucksServer.domainMember.repository.LikeProductRepositoryCustom;
 import starbucks3355.starbucksServer.domainMember.repository.LikesHistoryRepository;
@@ -69,6 +61,18 @@ public class MemberServiceImpl implements MemberService {
 		}
 
 		return new LikesProductResponseDto(like.getId(), like.getUuid(), like.getProductUuid(), !optionalLikes.isPresent());
+	}
+
+	@Override
+	public LikesProductResponseDto checkLikeStatus(String uuid, String productUuid) {
+		// 사용자의 찜 상태 조회
+		Optional<Likes> optionalLikes = likeProductRepository.findByUuidAndProductUuid(uuid, productUuid);
+		boolean liked = optionalLikes.isPresent();
+
+		return LikesProductResponseDto.builder()
+			.productUuid(productUuid)
+			.isLiked(liked)
+			.build();
 	}
 
 }

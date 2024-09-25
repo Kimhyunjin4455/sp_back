@@ -19,6 +19,7 @@ import starbucks3355.starbucksServer.auth.service.AuthService;
 import starbucks3355.starbucksServer.auth.vo.request.OAuthSignInRequestVo;
 import starbucks3355.starbucksServer.auth.vo.request.SignInRequestVo;
 import starbucks3355.starbucksServer.auth.vo.request.SignUpRequestVo;
+import starbucks3355.starbucksServer.auth.vo.response.OAuthSignInResponseVo;
 import starbucks3355.starbucksServer.auth.vo.response.SignInResponseVo;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
@@ -78,6 +79,10 @@ public class AuthController {
 		);
 	}
 
+	// @Operation(summary = "SignOut API", description = "SignOut API 입니다.", tags = {"AuthUserDetail"})
+	// @PostMapping("/sign-out")
+
+
 	/**
 	 * 소셜로그인
 	 * @param oAuthSignInRequestVo OAuthSignInRequestVo
@@ -85,7 +90,7 @@ public class AuthController {
 	 */
 	@Operation(summary = "OAuth SignIn API", description = "OAuth SignIn API 입니다.", tags = {"AuthUserDetail"})
 	@PostMapping("/oauth-sign-in")
-	public BaseResponse<SignInResponseVo> oAuthSignIn(
+	public BaseResponse<OAuthSignInResponseVo> oAuthSignIn(
 		@RequestBody OAuthSignInRequestVo oAuthSignInRequestVo) {
 
 		return new BaseResponse<>(

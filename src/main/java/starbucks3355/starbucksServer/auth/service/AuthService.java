@@ -1,12 +1,14 @@
 package starbucks3355.starbucksServer.auth.service;
 
 import starbucks3355.starbucksServer.auth.dto.request.EmailCheckRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.FindPasswordRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.FindUserIdRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.UserIdCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.FindPasswordResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.FindUserIdResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.OAuthSignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
@@ -79,6 +81,9 @@ public interface AuthService {
 	 */
 	FindUserIdResponseDto findUserId(FindUserIdRequestDto findUserIdRequestDto);
 
+	/**
+	 * 6. FinduserPassword
+	 */
 
-
+	FindPasswordResponseDto findPassword(FindPasswordRequestDto findPasswordRequestDto);
 }

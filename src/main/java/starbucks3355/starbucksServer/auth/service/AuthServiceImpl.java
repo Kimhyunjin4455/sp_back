@@ -2,11 +2,9 @@ package starbucks3355.starbucksServer.auth.service;
 
 import java.util.Optional;
 
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,20 +12,20 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.dto.request.EmailCheckRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.FindPasswordRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.FindUserIdRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.UserIdCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.FindPasswordResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.FindUserIdResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.OAuthSignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.UserIdCheckResponseDto;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.auth.repository.OAuthRepository;
-import starbucks3355.starbucksServer.auth.vo.request.FindUserIdRequestVo;
-import starbucks3355.starbucksServer.auth.vo.request.UserIdCheckRequestVo;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
@@ -156,7 +154,7 @@ public class AuthServiceImpl implements AuthService{
 	}
 
 	/**
-	 * FindUserId
+	 * findUserId
 	 */
 	@Override
 	public FindUserIdResponseDto findUserId(FindUserIdRequestDto findUserIdRequestDto) {
@@ -181,7 +179,6 @@ public class AuthServiceImpl implements AuthService{
 			.build();
 	}
 
-
 	// 아이디 마스킹 메서드
 	private String maskUserId(String userId) {
 		if (userId.length() <= 3) {
@@ -192,6 +189,22 @@ public class AuthServiceImpl implements AuthService{
 		return maskedPart + "***"; // 끝 3자만 보이게 마스킹
 	}
 
+	/**
+	 * findPassword (이메일, 아이디로 회원 정보 있는지 찾기)
+	 */
+	@Override
+	public FindPasswordResponseDto findPassword(FindPasswordRequestDto findPasswordRequestDto) {
+		String userId = findPasswordRequestDto.getUserId();
+		String email =  findPasswordRequestDto.getEmail();
+
+		Optional<Member> memberOptional = memberRepository.findByUserIdAndEmail(userId, email);
+
+		boolean isUser = memberOptional.isPresent();
+
+		return FindPasswordResponseDto.builder()
+			.isUser(isUser)
+			.build();
+	}
 
 
 

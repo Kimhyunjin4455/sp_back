@@ -53,6 +53,48 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 	}
 
 	@Override
+	public CursorPage<String> getUserReviews(
+		String authorName,
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	) {
+		QReview review = QReview.review;
+		BooleanBuilder builder = new BooleanBuilder();
+
+		Optional.ofNullable(lastId)
+			.ifPresent(id -> builder.and(review.id.lt(id)));
+
+		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
+		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
+
+		List<Review> userReviews = jpaQueryFactory
+			.select(review)
+			.from(review)
+			.where(review.authorName.eq(authorName)
+				.and(builder))
+			.orderBy(review.reviewUuid.asc())
+			.limit(currentPageSize + 1)
+			.fetch();
+
+		Long nextCursor = null;
+		boolean hasNext = false;
+
+		if (userReviews.size() > currentPageSize) {
+			hasNext = true;
+			userReviews = userReviews.subList(0, currentPageSize);
+			nextCursor = userReviews.get(userReviews.size() - 1).getId();
+		}
+
+		List<String> userReviewList = userReviews.stream()
+			.map(Review::getReviewUuid)
+			.toList();
+
+		return new CursorPage<>(userReviewList, nextCursor, hasNext, currentPageSize, currentPage);
+
+	}
+
+	@Override
 	public CursorPage<String> getReviewsOfProduct(
 		String productUuid,
 		Long lastId,
@@ -114,10 +156,6 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
 
-		// offset 계산
-		int offset = currentPage == 0 ? 0 : (currentPage - 1) * currentPageSize;
-		// 최신 순 부터 정렬해서 보여주는 정책이기에 (currentPage - 1) * currentPageSize 을 offset(쿼리 결과의 시작 위치를 지정)으로 사용
-
 		List<Review> mediaReviews = jpaQueryFactory
 			.select(review)
 			.from(review)
@@ -127,7 +165,6 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 				.and(builder))
 			.orderBy(review.reviewUuid.asc())
 			.limit(currentPageSize + 1)
-			.offset(offset)
 			.fetch();
 
 		// 다음 페이지의 커서 처리 및 hasNext 여부 판단
@@ -212,9 +249,6 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
 		int currentPageSize = 6;
 
-		// offset 계산
-		int offset = currentPage == 0 ? 0 : (currentPage - 1) * currentPageSize;
-
 		// 리뷰의 조회수와 점수가 높고 리뷰내용의 길이가 긴 것에 대해
 		List<Tuple> bestReviews = jpaQueryFactory
 			.select(reviewAggregate, review)
@@ -225,7 +259,6 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			.orderBy(reviewAggregate.viewCount.desc(), reviewAggregate.reviewScore.desc(),
 				review.content.length().desc())
 			.limit(currentPageSize + 1)
-			.offset(offset)
 			.fetch();
 		// 다음 페이지의 커서 처리 및 hasNext 여부 판단
 		Long nextCursor = null;

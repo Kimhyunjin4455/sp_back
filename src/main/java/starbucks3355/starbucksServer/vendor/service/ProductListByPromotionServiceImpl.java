@@ -1,12 +1,10 @@
 package starbucks3355.starbucksServer.vendor.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import starbucks3355.starbucksServer.vendor.dto.out.ProductListByPromotionResponseDto;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.vendor.repository.ProductListByPromotionRepositoryCustom;
 
 @Service
@@ -16,12 +14,22 @@ public class ProductListByPromotionServiceImpl implements ProductListByPromotion
 	private final ProductListByPromotionRepositoryCustom productListByPromotionRepositoryCustom;
 
 	@Override
-	public List<ProductListByPromotionResponseDto> getProductListByPromotion(String promotionUuid) {
-		return productListByPromotionRepositoryCustom.getProductByPromotionList(promotionUuid);
+	public CursorPage<String> getProductListByPromotion(
+		String promotionUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	) {
+		return productListByPromotionRepositoryCustom.getProductByPromotionList(promotionUuid, lastId, pageSize, page);
 	}
 
 	@Override
-	public List<ProductListByPromotionResponseDto> getProductsBySamePromotion(String productUuid) {
-		return productListByPromotionRepositoryCustom.getProductsBySamePromotion(productUuid);
+	public CursorPage<String> getProductsBySamePromotion(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page
+	) {
+		return productListByPromotionRepositoryCustom.getProductsBySamePromotion(productUuid, lastId, pageSize, page);
 	}
 }

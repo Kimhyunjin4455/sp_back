@@ -30,13 +30,13 @@ public interface ProductService {
 		Integer page
 	);
 
+	ProductFlagsResponseDto getProductFlags(String productUuid);
+
 	public ProductResponseDto getProduct(String productUuid);
 
 	// public List<ProductInfoResponseDto> getProductsInfo(String productSearchInfo);
 
 	public ProductDetailsPriceResponseDto getProductPrice(String productUuid);
-
-	public ProductFlagsResponseDto getProductFlags(String productUuid);
 
 	public DiscountResponseDto getDiscountInfo(String productUuid);
 

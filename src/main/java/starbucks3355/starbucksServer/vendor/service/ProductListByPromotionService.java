@@ -1,12 +1,18 @@
 package starbucks3355.starbucksServer.vendor.service;
 
-import java.util.List;
-
-import starbucks3355.starbucksServer.vendor.dto.out.ProductListByPromotionResponseDto;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
 
 public interface ProductListByPromotionService {
-	List<ProductListByPromotionResponseDto> getProductListByPromotion(String promotionUuid);
+	CursorPage<String> getProductListByPromotion(
+		String promotionUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page);
 
-	List<ProductListByPromotionResponseDto> getProductsBySamePromotion(String productUuid);
+	CursorPage<String> getProductsBySamePromotion(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page);
 
 }

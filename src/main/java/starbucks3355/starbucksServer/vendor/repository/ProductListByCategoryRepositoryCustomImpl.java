@@ -50,15 +50,12 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
 
-		int offset = currentPage == 0 ? 0 : (currentPage - 1) * currentPageSize;
-
 		// 같은 카테고리의 상품 목록 조회
 		List<CategoryList> content = jpaQueryFactory
 			.select(categoryList)
 			.from(categoryList)
 			.where(builder)
 			.orderBy(categoryList.id.desc())
-			.offset(offset) //
 			.limit(currentPageSize)
 			.fetch();
 
@@ -133,8 +130,6 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
 
-		int offset = currentPage == 0 ? 0 : (currentPage - 1) * currentPageSize;
-
 		// 상품 UUID 리스트로 카테고리 목록 조회
 		List<CategoryList> content = jpaQueryFactory
 			.select(categoryList)
@@ -142,7 +137,6 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 			.where(categoryList.productUuid.in(productUuidList))
 			.where(builder)
 			.orderBy(categoryList.id.desc())
-			.offset(offset)
 			.limit(currentPageSize + 1) // 다음 페이지 확인을 위해 pageSize + 1로 가져옴
 			.fetch();
 

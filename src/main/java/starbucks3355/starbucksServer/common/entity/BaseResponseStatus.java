@@ -37,6 +37,7 @@ public enum BaseResponseStatus {
 	SHIPPING_ID_NOT_EXIST(HttpStatus.NOT_FOUND, false, 413, "존재하지 않는 배송지 ID입니다."),
 	BASE_ADDRESS_EXIST(HttpStatus.BAD_REQUEST, false, 414, "기본 배송지가 이미 존재합니다."),
 	DUPLICATE_ID(HttpStatus.BAD_REQUEST, false, 415, "id 값이 중복됩니다."),
+	WRONG_FILE_TYPE(HttpStatus.BAD_REQUEST, false, 418, "잘못된 파일 형식입니다."),
 
 
 	/**

@@ -98,7 +98,7 @@ public class AwsFileServiceImpl implements FileService {
 		try {
 			return fileName.substring(fileName.lastIndexOf("."));
 		} catch (StringIndexOutOfBoundsException e) {
-			throw new BaseException(BaseResponseStatus.WRONG_FILE_TYPE);
+			throw new BaseException(BaseResponseStatus.SAVE_MEDIA_FAILED);
 		}
 	}
 

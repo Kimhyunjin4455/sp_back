@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +20,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
-import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.domainOrders.dto.request.OrderCreateRequestDto;
+import starbucks3355.starbucksServer.domainOrders.dto.response.OrderResponseDto;
 import starbucks3355.starbucksServer.domainOrders.entity.OrderStatus;
-import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 import starbucks3355.starbucksServer.domainOrders.service.OrderService;
 import starbucks3355.starbucksServer.domainOrders.vo.request.OrderCreateRequestVo;
 import starbucks3355.starbucksServer.domainOrders.vo.response.OrderResponseVo;
@@ -39,7 +39,7 @@ public class OrderController {
 	//주문 생성 ModelMapper 미사용, 이거 다음 Controller에서  생성할 듯
 	// OrderRequestVo를 OrderRequestDto로 변환
 	@PostMapping("/createOrder")
-	@Operation(summary = "주문 생성")
+	@Operation(summary = "주문 생성", description = "주문 생성")
 	public BaseResponse<Void> createOrders(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody OrderCreateRequestVo orderCreateRequestVo) {
@@ -52,6 +52,7 @@ public class OrderController {
 			.address(orderCreateRequestVo.getAddress())
 			.detailAddress(orderCreateRequestVo.getDetailAddress())
 			.phone1(orderCreateRequestVo.getPhone1())
+			.userName(orderCreateRequestVo.getUserName())
 			.orderStatus(OrderStatus.COMPLETE)
 			.build();
 
@@ -66,27 +67,39 @@ public class OrderController {
 	}
 
 	//주문 목록 조회
-	@GetMapping("/list")
-	@Operation(summary = "주문 목록 조회")
-	public CommonResponseEntity<List<OrderResponseVo>> getAllOrders() {
+	@GetMapping("/list/{userId}")
+	@Operation(summary = "주문 목록 조회", description = "주문 목록 조회")
+	public BaseResponse<List<OrderResponseVo>> getAllOrders(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@PathVariable("userId") String userId
+	) {
 		// 서비스에서 목록 가져오기
-		List<Orders> ordersList = orderService.getAllOrders();
-		// 주문 목록을 OrderResponseVo로 변환
-		// List<OrderResponseVo> orderResponseVoList = ordersList.stream()
-		// 	.map(order -> OrderResponseVo.builder()
-		// 		.id(order.getId())
-		// 		.orderStatus(order.getOrderStatus())
-		// 		.orderId(order.getOrderId())
-		// 		.userId(order.getUserId())
-		//
-		// 	.collect(Collectors.toList());
-		// 변환된 목록을 반환
-		// return new CommonResponseEntity<>(
-		// 	HttpStatus.OK,
-		// 	CommonResponseMessage.SUCCESS.getMessage(),
-		//
-		// )
-		return null;
+		//List<Orders> ordersList = orderService.getAllOrders(authUserDetail.getUserId());
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			orderService.getAllOrders(authUserDetail.getUserId()).stream().map(
+				OrderResponseDto::toVo
+			).toList());
+
+	}
+
+	@GetMapping("/getOrderOne/{userId}/{orderId}")
+	@Operation(summary = "단일 주문 조회", description = "단일 주문 조회")
+	public BaseResponse<OrderResponseVo> getOneOrder(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail,
+		@PathVariable("userId") String userId,
+		@PathVariable("orderId") String orderId
+	) {
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			orderService.getOneOrder(authUserDetail.getUserId(), orderId).toVo());
 	}
 
 	// 주문 상태 변경

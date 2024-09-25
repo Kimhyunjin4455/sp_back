@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.domainOrders.dto.request.OrderCreateRequestDto;
+import starbucks3355.starbucksServer.domainOrders.dto.response.OrderResponseDto;
 import starbucks3355.starbucksServer.domainOrders.entity.Orders;
 import starbucks3355.starbucksServer.domainOrders.repository.OrderRepository;
 
@@ -46,8 +47,35 @@ public class OrderServiceImpl implements OrderService {
 	// 주문 요약 정보 계산
 
 	//주문 목록 조회
-	public List<Orders> getAllOrders() {
-		return orderRepository.findAll();
+	public List<OrderResponseDto> getAllOrders(String userId) {
+		List<Orders> ordersList = orderRepository.findOrderResponseVoListByUserId(userId);
+		return ordersList.stream()
+			.map(order -> OrderResponseDto.builder()
+				.id(order.getId())
+				.productQuantity(order.getProductQuantity())
+				.totalAmount(order.getTotalAmount())
+				.address(order.getAddress())
+				.detailAddress(order.getDetailAddress())
+				.phone1(order.getPhone1())
+				.orderStatus(order.getOrderStatus())
+				.userName(order.getUserName())
+				.build())
+			.toList();
+	}
+
+	@Override
+	public OrderResponseDto getOneOrder(String userId, String orderId) {
+		Orders orders = orderRepository.findByUserIdAndOrderId(userId, orderId);
+		return OrderResponseDto.builder()
+			.id(orders.getId())
+			.productQuantity(orders.getProductQuantity())
+			.totalAmount(orders.getTotalAmount())
+			.address(orders.getAddress())
+			.detailAddress(orders.getDetailAddress())
+			.phone1(orders.getPhone1())
+			.orderStatus(orders.getOrderStatus())
+			.userName(orders.getUserName())
+			.build();
 	}
 
 	// // 주문 상태 변경  -> 주문 취소 api

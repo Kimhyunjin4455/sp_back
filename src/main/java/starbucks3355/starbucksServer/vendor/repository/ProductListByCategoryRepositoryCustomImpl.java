@@ -1,15 +1,14 @@
 package starbucks3355.starbucksServer.vendor.repository;
 
+import static starbucks3355.starbucksServer.category.entity.QCategoryList.*;
 import static starbucks3355.starbucksServer.domainProduct.entity.QProduct.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ import starbucks3355.starbucksServer.category.entity.CategoryList;
 import starbucks3355.starbucksServer.category.entity.QCategoryList;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.vendor.dto.out.CategoryAndCountOfSearchedProductListResponseDto;
+import starbucks3355.starbucksServer.vendor.dto.out.QCategoryAndCountOfSearchedProductListResponseDto;
 
 @RequiredArgsConstructor
 @Repository
@@ -35,17 +35,17 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		Integer page
 	) {
 
-		QCategoryList qCategoryList = QCategoryList.categoryList;
+		//QCategoryList categoryList = QCategoryList.categoryList;
 		BooleanBuilder builder = new BooleanBuilder();
 
 		Optional.ofNullable(topCategoryName)
-			.ifPresent(name -> builder.and(qCategoryList.topCategoryName.eq(name)));
+			.ifPresent(name -> builder.and(categoryList.topCategoryName.eq(name)));
 
 		Optional.ofNullable(middleCategoryName)
-			.ifPresent(name -> builder.and(qCategoryList.middleCategoryName.eq(name)));
+			.ifPresent(name -> builder.and(categoryList.middleCategoryName.eq(name)));
 
 		Optional.ofNullable(lastId)
-			.ifPresent(id -> builder.and(qCategoryList.id.lt(id)));
+			.ifPresent(id -> builder.and(categoryList.id.lt(id)));
 
 		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
@@ -54,11 +54,11 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 
 		// 같은 카테고리의 상품 목록 조회
 		List<CategoryList> content = jpaQueryFactory
-			.select(qCategoryList)
-			.from(qCategoryList)
+			.select(categoryList)
+			.from(categoryList)
 			.where(builder)
-			.orderBy(qCategoryList.id.desc())
-			.offset(offset)
+			.orderBy(categoryList.id.desc())
+			.offset(offset) //
 			.limit(currentPageSize)
 			.fetch();
 
@@ -80,32 +80,36 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 	@Override
 	public List<CategoryAndCountOfSearchedProductListResponseDto> getCategoryAndCountOfSearchedProductList(
 		List<String> productUuidList) {
-		QCategoryList categoryList = QCategoryList.categoryList;
-
-		// 결과를 저장할 리스트
-		List<CategoryAndCountOfSearchedProductListResponseDto> result = new ArrayList<>();
-
 		// 상품 UUID를 이용하여 카테고리와 상품 수 조회
-		List<Tuple> categoryCounts = jpaQueryFactory
-			.select(categoryList.topCategoryName, product.count())
+		return jpaQueryFactory
+			.select(new QCategoryAndCountOfSearchedProductListResponseDto(
+					categoryList.topCategoryName, product.count()
+				)
+			)
 			.from(product)
 			.leftJoin(categoryList).on(product.productUuid.eq(categoryList.productUuid))// 상품과 카테고리 조인
 			.where(product.productUuid.in(productUuidList)) // 주어진 UUID 리스트로 필터링
 			.groupBy(categoryList.topCategoryName) // 카테고리별로 그룹화
 			.fetch();
 
+		// List<Tuple> categoryCounts = jpaQueryFactory
+		// 	.select(categoryList.topCategoryName, product.count())
+		// 	.from(product)
+		// 	.leftJoin(categoryList).on(product.productUuid.eq(categoryList.productUuid))// 상품과 카테고리 조인
+		// 	.where(product.productUuid.in(productUuidList)) // 주어진 UUID 리스트로 필터링
+		// 	.groupBy(categoryList.topCategoryName) // 카테고리별로 그룹화
+		// 	.fetch();
+
 		// 결과를 DTO 리스트로 변환
-		for (Tuple tuple : categoryCounts) {
-			String categoryName = tuple.get(categoryList.topCategoryName);
-			Long count = tuple.get(1, Long.class); // count() 결과를 Long으로 가져옴
-
-			result.add(CategoryAndCountOfSearchedProductListResponseDto.builder()
-				.topCategoryName(categoryName)
-				.count(count.intValue()) // Integer로 변환
-				.build());
-		}
-
-		return result;
+		// for (Tuple tuple : categoryCounts) {
+		// 	String categoryName = tuple.get(categoryList.topCategoryName);
+		// 	Long count = tuple.get(1, Long.class); // count() 결과를 Long으로 가져옴
+		//
+		// 	result.add(CategoryAndCountOfSearchedProductListResponseDto.builder()
+		// 		.topCategoryName(categoryName)
+		// 		.count(count.intValue()) // Integer로 변환
+		// 		.build());
+		// }
 
 	}
 

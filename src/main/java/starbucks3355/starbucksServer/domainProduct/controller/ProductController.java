@@ -57,6 +57,17 @@ public class ProductController {
 		HttpSession session
 	) {
 		ProductResponseDto productResponseDto = productService.getProduct(productUuid);
+
+		if (productResponseDto == null) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
+
 		String memberUuid;
 
 		if (authUserDetail != null) {

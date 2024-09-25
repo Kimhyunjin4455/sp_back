@@ -35,20 +35,63 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 		BooleanBuilder builder = new BooleanBuilder();
 
 		// 상품의 uuid에 대해 리뷰 점수의 평균 조회
-		String reviewScore = jpaQueryFactory
+		Double reviewScore = jpaQueryFactory
 			.select(review.reviewScore.avg())
 			.from(review)
 			.where(review.productUuid.eq(productUuid))
-			.fetchOne().toString();
+			.fetchOne();
 
 		// 상품의 uuid에 대해 리뷰의 개수 조회
-		String reviewCount = jpaQueryFactory
+		Long reviewCount = jpaQueryFactory
 			.select(review.reviewUuid.count())
 			.from(review)
 			.where(review.productUuid.eq(productUuid))
-			.fetchOne().toString();
+			.fetchOne();
 
-		return reviewScore == null ? null : new ReviewScoreResponseDto(reviewScore, reviewCount);
+		return (reviewScore == null || reviewCount == null) ? null :
+			new ReviewScoreResponseDto(reviewScore.toString(), reviewCount.toString());
+	}
+
+	@Override
+	public CursorPage<String> getReviewsOfProduct(
+		String productUuid,
+		Long lastId,
+		Integer pageSize,
+		Integer page) {
+
+		QReview review = QReview.review;
+		BooleanBuilder builder = new BooleanBuilder();
+
+		Optional.ofNullable(lastId)
+			.ifPresent(id -> builder.and(review.id.lt(id)));
+
+		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
+		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
+
+		List<Review> reviews = jpaQueryFactory
+			.select(review)
+			.from(review)
+			.where(review.productUuid.eq(productUuid)
+				.and(builder))
+			.orderBy(review.reviewUuid.asc())
+			.limit(currentPageSize + 1)
+			.fetch();
+
+		Long nextCursor = null;
+		boolean hasNext = false;
+
+		if (reviews.size() > currentPageSize) {
+			hasNext = true;
+			reviews = reviews.subList(0, currentPageSize);
+			nextCursor = reviews.get(reviews.size() - 1).getId();
+		}
+
+		List<String> reviewList = reviews.stream()
+			.map(Review::getReviewUuid)
+			.toList();
+
+		return new CursorPage<>(reviewList, nextCursor, hasNext, currentPageSize, currentPage);
+
 	}
 
 	@Override

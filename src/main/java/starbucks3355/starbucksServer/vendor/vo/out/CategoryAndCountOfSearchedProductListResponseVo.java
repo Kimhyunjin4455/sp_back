@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryAndCountOfSearchedProductListResponseVo {
 	private String topCategoryName;
-	private Integer count;
+	private Long count;
 
 	@Builder
-	public CategoryAndCountOfSearchedProductListResponseVo(String topCategoryName, Integer count) {
+	public CategoryAndCountOfSearchedProductListResponseVo(String topCategoryName, Long count) {
 		this.topCategoryName = topCategoryName;
 		this.count = count;
 	}

@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public LikesProductResponseDto LikeStatus(String uuid, String productUuid) {
+	public void LikeStatus(String uuid, String productUuid) {
 		Optional<Likes> optionalLikes = likeProductRepository.findByUuidAndProductUuid(uuid, productUuid);
 
 		Likes like = optionalLikes.orElseGet(() -> {
@@ -59,9 +59,8 @@ public class MemberServiceImpl implements MemberService {
 			likeProductRepository.delete(like);
 			likesHistoryRepository.save(LikesHistory.create(uuid, productUuid, false));
 		}
-
-		return new LikesProductResponseDto(like.getId(), like.getUuid(), like.getProductUuid(), !optionalLikes.isPresent());
 	}
+
 
 	@Override
 	public LikesProductResponseDto checkLikeStatus(String uuid, String productUuid) {

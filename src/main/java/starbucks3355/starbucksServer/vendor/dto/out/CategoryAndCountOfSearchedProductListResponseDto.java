@@ -1,18 +1,23 @@
 package starbucks3355.starbucksServer.vendor.dto.out;
 
+import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import starbucks3355.starbucksServer.vendor.vo.out.CategoryAndCountOfSearchedProductListResponseVo;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class CategoryAndCountOfSearchedProductListResponseDto {
 	private String topCategoryName;
-	private Integer count;
+	private Long count;
 
 	@Builder
-	public CategoryAndCountOfSearchedProductListResponseDto(String topCategoryName, Integer count) {
+	@QueryProjection
+	public CategoryAndCountOfSearchedProductListResponseDto(String topCategoryName, Long count) {
 		this.topCategoryName = topCategoryName;
 		this.count = count;
 	}

@@ -26,7 +26,9 @@ public interface MemberService {
 
 	//public LikesProductResponseDto getLikes(String uuid);
 
-	LikesProductResponseDto LikeStatus(String uuid, String productUuid);
+	void LikeStatus(String uuid, String productUuid);
+
+	//LikesProductResponseDto LikeEmpty();
 
 	LikesProductResponseDto checkLikeStatus(String uuid, String productUuid);
 }

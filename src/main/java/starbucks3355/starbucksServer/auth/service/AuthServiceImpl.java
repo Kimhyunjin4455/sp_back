@@ -17,11 +17,14 @@ import starbucks3355.starbucksServer.auth.dto.request.EmailCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.UserIdCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.OAuthSignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.UserIdCheckResponseDto;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.auth.repository.OAuthRepository;
+import starbucks3355.starbucksServer.auth.vo.request.UserIdCheckRequestVo;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
@@ -63,6 +66,17 @@ public class AuthServiceImpl implements AuthService{
 		String message = isDuplicated ? "이미 존재하는 이메일입니다.":"사용 가능한 이메일입니다.";
 
 		return EmailCheckResponseDto.builder()
+			.isDuplicated(isDuplicated)
+			.message(message)
+			.build();
+	}
+
+	@Override
+	public UserIdCheckResponseDto checkUserId(UserIdCheckRequestDto userIdCheckRequestDto) {
+		boolean isDuplicated = memberRepository.findByUserId(userIdCheckRequestDto.getUserId()).isPresent();
+		String message = isDuplicated ? "이미 존재하는 아이디입니다.":"사용 가능한 아이디입니다.";
+
+		return UserIdCheckResponseDto.builder()
 			.isDuplicated(isDuplicated)
 			.message(message)
 			.build();

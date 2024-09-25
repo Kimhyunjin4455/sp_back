@@ -4,9 +4,12 @@ import starbucks3355.starbucksServer.auth.dto.request.EmailCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.UserIdCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.OAuthSignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.UserIdCheckResponseDto;
+import starbucks3355.starbucksServer.auth.vo.request.UserIdCheckRequestVo;
 
 public interface AuthService {
 
@@ -34,6 +37,14 @@ public interface AuthService {
 	 * return message
 	 */
 	EmailCheckResponseDto checkEmail(EmailCheckRequestDto emailCheckRequestDto);
+
+	/**
+	 * 1-2. isuserIdDuplicated
+	 * 아이디 중복 체크
+	 * @param userIdCheckRequestDto
+	 * return message
+	 */
+	UserIdCheckResponseDto checkUserId(UserIdCheckRequestDto userIdCheckRequestDto);
 
 	/**
 	 * 2. Sign in

@@ -14,7 +14,9 @@ import starbucks3355.starbucksServer.auth.dto.request.EmailCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.UserIdCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.UserIdCheckResponseDto;
 import starbucks3355.starbucksServer.auth.service.AuthService;
 import starbucks3355.starbucksServer.auth.vo.request.OAuthSignInRequestVo;
 import starbucks3355.starbucksServer.auth.vo.request.SignInRequestVo;
@@ -38,6 +40,7 @@ public class AuthController {
 	 * api/v1/auth
 	 * 1. 회원가입
 	 * 1-1. 회원가입 시 이메일 중복 처리
+	 * 1-2. 회원가입 시 아이디 중복 처리
 	 * 2. 로그인
 	 * 3. 로그아웃
 	 * 4. 소셜로그인
@@ -58,17 +61,42 @@ public class AuthController {
 		return new BaseResponse<>(BaseResponseStatus.SUCCESS);
 	}
 
+	/**
+	 * 이메일 중복 여부
+	 */
 	@Operation(summary = "이메일 중복 여부 확인 API", description = "이메일 중복 여부 확인 API 입니다.", tags = {"AuthUserDetail"})
 	@PostMapping("/email-duplicate")
-	public CommonResponseEntity<EmailCheckResponseDto> checkEmail(@RequestBody EmailCheckRequestDto emailCheckRequestDto) {
+	public BaseResponse<EmailCheckResponseDto> checkEmail(@RequestBody EmailCheckRequestDto emailCheckRequestDto) {
 		EmailCheckResponseDto response = authService.checkEmail(emailCheckRequestDto);
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			response);
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			response
+		);
+}
+
+	/**
+	 * 아이디 중복 여부
+	 */
+	@Operation(summary = "아이디 중복 여부 확인 API", description = "아이디 중복 여부 확인 API 입니다.", tags = {"AuthUserDetail"})
+	@PostMapping("/userId-duplicate")
+	public BaseResponse<UserIdCheckResponseDto> checkUserId(@RequestBody UserIdCheckRequestDto userIdCheckRequestDto) {
+		UserIdCheckResponseDto response = authService.checkUserId(userIdCheckRequestDto);
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			response
+		);
 	}
 
 
+	/**
+	 * 로그인
+	 */
 	@Operation(summary = "SignIn API", description = "SignIn API 입니다.", tags = {"AuthUserDetail"})
 	@PostMapping("/sign-in")
 	public BaseResponse<SignInResponseVo> signIn(
@@ -78,9 +106,6 @@ public class AuthController {
 			authService.signIn(SignInRequestDto.from(signInRequestVo)).toVo()
 		);
 	}
-
-	// @Operation(summary = "SignOut API", description = "SignOut API 입니다.", tags = {"AuthUserDetail"})
-	// @PostMapping("/sign-out")
 
 
 	/**
@@ -97,7 +122,5 @@ public class AuthController {
 			authService.oAuthSignIn(OAuthSignInRequestDto.of(oAuthSignInRequestVo)).toVo()
 		);
 	}
-
-
 
 }

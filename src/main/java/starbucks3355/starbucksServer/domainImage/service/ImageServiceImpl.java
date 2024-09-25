@@ -136,8 +136,9 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public void deleteImage(Long id, String otherUuid) {
-		imageRepository.deleteById(id);
+	@Transactional
+	public void deleteImage(String s3url, String otherUuid) {
+		imageRepository.deleteByS3url(s3url);
 		// 남은 이미지가 존재할 경우 그 이미지중 첫번째가 메인이미지가 되도록 설정
 		if (imageRepository.findByOtherUuid(otherUuid).size() > 0) {
 			Image image = imageRepository.findByOtherUuid(otherUuid).get(0);

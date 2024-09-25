@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,10 +98,11 @@ public class ImageController {
 		);
 	}
 
-	@DeleteMapping("/{otherUuid}/deleteMedia/{id}")
+	@DeleteMapping("/{otherUuid}/deleteMedia/s3url")
 	@Operation(summary = "개체(상품, 리뷰, 쿠폰)에 대한 이미지 삭제")
 	public BaseResponse<Void> deleteImage(
-		@PathVariable Long id, String otherUuid,
+		@PathVariable String otherUuid,
+		@RequestParam String s3url,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
 		if (authUserDetail == null) {
@@ -113,7 +115,7 @@ public class ImageController {
 			);
 		}
 
-		imageService.deleteImage(id, otherUuid);
+		imageService.deleteImage(s3url, otherUuid); // -> 이미지 url 통해 삭제 <- s3 삭제
 
 		return new BaseResponse<>(
 			HttpStatus.OK,

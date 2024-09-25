@@ -16,7 +16,7 @@ public interface ImageService {
 
 	void modifyImage(ImageRequestDto imageRequestDto, String imageUuid);
 
-	void deleteImage(Long id, String otherUuid);
+	void deleteImage(String s3url, String otherUuid);
 
 	void deleteAllImages(String otherUuid);
 

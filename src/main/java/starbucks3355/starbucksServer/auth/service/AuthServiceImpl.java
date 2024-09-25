@@ -58,6 +58,15 @@ public class AuthServiceImpl implements AuthService{
 	@Transactional
 	public void signUp(SignUpRequestDto signUpRequestDto) {
 
+		// 이메일 중복 체크
+		if (memberRepository.findByEmail(signUpRequestDto.getEmail()).isPresent()) {
+			throw new BaseException(BaseResponseStatus.DUPLICATED_EMAIL);
+		}
+
+		// 아이디 중복 체크
+		if (memberRepository.findByUserId(signUpRequestDto.getUserId()).isPresent()) {
+			throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+		}
 		try {
 			memberRepository.save(signUpRequestDto.toEntity(passwordEncoder));
 		} catch (Exception e) {

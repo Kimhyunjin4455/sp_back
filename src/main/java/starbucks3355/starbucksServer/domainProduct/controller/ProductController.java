@@ -28,12 +28,14 @@ import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.domainProduct.dto.request.ProductRequestDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.service.ProductService;
 import starbucks3355.starbucksServer.domainProduct.vo.request.ProductRequestVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.DiscountResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsPriceResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.ProductFlagsResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductsResponseVo;
 import starbucks3355.starbucksServer.vendor.service.ProductListByCategoryService;
@@ -221,6 +223,23 @@ public class ProductController {
 		return new BaseResponse<>(
 			productListByCategoryService.getCategoryAndCountOfSearchedProductList(
 				productUuidList).stream().map(dto -> dto.dtoToResponseVo()).toList()
+		);
+	}
+
+	@GetMapping("/categoryFlagsInfo")
+	@Operation(summary = "상품의 각종 여부(신상/베스트) 조회")
+	public BaseResponse<ProductFlagsResponseVo> getProductFlags(
+		@RequestParam String productUuid
+	) {
+
+		ProductFlagsResponseDto productFlagsResponseDto = productService.getProductFlags(productUuid);
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			productFlagsResponseDto.dtoToResponseVo()
 		);
 	}
 

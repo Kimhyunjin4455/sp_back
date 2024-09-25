@@ -22,6 +22,12 @@ public interface ShippingRepository extends JpaRepository<ShippingAddress, Long>
 
 	boolean existsByDetailAddressAndUuid(String detailAddress, String uuid);
 
+	@Query("SELECT sa FROM ShippingAddress sa WHERE sa.uuid = :uuid")
 	List<ShippingAddress> findByUuid(String uuid);
 
+	// ShippingAddress findByUuid(String uuid);
+
+	// ShippingAddress deleteByUuid(String uuid);
+
+	void deleteAllByUuid(String uuid);
 }

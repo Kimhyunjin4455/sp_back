@@ -328,6 +328,39 @@ public class ShippingServiceImpl implements ShippingService {
 			.build();
 
 	}
-	//주석처리
+
+	// 배송 정보 동의
+	// 디폴트가 트루라고 할때 -> false로 바꾸기
+	@Override
+	@Transactional
+	public void agreeShippingCancel(String uuid) {
+		List<ShippingAddress> shippingAddresses = shippingRepository.findByUuid(uuid);
+		// 기본 배송지 true일때 -> false로 변경
+		for (ShippingAddress shippingAddress : shippingAddresses) {
+			if (shippingAddress.isAgree()) {
+				ShippingAddress updatedShippingAddress = ShippingAddress.builder()
+					.deliveryId(shippingAddress.getDeliveryId())
+					.address(shippingAddress.getAddress())
+					.detailAddress(shippingAddress.getDetailAddress())
+					.phone1(shippingAddress.getPhone1())
+					.phone2(shippingAddress.getPhone2())
+					.receiver(shippingAddress.getReceiver())
+					.message(shippingAddress.getMessage())
+					.nickname(shippingAddress.getNickname())
+					.postNumber(shippingAddress.getPostNumber())
+					.uuid(shippingAddress.getUuid())
+					.baseAddress(shippingAddress.isBaseAddress())
+					.agree(false)
+					.build();
+				shippingRepository.save(updatedShippingAddress);
+				deleteShippingAddressByUuid(uuid);
+			}
+		}
+	}
+
+	@Override
+	public void deleteShippingAddressByUuid(String uuid) {
+		shippingRepository.deleteAllByUuid(uuid);
+	}
 
 }

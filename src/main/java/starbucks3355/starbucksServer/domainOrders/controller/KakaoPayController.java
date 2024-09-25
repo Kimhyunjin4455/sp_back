@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainOrders.controller;
 
+import static starbucks3355.starbucksServer.common.entity.BaseResponseStatus.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,8 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
-import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
+import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestApproveDto;
 import starbucks3355.starbucksServer.domainOrders.dto.request.KakaoRequestReadyDto;
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseApproveDto;
@@ -27,12 +28,14 @@ public class KakaoPayController {
 
 	@PostMapping("/ready")
 	@Operation(summary = "카카오페이 결제 준비", description = "카카오페이 결제 준비 API를 호출합니다.")
-	public CommonResponseEntity<KakaoResponseReadyDto> KakaoPayReady(
+	public BaseResponse<KakaoResponseReadyDto> KakaoPayReady(
 		@RequestBody KakaoRequestReadyDto kakaoRequestReadyDto) {
 		KakaoResponseReadyDto response = kakaoService.getKakaoPayReady(kakaoRequestReadyDto);
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			response);
 
 	}
@@ -51,7 +54,7 @@ public class KakaoPayController {
 	//pgToken 얻기
 	@PostMapping("/success")
 	@Operation(summary = "카카오페이 결제 승인", description = "카카오페이 결제 승인 API를 호출합니다.")
-	public CommonResponseEntity<KakaoResponseApproveDto> getPgToken(
+	public BaseResponse<KakaoResponseApproveDto> getPgToken(
 		// 결제 승인할 때 필수적으로 확인이 필요한 파라미터들
 		@RequestParam("pg_token") String pgToken,
 		@RequestParam("tid") String tid,
@@ -67,9 +70,11 @@ public class KakaoPayController {
 
 		KakaoResponseApproveDto response = kakaoService.getKakaoPayApprove(kakaoRequestApproveDto);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			response);
 	}
 

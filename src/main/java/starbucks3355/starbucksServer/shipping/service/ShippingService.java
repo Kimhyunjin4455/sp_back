@@ -39,4 +39,9 @@ public interface ShippingService {
 	// 단일 배송지 조회
 	ShippingOneResponseDto getShippingOne(String uuid, Long deliveryId);
 
+	// 배송지 정보 수집 동의
+	void agreeShippingCancel(String uuid);
+
+	void deleteShippingAddressByUuid(String uuid);
+
 }

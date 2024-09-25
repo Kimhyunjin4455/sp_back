@@ -38,6 +38,7 @@ public enum BaseResponseStatus {
 	BASE_ADDRESS_EXIST(HttpStatus.BAD_REQUEST, false, 414, "기본 배송지가 이미 존재합니다."),
 	DUPLICATE_ID(HttpStatus.BAD_REQUEST, false, 415, "id 값이 중복됩니다."),
 
+
 	/**
 	 * 900: 기타 에러
 	 */

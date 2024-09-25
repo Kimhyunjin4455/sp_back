@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.category.controller;
 
+import static starbucks3355.starbucksServer.common.entity.BaseResponseStatus.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,8 +31,7 @@ import starbucks3355.starbucksServer.category.vo.request.TopCategoryRequestVo;
 import starbucks3355.starbucksServer.category.vo.response.BottomCategoryResponseVo;
 import starbucks3355.starbucksServer.category.vo.response.MiddleCategoryResponseVo;
 import starbucks3355.starbucksServer.category.vo.response.TopCategoryResponseVo;
-import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
-import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
+import starbucks3355.starbucksServer.common.entity.BaseResponse;
 
 @RestController
 @RequestMapping("/api/v1/category")
@@ -43,21 +44,23 @@ public class CategoryController {
 
 	@PostMapping("/top-category")
 	@Operation(summary = "Top 카테고리 생성")
-	public CommonResponseEntity<Void> createTopCategory(
+	public BaseResponse<Void> createTopCategory(
 		@RequestBody TopCategoryRequestVo topCategoryRequestVo) {
 		TopCategoryRequestDto topCategoryRequestDto = TopCategoryRequestDto.builder()
 			.topCategoryName(topCategoryRequestVo.getTopCategoryName())
 			.build();
 		categoryService.createTopCategory(topCategoryRequestDto);
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
 	}
 
 	@PostMapping("/middle-category")
 	@Operation(summary = "Middle 카테고리 생성")
-	public CommonResponseEntity<Void> createMiddleCategory(
+	public BaseResponse<Void> createMiddleCategory(
 		@RequestBody List<MiddleCategoryRequestVo> middleCategoryRequestVo) {
 
 		List<MiddleCategoryRequestDto> middleCategoryRequestDto = middleCategoryRequestVo.stream()
@@ -69,15 +72,17 @@ public class CategoryController {
 		// 서비스에 전달하여 여러 미들 카테고리 생성
 		categoryService.createMiddleCategory(middleCategoryRequestDto);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
 	}
 
 	@PostMapping("/bottom-category")
 	@Operation(summary = "Bottom 카테고리 생성")
-	public CommonResponseEntity<Void> createBottomCategory(
+	public BaseResponse<Void> createBottomCategory(
 		@RequestBody List<BottomCategoryRequestVo> bottomCategoryRequestVo) {
 		List<BottomCategoryRequestDto> bottomCategoryRequestDto = bottomCategoryRequestVo.stream()
 			.map(vo -> BottomCategoryRequestDto.builder()
@@ -88,9 +93,11 @@ public class CategoryController {
 		// 서비스에 전달하여 여러 바텀 카테고리 생성
 		categoryService.createBottomCategory(bottomCategoryRequestDto);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
 	}
 
@@ -110,15 +117,18 @@ public class CategoryController {
 
 	@GetMapping("/top-categories")
 	@Operation(summary = "Top 전체 카테고리 조회")
-	public CommonResponseEntity<List<TopCategoryResponseVo>> getTopCategories() {
+	public BaseResponse<List<TopCategoryResponseVo>> getTopCategories() {
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			categoryService.getTopCategories()
 				.stream()
 				.map(TopCategoryResponseDto::toVo)
 				.collect(Collectors.toList()));
+
 	}
 
 	// @GetMapping("/middle-categories")
@@ -135,29 +145,36 @@ public class CategoryController {
 
 	@GetMapping("/bottom-categories")
 	@Operation(summary = "Bottom 전체 카테고리 조회")
-	public CommonResponseEntity<List<BottomCategoryResponseVo>> getBottomCategories() {
-		return new CommonResponseEntity<>(
+	public BaseResponse<List<BottomCategoryResponseVo>> getBottomCategories() {
+
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			categoryService.getBottomCategories()
 				.stream()
 				.map(BottomCategoryResponseDto::toVo)
 				.collect(Collectors.toList()));
+
 	}
 
 	@GetMapping("/top-categories/{topCategoryId}/middle-categories")
 	@Operation(summary = " Top 카테고리 id에 '카테고리' 이름을 가진 Middle 카테고리")
-	public CommonResponseEntity<MiddleCategoryListResponseDto> getMiddleCategoryByNameAndTopCategoryId(
+	public BaseResponse<MiddleCategoryListResponseDto> getMiddleCategoryByNameAndTopCategoryId(
 		@PathVariable Integer topCategoryId) {
 		String middleCategoryName = "카테고리";
 		MiddleCategoryListResponseDto response = categoryService.getMiddleCategoryByNameAndTopCategoryId(
 			topCategoryId,
 			middleCategoryName);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			response);
+
 	}
 
 	// @GetMapping("/middle-categories/{topCategoryName}")
@@ -221,12 +238,14 @@ public class CategoryController {
 
 	@GetMapping("/middle-categories/by-id/{topCategoryId}")
 	@Operation(summary = "Top 카테고리 ID로 Middle 카테고리 조회")
-	public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategoriesByTopCategoryId(
+	public BaseResponse<List<MiddleCategoryResponseVo>> getMiddleCategoriesByTopCategoryId(
 		@PathVariable Integer topCategoryId) {
-		return new CommonResponseEntity<>(
+
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			// data -> 응답값에 실려 들어갈 데이터들
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			categoryService.getMiddleCategoriesByTopCategoryId(topCategoryId)
 				.stream()
 				.map(MiddleCategoryResponseDto::toVo)
@@ -236,15 +255,18 @@ public class CategoryController {
 
 	@GetMapping("/bottom-categories/by-id/{middleCategoryId}")
 	@Operation(summary = "Middle 카테고리 ID로 Bottom 카테고리 조회")
-	public CommonResponseEntity<List<BottomCategoryResponseVo>> getBottomCategoriesByMiddleCategoryId(
+	public BaseResponse<List<BottomCategoryResponseVo>> getBottomCategoriesByMiddleCategoryId(
 		@PathVariable Integer middleCategoryId) {
-		return new CommonResponseEntity<>(
+
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
-			// data -> 응답값에 실려 들어갈 데이터들
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			categoryService.getBottomCategoriesByMiddleCategoryId(middleCategoryId)
 				.stream()
 				.map(BottomCategoryResponseDto::toVo)
 				.collect(Collectors.toList()));
+
 	}
 }

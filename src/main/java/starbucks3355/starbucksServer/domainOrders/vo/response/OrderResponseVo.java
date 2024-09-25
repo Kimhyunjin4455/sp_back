@@ -14,11 +14,8 @@ public class OrderResponseVo {
 	private Long id;
 	private String address;
 	private String detailAddress;
-	private String orderId;
-	private String userId;
 	private String userName; // 배송 보낼때 이름 다르게 할 수 있으니
 	private Integer productQuantity;
-	private String productUuid;
 	private Integer totalAmount;
 	private OrderStatus orderStatus;
 	private String phone1;

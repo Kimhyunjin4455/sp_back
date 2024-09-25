@@ -14,14 +14,20 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.dto.request.EmailCheckRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.FindUserIdRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.UserIdCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.FindUserIdResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.OAuthSignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
+import starbucks3355.starbucksServer.auth.dto.response.UserIdCheckResponseDto;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.auth.repository.OAuthRepository;
+import starbucks3355.starbucksServer.auth.vo.request.FindUserIdRequestVo;
+import starbucks3355.starbucksServer.auth.vo.request.UserIdCheckRequestVo;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
@@ -45,6 +51,9 @@ public class AuthServiceImpl implements AuthService{
 	 * 3. 로그아웃
 	 */
 
+	/**
+	 * signUp
+	 */
 	@Override
 	@Transactional
 	public void signUp(SignUpRequestDto signUpRequestDto) {
@@ -57,6 +66,9 @@ public class AuthServiceImpl implements AuthService{
 
 	}
 
+	/**
+	 * checkEmail
+	 */
 	@Override
 	public EmailCheckResponseDto checkEmail(EmailCheckRequestDto emailCheckRequestDto) {
 		boolean isDuplicated = memberRepository.findByEmail(emailCheckRequestDto.getEmail()).isPresent();
@@ -68,6 +80,23 @@ public class AuthServiceImpl implements AuthService{
 			.build();
 	}
 
+	/**
+	 * checkUserId
+	 */
+	@Override
+	public UserIdCheckResponseDto checkUserId(UserIdCheckRequestDto userIdCheckRequestDto) {
+		boolean isDuplicated = memberRepository.findByUserId(userIdCheckRequestDto.getUserId()).isPresent();
+		String message = isDuplicated ? "이미 존재하는 아이디입니다.":"사용 가능한 아이디입니다.";
+
+		return UserIdCheckResponseDto.builder()
+			.isDuplicated(isDuplicated)
+			.message(message)
+			.build();
+	}
+
+	/**
+	 * signIn
+	 */
 	@Override
 	@Transactional
 	public SignInResponseDto signIn(SignInRequestDto signInRequestDto) {
@@ -87,12 +116,18 @@ public class AuthServiceImpl implements AuthService{
 
 	}
 
+	/**
+	 * signOut
+	 */
 	@Override
 	public void signOut(String accessToken) {
 
 	}
 
 
+	/**
+	 * oAuthSignIn
+	 */
 	@Override
 	public OAuthSignInResponseDto oAuthSignIn(OAuthSignInRequestDto oAuthSignInRequestDto) {
 
@@ -110,6 +145,46 @@ public class AuthServiceImpl implements AuthService{
 		return OAuthSignInResponseDto.from(member.get(), token, true);
 
 	}
+
+	/**
+	 * FindUserId
+	 */
+	@Override
+	public FindUserIdResponseDto findUserId(FindUserIdRequestDto findUserIdRequestDto) {
+		String email = findUserIdRequestDto.getEmail(); // 프론트에서 받은 이메일
+
+
+		// 이메일로 사용자를 찾기
+		Optional<Member> memberOptional = memberRepository.findByEmail(email);
+
+		if (memberOptional.isPresent()) {
+			String userId = memberOptional.get().getUserId();
+			String maskedUserId = maskUserId(userId); // 아이디 마스킹
+			return FindUserIdResponseDto.builder()
+				.userId(maskedUserId)
+				.message("아이디를 성공적으로 찾았습니다.")
+				.build();
+		}
+
+		return FindUserIdResponseDto.builder()
+			.userId(null)
+			.message("해당 이메일에 대한 아이디가 존재하지 않습니다.")
+			.build();
+	}
+
+
+	// 아이디 마스킹 메서드
+	private String maskUserId(String userId) {
+		if (userId.length() <= 3) {
+			return userId; // 아이디가 3자 이하인 경우 마스킹 처리하지 않음
+		}
+		String maskedPart = userId.substring(0, userId.length() - 3);
+		String visiblePart = userId.substring(userId.length() - 3);
+		return maskedPart + "***"; // 끝 3자만 보이게 마스킹
+	}
+
+
+
 
 	private String createToken(Authentication authentication) {
 		return jwtTokenProvider.generateAccessToken(authentication);

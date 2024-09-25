@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainReview.dto.out;
 
+import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,7 @@ public class BestReviewResponseDto {
 	private String productUuid;
 
 	@Builder
+	@QueryProjection
 	public BestReviewResponseDto(
 		String reviewUuid,
 		String productUuid) {

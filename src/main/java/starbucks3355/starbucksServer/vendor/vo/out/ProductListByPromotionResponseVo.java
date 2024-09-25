@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductListByPromotionResponseVo {
 
-	String productUuidList;
+	String productUuid;
 
 	@Builder
 	public ProductListByPromotionResponseVo(String productUuid) {
-		this.productUuidList = productUuid;
+		this.productUuid = productUuid;
 	}
 }

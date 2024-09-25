@@ -59,6 +59,7 @@ public class SecurityConfig {
 						"/api/v1/kakao/**",
 						"/api/v1/orders/**",
 						"/api/v1/S3/**",
+						"/api/v1/image/**",
 						"/error"
 					)
 					.permitAll()

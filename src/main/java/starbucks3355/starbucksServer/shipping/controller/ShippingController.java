@@ -22,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
-import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
-import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingModifyRequestDto;
@@ -76,7 +74,7 @@ public class ShippingController {
 
 	@PostMapping("/add")
 	@Operation(summary = "배송지 추가", description = "배송지를 추가합니다.")
-	public CommonResponseEntity<Void> addDelivery(
+	public BaseResponse<Void> addDelivery(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ShippingAddRequestVo shippingAddRequestVo) {
 
@@ -94,10 +92,13 @@ public class ShippingController {
 
 		shippingService.createShipping(authUserDetail.getUuid(), shippingAddRequestDto);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
+
 	}
 
 	// @GetMapping("/all")

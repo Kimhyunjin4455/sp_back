@@ -98,6 +98,16 @@ public class ImageController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
 
+		if (file.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.BAD_REQUEST,
+				BaseResponseStatus.WRONG_FILE_TYPE.isSuccess(),
+				BaseResponseStatus.WRONG_FILE_TYPE.getMessage(),
+				BaseResponseStatus.WRONG_FILE_TYPE.getCode(),
+				null
+			);
+		}
+
 		log.info(file.toString());
 
 		if (file.isEmpty()) {

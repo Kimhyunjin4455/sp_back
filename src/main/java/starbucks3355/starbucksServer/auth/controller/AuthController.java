@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import starbucks3355.starbucksServer.auth.dto.request.FindUserIdRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.UpdatePasswordRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.UserIdCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.FindPasswordResponseDto;
@@ -32,6 +34,8 @@ import starbucks3355.starbucksServer.common.entity.BaseResponse;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
 import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
+import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
+import starbucks3355.starbucksServer.domainMember.service.MemberService;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,6 +44,7 @@ import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 public class AuthController {
 
 	private final AuthService authService;
+	private final JwtTokenProvider provider;
 
 	/**
 	 * api/v1/auth
@@ -153,7 +158,7 @@ public class AuthController {
 	/**
 	 * 비밀번호 찾기
 	 */
-	@Operation(summary = "비밀번호 찾기 위한 회원 정보 조회 API", description = "아이디, 이메일을 통해 회원 정보를 찾는 API 입니다", tags = {"AuthUserDetail"})
+	@Operation(summary = "비밀번호 찾기 API", description = "아이디, 이메일을 통해 회원 정보를 찾는 API 입니다", tags = {"AuthUserDetail"})
 	@PostMapping("find-password")
 	public BaseResponse<FindPasswordResponseDto> findUserId(@RequestBody FindPasswordRequestDto findPasswordRequestDto) {
 		FindPasswordResponseDto response = authService.findPassword(findPasswordRequestDto);
@@ -166,5 +171,28 @@ public class AuthController {
 			response
 		);
 	}
+
+	/**
+	 * 비밀번호 업데이트
+	 */
+	@Operation(summary = "비밀번호 변경 API", description = "회원의 비밀번호를 변경하는 API", tags = {"AuthUserDetail"})
+	@PostMapping("/update-password")
+	public BaseResponse<Void> updatePassword(
+		@RequestHeader("Authorization") String accessToken,
+		@RequestBody UpdatePasswordRequestDto updatePasswordRequestDto) {
+
+			String uuid = provider.parseUuid(accessToken);
+
+			authService.updatePassword(uuid, updatePasswordRequestDto);
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.SUCCESS.isSuccess(),
+				BaseResponseStatus.SUCCESS.getMessage(),
+				BaseResponseStatus.SUCCESS.getCode(),
+				null // 비밀번호 변경 시 응답 내용이 없으면 null
+			);
+	}
+
+
 
 }

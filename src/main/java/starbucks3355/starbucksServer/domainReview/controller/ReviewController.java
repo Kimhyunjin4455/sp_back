@@ -51,12 +51,26 @@ public class ReviewController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "20") int size) {
 
+		CursorPage<String> reviews = reviewService.getProductReviews(productUuid, lastId, page, size);
+
+		// 리뷰가 없을 경우 다른 응답 메시지 반환
+		if (reviews == null || reviews.getContent().isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND, // 404 Not Found
+				BaseResponseStatus.NO_EXIST_REVIEW.isSuccess(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getMessage(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getCode(),
+				null // 리뷰가 없으므로 null 반환
+			);
+		}
+
+		// 리뷰가 있을 경우 정상 응답 반환
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			reviewService.getProductReviews(productUuid, lastId, page, size)
+			reviews
 		);
 
 	}
@@ -69,12 +83,26 @@ public class ReviewController {
 		@RequestParam(value = "pageSize", required = false) Integer pageSize,
 		@RequestParam(value = "page", required = false) Integer page) {
 
+		CursorPage<String> productReviewsHaveMedia = reviewService.getProductReviewsHaveMedia(productUuid, lastId,
+			pageSize, page);
+
+		// 리뷰가 없을 경우 다른 응답 메시지 반환
+		if (productReviewsHaveMedia == null || productReviewsHaveMedia.getContent().isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND, // 404 Not Found
+				BaseResponseStatus.NO_EXIST_REVIEW.isSuccess(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getMessage(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getCode(),
+				null // 리뷰가 없으므로 null 반환
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			reviewService.getProductReviewsHaveMedia(productUuid, lastId, pageSize, page)
+			productReviewsHaveMedia
 		);
 	}
 
@@ -85,12 +113,25 @@ public class ReviewController {
 		@RequestParam(value = "pageSize", required = false) Integer pageSize,
 		@RequestParam(value = "page", required = false) Integer page) {
 
+		CursorPage<BestReviewResponseDto> bestReviews = reviewService.getBestReviews(lastId, pageSize, page);
+
+		// 리뷰가 없을 경우 다른 응답 메시지 반환
+		if (bestReviews == null || bestReviews.getContent().isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND, // 404 Not Found
+				BaseResponseStatus.NO_EXIST_REVIEW.isSuccess(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getMessage(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getCode(),
+				null // 리뷰가 없으므로 null 반환
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			reviewService.getBestReviews(lastId, pageSize, page)
+			bestReviews
 		);
 	}
 
@@ -115,6 +156,16 @@ public class ReviewController {
 		// 수정 필요
 		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(username);
 
+		if (memberReviewsDto.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NO_CONTENT,
+				BaseResponseStatus.NO_EXIST_REVIEW.isSuccess(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getMessage(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -135,6 +186,16 @@ public class ReviewController {
 	) {
 		List<UserReviewResponseDto> userReviews = reviewService.getUserReviews(authorName);
 
+		if (userReviews == null || userReviews.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_REVIEW.isSuccess(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getMessage(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -153,6 +214,17 @@ public class ReviewController {
 		@PathVariable String reviewUuid
 	) {
 		ReviewResponseDto reviewResponseDto = reviewService.getReview(reviewUuid);
+
+		if (reviewResponseDto == null) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_REVIEW.isSuccess(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getMessage(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getCode(),
+				null
+			);
+		}
+
 		reviewService.addReviewViewCount(reviewUuid);
 
 		return new BaseResponse<>(
@@ -196,7 +268,28 @@ public class ReviewController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ReviewRequestVo reviewRequestVo) { // Service 로직에서 UUID 생성하여 저장하므로 vo에서 관련정보를 뺴거나, 서비스 로직에서 제거하기
 
+		if (reviewRequestVo == null) {
+			return new BaseResponse<>(
+				HttpStatus.BAD_REQUEST,
+				BaseResponseStatus.FAILED_TO_ADD_REVIEWS.isSuccess(),
+				BaseResponseStatus.FAILED_TO_ADD_REVIEWS.getMessage(),
+				BaseResponseStatus.FAILED_TO_ADD_REVIEWS.getCode(),
+				null
+			);
+		}
+
 		String authorName = authUserDetail.getNickname();
+
+		if (authorName == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		log.info("authorName: {}", authorName);
 		reviewService.addReview(ReviewRequestDto.of(reviewRequestVo, authorName));
 

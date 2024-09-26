@@ -17,6 +17,7 @@ import starbucks3355.starbucksServer.auth.dto.request.FindUserIdRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.OAuthSignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignInRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.SignUpRequestDto;
+import starbucks3355.starbucksServer.auth.dto.request.UpdatePasswordRequestDto;
 import starbucks3355.starbucksServer.auth.dto.request.UserIdCheckRequestDto;
 import starbucks3355.starbucksServer.auth.dto.response.EmailCheckResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.FindPasswordResponseDto;
@@ -26,6 +27,7 @@ import starbucks3355.starbucksServer.auth.dto.response.SignInResponseDto;
 import starbucks3355.starbucksServer.auth.dto.response.UserIdCheckResponseDto;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.auth.repository.OAuthRepository;
+import starbucks3355.starbucksServer.auth.vo.request.UpdatePasswordRequestVo;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
@@ -199,13 +201,41 @@ public class AuthServiceImpl implements AuthService{
 
 		Optional<Member> memberOptional = memberRepository.findByUserIdAndEmail(userId, email);
 
-		boolean isUser = memberOptional.isPresent();
+		if (memberOptional.isPresent()) {
+			Member member = memberOptional.get();
 
+			String accessToken = jwtTokenProvider.generateAccessTokenByFindPw(
+				member.getUuid());
+
+			return FindPasswordResponseDto.builder()
+				.isUser(true)
+				.accessToken(accessToken)
+				.nickname(member.getNickname())
+				.build();
+		}
 		return FindPasswordResponseDto.builder()
-			.isUser(isUser)
+			.isUser(false)
 			.build();
 	}
 
+
+
+	/**
+	 * updatePassword (비밀번호 수정)
+	 */
+	@Override
+	@Transactional
+	public void updatePassword(String uuid, UpdatePasswordRequestDto updatePasswordRequestDto) {
+		if (uuid == null || uuid.isEmpty()) {
+			throw new BaseException(BaseResponseStatus.NO_EXIST_USER); // UUID가 없을 경우 처리
+		}
+
+		Member member = memberRepository.findByUuid(uuid)
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+
+		member.updatePassword(passwordEncoder.encode(updatePasswordRequestDto.getNewPassword()));
+		memberRepository.save(member);
+	}
 
 
 	private String createToken(Authentication authentication) {

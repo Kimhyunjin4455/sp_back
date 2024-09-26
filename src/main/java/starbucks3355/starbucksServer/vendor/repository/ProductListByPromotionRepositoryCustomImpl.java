@@ -10,6 +10,8 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
+import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.vendor.entity.ProductByPromotionList;
 import starbucks3355.starbucksServer.vendor.entity.QProductByPromotionList;
@@ -35,6 +37,10 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 		Optional.ofNullable(promotionUuid)
 			.ifPresent(uuid -> builder.and(qProductByPromotionList.promotionUuid.eq(uuid)));
 
+		if (promotionUuid == null) {
+			throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
+		}
+
 		Optional.ofNullable(lastId)
 			.ifPresent(id -> builder.and(qProductByPromotionList.id.lt(id)));
 
@@ -44,6 +50,10 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 			.from(qProductByPromotionList)
 			.where(builder)
 			.fetch();
+
+		if (result.isEmpty()) {
+			return new CursorPage<>(List.of(), null, false, 0, 0);
+		}
 
 		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);

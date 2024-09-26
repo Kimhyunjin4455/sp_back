@@ -35,6 +35,16 @@ public class ProductListByPromotionController {
 		CursorPage<String> productListByPromotion = productListByPromotionService.getProductListByPromotion(
 			promotionUuid, lastId, page, size);
 
+		if (productListByPromotion == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -55,6 +65,16 @@ public class ProductListByPromotionController {
 	) {
 		CursorPage<String> productListByPromotion = productListByPromotionService.getProductsBySamePromotion(
 			productUuid, lastId, page, size);
+
+		if (productListByPromotion == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
 
 		return new BaseResponse<>(
 			HttpStatus.OK,

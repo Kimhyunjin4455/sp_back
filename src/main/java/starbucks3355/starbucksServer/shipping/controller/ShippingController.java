@@ -234,4 +234,17 @@ public class ShippingController {
 			SUCCESS.getCode(),
 			updateAgreeStatus);
 	}
+
+	@GetMapping("/agreeStatus")
+	@Operation(summary = "true-false", description = "true-false")
+	public BaseResponse<Boolean> getAgreeStatus(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+		boolean agreeStatus = shippingService.getAgreeStatus(authUserDetail.getUuid());
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			agreeStatus);
+	}
 }

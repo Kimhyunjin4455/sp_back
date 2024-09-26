@@ -379,4 +379,10 @@ public class ShippingServiceImpl implements ShippingService {
 		shippingRepository.deleteAllByUuid(uuid);
 	}
 
+	@Override
+	public boolean getAgreeStatus(String uuid) {
+		agreeStatus = !agreeStatus;
+		return agreeStatus;
+	}
+
 }

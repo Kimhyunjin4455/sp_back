@@ -70,6 +70,16 @@ public class ImageController {
 	) {
 		ImageResponseDto imageDto = imageService.getMainImage(otherUuid, true);
 
+		if (imageDto == null) {
+			return new BaseResponse<>(
+				HttpStatus.NO_CONTENT,
+				BaseResponseStatus.NO_EXIST_IMAGE.isSuccess(),
+				BaseResponseStatus.NO_EXIST_IMAGE.getMessage(),
+				BaseResponseStatus.NO_EXIST_IMAGE.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -87,6 +97,16 @@ public class ImageController {
 		@RequestPart String otherUuid,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail
 	) {
+
+		if (file.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.BAD_REQUEST,
+				BaseResponseStatus.WRONG_FILE_TYPE.isSuccess(),
+				BaseResponseStatus.WRONG_FILE_TYPE.getMessage(),
+				BaseResponseStatus.WRONG_FILE_TYPE.getCode(),
+				null
+			);
+		}
 
 		log.info(file.toString());
 		imageService.addImages(file, otherUuid);

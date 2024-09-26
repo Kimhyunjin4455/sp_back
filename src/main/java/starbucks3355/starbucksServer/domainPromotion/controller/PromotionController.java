@@ -34,6 +34,16 @@ public class PromotionController {
 
 		List<PromotionResponseDto> promotionUuidList = promotionService.getPromotionUuidList();
 
+		if (promotionUuidList.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PROMOTION.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PROMOTION.getMessage(),
+				BaseResponseStatus.NO_EXIST_PROMOTION.getCode(),
+				List.of()
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -53,6 +63,16 @@ public class PromotionController {
 	) {
 		PromotionNameResponseDto promotionName = promotionService.getPromotionName(promotionUuid);
 
+		if (promotionName == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PROMOTION.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PROMOTION.getMessage(),
+				BaseResponseStatus.NO_EXIST_PROMOTION.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -66,6 +86,16 @@ public class PromotionController {
 	@Operation(summary = "기획전 이름 목록 조회")
 	public BaseResponse<List<PromotionNameResponseVo>> getPromotionNameList() {
 		List<PromotionNameResponseDto> promotionNameList = promotionService.getPromotionNameList();
+
+		if (promotionNameList.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PROMOTION.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PROMOTION.getMessage(),
+				BaseResponseStatus.NO_EXIST_PROMOTION.getCode(),
+				List.of()
+			);
+		}
 
 		return new BaseResponse<>(
 			HttpStatus.OK,

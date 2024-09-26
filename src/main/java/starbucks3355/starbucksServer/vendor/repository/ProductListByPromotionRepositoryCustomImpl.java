@@ -50,6 +50,10 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 			.where(builder)
 			.fetch();
 
+		if (result.isEmpty()) {
+			return new CursorPage<>(List.of(), null, false, 0, 0);
+		}
+
 		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
 

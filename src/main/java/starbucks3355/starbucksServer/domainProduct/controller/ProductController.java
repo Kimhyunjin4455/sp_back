@@ -114,12 +114,25 @@ public class ProductController {
 			}
 		}
 
+		CursorPage<String> recentlyViewed = productService.getRecentlyViewed(memberUuid, 20, page);
+
+		if (recentlyViewed == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_RECENTLY.isSuccess(),
+				BaseResponseStatus.NO_EXIST_RECENTLY.getMessage(),
+				BaseResponseStatus.NO_EXIST_RECENTLY.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			productService.getRecentlyViewed(memberUuid, 20, page)
+			recentlyViewed
+
 		);
 	}
 
@@ -157,6 +170,17 @@ public class ProductController {
 	) {
 		Slice<ProductsResponseDto> productResponseDtos = productService.getProducts(page, size);
 
+		if (productResponseDtos == null) {
+			return new CommonResponsePagingEntity<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null,
+				false
+			);
+		}
+
 		List<ProductsResponseVo> productResponseVos = productResponseDtos.stream()
 			.map(ProductsResponseDto::dtoToResponseVo)
 			.collect(Collectors.toList());
@@ -179,6 +203,17 @@ public class ProductController {
 		@RequestParam(value = "page", required = false) Integer page
 	) {
 		CursorPage<String> productResponseDtos = productService.getProductList(lastId, pageSize, page);
+
+		if (productResponseDtos == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -193,6 +228,16 @@ public class ProductController {
 	public BaseResponse<DiscountResponseVo> getProductRateDiscountInfo(
 		@PathVariable String productUuid) {
 		DiscountResponseDto discountRateResponseDto = productService.getDiscountInfo(productUuid);
+
+		if (discountRateResponseDto == null) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_DISCOUNT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_DISCOUNT.getMessage(),
+				BaseResponseStatus.NO_EXIST_DISCOUNT.getCode(),
+				null
+			);
+		}
 
 		return new BaseResponse<>(
 			HttpStatus.OK,
@@ -212,8 +257,24 @@ public class ProductController {
 		@RequestParam(value = "page", required = false) Integer page
 	) {
 
+		CursorPage<String> searchedProductList = productService.getSearchedProductList(keyword, lastId, pageSize, page);
+
+		if (searchedProductList == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
-			productService.getSearchedProductList(keyword, lastId, pageSize, page)
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			searchedProductList
 		);
 	}
 
@@ -222,9 +283,26 @@ public class ProductController {
 	public BaseResponse<List<CategoryAndCountOfSearchedProductListResponseVo>> getCategoryInfoOfSearchedProduct(
 		@RequestParam List<String> productUuidList
 	) {
+
+		List<CategoryAndCountOfSearchedProductListResponseVo> result = productListByCategoryService.getCategoryAndCountOfSearchedProductList(
+			productUuidList).stream().map(dto -> dto.dtoToResponseVo()).toList();
+
+		if (result == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
-			productListByCategoryService.getCategoryAndCountOfSearchedProductList(
-				productUuidList).stream().map(dto -> dto.dtoToResponseVo()).toList()
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			result
 		);
 	}
 
@@ -235,6 +313,16 @@ public class ProductController {
 	) {
 
 		ProductFlagsResponseDto productFlagsResponseDto = productService.getProductFlags(productUuid);
+
+		if (productFlagsResponseDto == null) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.getCode(),
+				null
+			);
+		}
 
 		return new BaseResponse<>(
 			HttpStatus.OK,
@@ -254,27 +342,54 @@ public class ProductController {
 		@RequestParam(value = "pageSize", required = false) Integer pageSize,
 		@RequestParam(value = "page", required = false) Integer page
 	) {
+
+		CursorPage<String> result = productListByCategoryService.getProductByCategoryOfSearchedProducts(
+			productUuidList, topCategoryName, lastId, pageSize, page);
+
+		if (result == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			productListByCategoryService.getProductByCategoryOfSearchedProducts(
-				productUuidList, topCategoryName, lastId, pageSize, page)
+			result
+
 		);
 	}
 
 	@GetMapping("/tagList")
 	@Operation(summary = "상품 태그 목록 조회")
 	public BaseResponse<List<ProductTagResponseVo>> getTagList() {
+
+		List<ProductTagResponseVo> result = productService.getTagList().stream()
+			.map(ProductTagResponseDto::toResponseVo)
+			.toList();
+
+		if (result == null) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				BaseResponseStatus.NO_EXIST_TAG.isSuccess(),
+				BaseResponseStatus.NO_EXIST_TAG.getMessage(),
+				BaseResponseStatus.NO_EXIST_TAG.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			productService.getTagList().stream()
-				.map(ProductTagResponseDto::toResponseVo)
-				.toList()
+			result
 		);
 	}
 
@@ -285,10 +400,24 @@ public class ProductController {
 		@RequestBody ProductRequestVo productRequestVo
 	) {
 
+		if (productRequestVo == null) {
+			return new BaseResponse<>(
+				HttpStatus.BAD_REQUEST,
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL.getCode(),
+				null
+			);
+		}
+
 		productService.addProduct(ProductRequestDto.of(productRequestVo));
 
 		return new BaseResponse<>(
-			BaseResponseStatus.SUCCESS
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			null
 		);
 	}
 

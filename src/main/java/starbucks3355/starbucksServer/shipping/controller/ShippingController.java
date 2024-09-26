@@ -118,17 +118,30 @@ public class ShippingController {
 	public BaseResponse<ShippingBaseResponseVo> getBaseDelivery(
 		//밑에 @쓰면 AuthUserDetail것을 가져와서 사용 가능
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+		try {
+			//인증된 사용자의 uuid를 가져와서 사용 가능
+			String userUuid = authUserDetail.getUuid();
+			ShippingBaseResponseDto shippingBaseResponseDto = shippingService.getBaseShippingAddress(userUuid);
 
-		//인증된 사용자의 uuid를 가져와서 사용 가능
-		String userUuid = authUserDetail.getUuid();
-		ShippingBaseResponseDto shippingBaseResponseDto = shippingService.getBaseShippingAddress(userUuid);
+			ShippingBaseResponseVo responseVo = null;
+			if (shippingBaseResponseDto != null) {
+				responseVo = shippingBaseResponseDto.toVo();
+			}
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				SUCCESS.isSuccess(),
+				SUCCESS.getMessage(),
+				SUCCESS.getCode(),
+				responseVo);
 
-		return new BaseResponse<>(
-			HttpStatus.OK,
-			SUCCESS.isSuccess(),
-			SUCCESS.getMessage(),
-			SUCCESS.getCode(),
-			shippingBaseResponseDto.toVo());
+		} catch (Exception e) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				SUCCESS.isSuccess(),
+				SUCCESS.getMessage(),
+				SUCCESS.getCode(),
+				null);
+		}
 	}
 
 	@PutMapping("/base/{deliveryId}/set-default")

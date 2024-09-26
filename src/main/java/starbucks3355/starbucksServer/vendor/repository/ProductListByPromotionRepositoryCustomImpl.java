@@ -1,5 +1,6 @@
 package starbucks3355.starbucksServer.vendor.repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,10 +51,16 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 		Long nextCursor = null;
 		boolean hasNext = false;
 
-		if (result.size() > currentPageSize) {
-			hasNext = true;
-			result = result.subList(0, currentPageSize);
-			nextCursor = result.get(result.size() - 1).getId();
+		// currentPageSize가 0인 경우 처리
+		if (currentPageSize > 0) {
+			if (result.size() > currentPageSize) {
+				hasNext = true;
+				result = result.subList(0, currentPageSize);
+				nextCursor = result.get(result.size() - 1).getId();
+			}
+		} else {
+			// currentPageSize가 0일 때는 hasNext를 false로 설정하고 result를 그대로 반환
+			result = Collections.emptyList(); // 또는 result를 그대로 유지할 수 있습니다.
 		}
 
 		List<String> productsByPromotion = result.stream()

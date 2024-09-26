@@ -52,4 +52,9 @@ public class Member {
         this.withdrawalTime = withdrawalTime;
         this.uuid = uuid;
     }
+
+    // 비밀번호 변경 메서드
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

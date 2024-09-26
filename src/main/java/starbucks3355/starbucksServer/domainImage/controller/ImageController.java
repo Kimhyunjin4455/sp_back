@@ -42,6 +42,16 @@ public class ImageController {
 	) {
 		List<ImageResponseDto> imageDtoList = imageService.getImages(otherUuid);
 
+		if (imageDtoList.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_OPTION.isSuccess(),
+				BaseResponseStatus.NO_EXIST_OPTION.getMessage(),
+				BaseResponseStatus.NO_EXIST_OPTION.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -59,6 +69,16 @@ public class ImageController {
 		@PathVariable String otherUuid
 	) {
 		ImageResponseDto imageDto = imageService.getMainImage(otherUuid, true);
+
+		if (imageDto == null) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_OPTION.isSuccess(),
+				BaseResponseStatus.NO_EXIST_OPTION.getMessage(),
+				BaseResponseStatus.NO_EXIST_OPTION.getCode(),
+				null
+			);
+		}
 
 		return new BaseResponse<>(
 			HttpStatus.OK,
@@ -79,6 +99,17 @@ public class ImageController {
 	) {
 
 		log.info(file.toString());
+
+		if (file.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.BAD_REQUEST,
+				BaseResponseStatus.WRONG_FILE_TYPE.isSuccess(),
+				BaseResponseStatus.WRONG_FILE_TYPE.getMessage(),
+				BaseResponseStatus.WRONG_FILE_TYPE.getCode(),
+				null
+			);
+		}
+
 		imageService.addImages(file, otherUuid);
 
 		// if (authUserDetail == null) {

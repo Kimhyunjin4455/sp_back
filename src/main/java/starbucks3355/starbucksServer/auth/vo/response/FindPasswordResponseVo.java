@@ -7,10 +7,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class FindPasswordResponseVo {
+	private String accessToken;
+	private String nickname;
 	private boolean isUser;
 
 	@Builder
-	public FindPasswordResponseVo(boolean isUser) {
+	public FindPasswordResponseVo(String accessToken, String nickname, boolean isUser) {
+		this.accessToken = accessToken;
+		this.nickname = nickname;
 		this.isUser = isUser;
 	}
 }

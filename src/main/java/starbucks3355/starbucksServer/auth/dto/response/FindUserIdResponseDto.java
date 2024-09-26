@@ -13,6 +13,7 @@ public class FindUserIdResponseDto {
 
 	@Builder
 	public  FindUserIdResponseDto(String userId, String message) {
+
 		this.userId = userId;
 		this.message = message;
 	}

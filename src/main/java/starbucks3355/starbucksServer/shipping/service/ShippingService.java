@@ -44,4 +44,6 @@ public interface ShippingService {
 
 	void deleteShippingAddressByUuid(String uuid);
 
+	boolean getAgreeStatus(String uuid);
+
 }

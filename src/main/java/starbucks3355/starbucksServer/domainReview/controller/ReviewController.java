@@ -156,6 +156,16 @@ public class ReviewController {
 		// 수정 필요
 		List<UserReviewResponseDto> memberReviewsDto = reviewService.getUserReviews(username);
 
+		if (memberReviewsDto.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NO_CONTENT,
+				BaseResponseStatus.NO_EXIST_REVIEW.isSuccess(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getMessage(),
+				BaseResponseStatus.NO_EXIST_REVIEW.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
@@ -257,6 +267,16 @@ public class ReviewController {
 	public BaseResponse<Void> addReview(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ReviewRequestVo reviewRequestVo) { // Service 로직에서 UUID 생성하여 저장하므로 vo에서 관련정보를 뺴거나, 서비스 로직에서 제거하기
+
+		if (reviewRequestVo == null) {
+			return new BaseResponse<>(
+				HttpStatus.BAD_REQUEST,
+				BaseResponseStatus.FAILED_TO_ADD_REVIEWS.isSuccess(),
+				BaseResponseStatus.FAILED_TO_ADD_REVIEWS.getMessage(),
+				BaseResponseStatus.FAILED_TO_ADD_REVIEWS.getCode(),
+				null
+			);
+		}
 
 		String authorName = authUserDetail.getNickname();
 

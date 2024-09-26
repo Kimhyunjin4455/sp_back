@@ -9,6 +9,8 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
+import starbucks3355.starbucksServer.common.exception.BaseException;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.vendor.entity.ProductByPromotionList;
 import starbucks3355.starbucksServer.vendor.entity.QProductByPromotionList;
@@ -33,6 +35,10 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 
 		Optional.ofNullable(promotionUuid)
 			.ifPresent(uuid -> builder.and(qProductByPromotionList.promotionUuid.eq(uuid)));
+
+		if (promotionUuid == null) {
+			throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
+		}
 
 		Optional.ofNullable(lastId)
 			.ifPresent(id -> builder.and(qProductByPromotionList.id.lt(id)));

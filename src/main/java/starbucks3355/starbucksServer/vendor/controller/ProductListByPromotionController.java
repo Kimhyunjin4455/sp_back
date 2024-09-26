@@ -35,9 +35,9 @@ public class ProductListByPromotionController {
 		CursorPage<String> productListByPromotion = productListByPromotionService.getProductListByPromotion(
 			promotionUuid, lastId, page, size);
 
-		if (productListByPromotion == null) {
+		if (productListByPromotion.getContent().isEmpty()) {
 			return new BaseResponse<>(
-				HttpStatus.OK,
+				HttpStatus.NO_CONTENT,
 				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
 				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
 				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
@@ -66,9 +66,9 @@ public class ProductListByPromotionController {
 		CursorPage<String> productListByPromotion = productListByPromotionService.getProductsBySamePromotion(
 			productUuid, lastId, page, size);
 
-		if (productListByPromotion == null) {
+		if (productListByPromotion.getContent().isEmpty()) {
 			return new BaseResponse<>(
-				HttpStatus.OK,
+				HttpStatus.NO_CONTENT,
 				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
 				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
 				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),

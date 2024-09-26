@@ -41,9 +41,9 @@ public class ProductListByCategoryController {
 			page
 		);
 
-		if (result == null) {
+		if (result.getContent().isEmpty()) {
 			return new BaseResponse<>(
-				HttpStatus.OK,
+				HttpStatus.NO_CONTENT,
 				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
 				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
 				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),

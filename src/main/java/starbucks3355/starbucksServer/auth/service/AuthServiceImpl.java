@@ -189,9 +189,6 @@ public class AuthServiceImpl implements AuthService{
 		return maskedPart + "***"; // 끝 3자만 보이게 마스킹
 	}
 
-	/**
-	 * findPassword (이메일, 아이디로 회원 정보 있는지 찾기)
-	 */
 	@Override
 	public FindPasswordResponseDto findPassword(FindPasswordRequestDto findPasswordRequestDto) {
 		String userId = findPasswordRequestDto.getUserId();
@@ -199,12 +196,38 @@ public class AuthServiceImpl implements AuthService{
 
 		Optional<Member> memberOptional = memberRepository.findByUserIdAndEmail(userId, email);
 
-		boolean isUser = memberOptional.isPresent();
+		if (memberOptional.isPresent()) {
+			Member member = memberOptional.get();
 
+			String accessToken = createToken(new UsernamePasswordAuthenticationToken(member.getUserId(), null));
+
+			return FindPasswordResponseDto.builder()
+				.isUser(true)
+				.accessToken(accessToken)
+				.nickname(member.getNickname())
+				.build();
+		}
 		return FindPasswordResponseDto.builder()
-			.isUser(isUser)
+			.isUser(false)
 			.build();
 	}
+
+	/**
+	 * findPassword (이메일, 아이디로 회원 정보 있는지 찾기)
+	 */
+	// @Override
+	// public FindPasswordResponseDto findPassword(FindPasswordRequestDto findPasswordRequestDto) {
+	// 	String userId = findPasswordRequestDto.getUserId();
+	// 	String email =  findPasswordRequestDto.getEmail();
+	//
+	// 	Optional<Member> memberOptional = memberRepository.findByUserIdAndEmail(userId, email);
+	//
+	// 	boolean isUser = memberOptional.isPresent();
+	//
+	// 	return FindPasswordResponseDto.builder()
+	// 		.isUser(isUser)
+	// 		.build();
+	// }
 
 
 

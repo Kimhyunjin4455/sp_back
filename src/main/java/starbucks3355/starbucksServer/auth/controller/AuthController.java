@@ -153,7 +153,7 @@ public class AuthController {
 	/**
 	 * 비밀번호 찾기
 	 */
-	@Operation(summary = "비밀번호 찾기 위한 회원 정보 조회 API", description = "아이디, 이메일을 통해 회원 정보를 찾는 API 입니다", tags = {"AuthUserDetail"})
+	@Operation(summary = "비밀번호 찾기 API", description = "아이디, 이메일을 통해 회원 정보를 찾는 API 입니다", tags = {"AuthUserDetail"})
 	@PostMapping("find-password")
 	public BaseResponse<FindPasswordResponseDto> findUserId(@RequestBody FindPasswordRequestDto findPasswordRequestDto) {
 		FindPasswordResponseDto response = authService.findPassword(findPasswordRequestDto);

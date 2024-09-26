@@ -1,6 +1,7 @@
 package starbucks3355.starbucksServer.domainProduct.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,7 @@ import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponse
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductTagResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainProduct.repository.DiscountRepository;
@@ -27,6 +29,7 @@ import starbucks3355.starbucksServer.domainProduct.repository.FlagsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductDetailsRepository;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductListRepositoryCustom;
 import starbucks3355.starbucksServer.domainProduct.repository.ProductRepository;
+import starbucks3355.starbucksServer.domainProduct.repository.ProductTagRepositoryCustom;
 
 @Service
 @Slf4j
@@ -39,6 +42,8 @@ public class ProductServiceImpl implements ProductService {
 	private final FlagsRepository flagsRepository;
 	private final ProductListRepositoryCustom productListRepositoryCustom;
 	private final RedisTemplate<String, String> redisTemplate;
+
+	private final ProductTagRepositoryCustom productTagRepositoryCustom;
 
 	private static final String RECENTLY_VIEWED_PREFIX = "recently_viewed:";
 	private static final int MAX_SIZE = 40;
@@ -69,9 +74,20 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductResponseDto getProduct(String productUuid) {
+		log.info("상품 조회 요청: UUID = {}", productUuid); // 요청한 UUID 로그
 
-		return ProductResponseDto.from(productRepository.findByProductUuid(productUuid)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT)));
+		Optional<Product> productOptional = productRepository.findByProductUuid(productUuid);
+
+		if (productOptional.isPresent()) {
+			log.info("상품 조회 성공: {}", productOptional.get()); // 상품 정보 로그
+			return ProductResponseDto.from(productOptional.get());
+		} else {
+			log.warn("상품 조회 실패: 존재하지 않는 UUID = {}", productUuid); // 존재하지 않는 경우 로그
+			throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
+		}
+
+		// return ProductResponseDto.from(productRepository.findByProductUuid(productUuid)
+		// 	.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT)));
 
 	}
 
@@ -116,6 +132,11 @@ public class ProductServiceImpl implements ProductService {
 			.page(page)
 			.build();
 
+	}
+
+	@Override
+	public List<ProductTagResponseDto> getTagList() {
+		return productTagRepositoryCustom.getTagList();
 	}
 
 	@Override

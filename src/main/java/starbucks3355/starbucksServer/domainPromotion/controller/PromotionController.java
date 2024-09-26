@@ -29,7 +29,7 @@ public class PromotionController {
 	private final PromotionService promotionService;
 
 	@GetMapping("/list")
-	@Operation(summary = "기획전 uuid 목록 조회")
+	@Operation(summary = "기획전 uuid 조회")
 	public BaseResponse<List<PromotionResponseVo>> getPromotionList() {
 
 		List<PromotionResponseDto> promotionUuidList = promotionService.getPromotionUuidList();
@@ -59,6 +59,22 @@ public class PromotionController {
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
 			promotionName.dtoToResponseVo()
+		);
+	}
+
+	@GetMapping("/nameList")
+	@Operation(summary = "기획전 이름 목록 조회")
+	public BaseResponse<List<PromotionNameResponseVo>> getPromotionNameList() {
+		List<PromotionNameResponseDto> promotionNameList = promotionService.getPromotionNameList();
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			promotionNameList.stream()
+				.map(PromotionNameResponseDto::dtoToResponseVo)
+				.toList()
 		);
 	}
 

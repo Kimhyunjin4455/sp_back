@@ -12,4 +12,6 @@ public interface PromotionService {
 
 	// List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid);
 
+	List<PromotionNameResponseDto> getPromotionNameList();
+
 }

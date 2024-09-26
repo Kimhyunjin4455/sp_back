@@ -27,6 +27,11 @@ public class PromotionServiceImpl implements PromotionService {
 		return promotionRepositoryCustom.getPromotionName(promotionUuid);
 	}
 
+	@Override
+	public List<PromotionNameResponseDto> getPromotionNameList() {
+		return promotionRepositoryCustom.getPromotionNameList();
+	}
+
 	// @Override
 	// public List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid) {
 	// 	return promotionRepositoryCustom.getPromotionProductList(promotionUuid);

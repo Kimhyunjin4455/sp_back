@@ -15,4 +15,6 @@ public interface PromotionRepositoryCustom {
 	PromotionNameResponseDto getPromotionName(String promotionUuid);
 
 	// List<PromotionProductResponseDto> getPromotionProductList(String promotionUuid);
+
+	List<PromotionNameResponseDto> getPromotionNameList();
 }

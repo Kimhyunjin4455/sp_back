@@ -42,6 +42,16 @@ public class ImageController {
 	) {
 		List<ImageResponseDto> imageDtoList = imageService.getImages(otherUuid);
 
+		if (imageDtoList.isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NO_CONTENT,
+				BaseResponseStatus.NO_EXIST_IMAGE.isSuccess(),
+				BaseResponseStatus.NO_EXIST_IMAGE.getMessage(),
+				BaseResponseStatus.NO_EXIST_IMAGE.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),

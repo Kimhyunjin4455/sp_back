@@ -30,6 +30,7 @@ import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponse
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductTagResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.service.ProductService;
 import starbucks3355.starbucksServer.domainProduct.vo.request.ProductRequestVo;
@@ -37,6 +38,7 @@ import starbucks3355.starbucksServer.domainProduct.vo.response.DiscountResponseV
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductDetailsPriceResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductFlagsResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductResponseVo;
+import starbucks3355.starbucksServer.domainProduct.vo.response.ProductTagResponseVo;
 import starbucks3355.starbucksServer.domainProduct.vo.response.ProductsResponseVo;
 import starbucks3355.starbucksServer.vendor.service.ProductListByCategoryService;
 import starbucks3355.starbucksServer.vendor.vo.out.CategoryAndCountOfSearchedProductListResponseVo;
@@ -253,8 +255,26 @@ public class ProductController {
 		@RequestParam(value = "page", required = false) Integer page
 	) {
 		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
 			productListByCategoryService.getProductByCategoryOfSearchedProducts(
 				productUuidList, topCategoryName, lastId, pageSize, page)
+		);
+	}
+
+	@GetMapping("/tagList")
+	@Operation(summary = "상품 태그 목록 조회")
+	public BaseResponse<List<ProductTagResponseVo>> getTagList() {
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			productService.getTagList().stream()
+				.map(ProductTagResponseDto::toResponseVo)
+				.toList()
 		);
 	}
 

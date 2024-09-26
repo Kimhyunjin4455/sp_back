@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainProduct.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Slice;
 
 import starbucks3355.starbucksServer.common.utils.CursorPage;
@@ -8,6 +10,7 @@ import starbucks3355.starbucksServer.domainProduct.dto.response.DiscountResponse
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductDetailsPriceResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductFlagsResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductResponseDto;
+import starbucks3355.starbucksServer.domainProduct.dto.response.ProductTagResponseDto;
 import starbucks3355.starbucksServer.domainProduct.dto.response.ProductsResponseDto;
 
 public interface ProductService {
@@ -45,6 +48,8 @@ public interface ProductService {
 		Integer pageSize,
 		Integer page
 	);
+
+	List<ProductTagResponseDto> getTagList();
 
 	void addRecentlyViewed(String memberUuid, String productUuid);
 

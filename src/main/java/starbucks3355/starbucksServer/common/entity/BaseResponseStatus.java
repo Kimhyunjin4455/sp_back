@@ -39,7 +39,6 @@ public enum BaseResponseStatus {
 	DUPLICATE_ID(HttpStatus.BAD_REQUEST, false, 415, "id 값이 중복됩니다."),
 	WRONG_FILE_TYPE(HttpStatus.BAD_REQUEST, false, 418, "잘못된 파일 형식입니다."),
 
-
 	/**
 	 * 900: 기타 에러
 	 */
@@ -88,6 +87,8 @@ public enum BaseResponseStatus {
 	NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3006, "해당 상품의 상세정보가 존재하지 않습니다."),
 	FAILED_TO_ADD_S3(HttpStatus.INTERNAL_SERVER_ERROR, false, 3007, "AWS S3에 이미지 저장을 실패했습니다."),
 	NO_EXIST_S3_IMAGE(HttpStatus.NOT_FOUND, false, 3008, "AWS S3에 해당 이미지가 존재하지 않습니다."),
+	NO_EXIST_IMAGE(HttpStatus.NOT_FOUND, false, 3009, "해당 이미지가 존재하지 않습니다."),
+	NO_EXIST_TAG(HttpStatus.NOT_FOUND, false, 3010, "태그 정보가 존재하지 않습니다."),
 
 	/**
 	 * 4000: comment service error

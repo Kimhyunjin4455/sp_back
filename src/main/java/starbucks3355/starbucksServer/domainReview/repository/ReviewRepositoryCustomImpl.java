@@ -251,7 +251,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
 		// 리뷰의 조회수와 점수가 높고 리뷰내용의 길이가 긴 것에 대해
 		List<Tuple> bestReviews = jpaQueryFactory
-			.select(reviewAggregate, review)
+			.select(reviewAggregate.id, review.reviewUuid, review.productUuid)
 			.from(reviewAggregate)
 			.join(review)
 			.on(reviewAggregate.reviewUuid.eq(review.reviewUuid))
@@ -267,7 +267,9 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 		if (bestReviews.size() > currentPageSize) {
 			hasNext = true;
 			bestReviews = bestReviews.subList(0, currentPageSize);  // 실제 페이지 사이즈 만큼 자르기
-			nextCursor = ((ReviewAggregate)bestReviews.get(bestReviews.size() - 1)).getId();  // 마지막 항목의 ID를 커서로 설정
+			nextCursor = bestReviews.get(bestReviews.size() - 1).get(reviewAggregate.id);  // 마지막 항목의 ID를 커서로 설정
+
+			//nextCursor = ((ReviewAggregate)bestReviews.get(bestReviews.size() - 1)).getId();  // 마지막 항목의 ID를 커서로 설정
 		}
 
 		// List<BestReviewResponseDto> bestReviewList = bestReviews.stream()

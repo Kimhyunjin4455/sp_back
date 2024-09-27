@@ -48,10 +48,11 @@ public class ReviewController {
 	public BaseResponse<CursorPage<String>> getProductReviews(
 		@RequestParam String productUuid,
 		@RequestParam(required = false) Long lastId,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "20") int size) {
+		@RequestParam(defaultValue = "20") int size,
+		@RequestParam(defaultValue = "0") int page
+	) {
 
-		CursorPage<String> reviews = reviewService.getProductReviews(productUuid, lastId, page, size);
+		CursorPage<String> reviews = reviewService.getProductReviews(productUuid, lastId, size, page);
 
 		// 리뷰가 없을 경우 다른 응답 메시지 반환
 		if (reviews == null || reviews.getContent().isEmpty()) {

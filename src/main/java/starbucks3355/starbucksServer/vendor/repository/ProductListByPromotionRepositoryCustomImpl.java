@@ -36,12 +36,15 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 		Optional.ofNullable(promotionUuid)
 			.ifPresent(uuid -> builder.and(qProductByPromotionList.promotionUuid.eq(uuid)));
 
-		if (promotionUuid == null) {
-			throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
-		}
+		// if (promotionUuid == null) {
+		// 	throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
+		// }
 
 		Optional.ofNullable(lastId)
 			.ifPresent(id -> builder.and(qProductByPromotionList.id.lt(id)));
+
+		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
+		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
 
 		// 기획전 uuid를 통해 상품 uuid를 조회
 		List<ProductByPromotionList> result = jpaQueryFactory
@@ -50,12 +53,14 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 			.where(builder)
 			.fetch();
 
-		if (result.isEmpty()) {
-			return new CursorPage<>(List.of(), null, false, 0, 0);
-		}
+		// if (result.isEmpty()) {
+		// 	return new CursorPage<>(List.of(), null, false, 0, 0);
+		// }
 
-		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
-		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
+		// result가 null 인 경우 예외 발생
+		if (result.isEmpty()) {
+			throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
+		}
 
 		Long nextCursor = null;
 		boolean hasNext = false;

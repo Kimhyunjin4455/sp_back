@@ -50,8 +50,8 @@
 | --- | --- |
 | Common | GitHub, Notion, Figma, Git-Flow |
 | Back-end | JDK(17), gradle(버전 추가), ORM (JPA), Spring Security, swagger(3) |
-| CI/CD | AWS EC2, Nginx, Ubuntu(Ubuntu 20.04 LTS), Docker(버전 추가), Docker-compose(버전 추가) |
-| Database | MySQL(ec2에서 확인 필요), Redis(7.2.5) |
+| CI/CD | AWS EC2, Nginx, Ubuntu(Ubuntu 20.04 LTS), Docker(27.2.0), Docker-compose(v2.5.0) |
+| Database | MySQL(24.04.2), Redis(7.2.5) |
 
 ### 🔧 **서버 구성 및 데이터베이스**
 

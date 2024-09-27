@@ -97,7 +97,8 @@ public class KakaoServiceImpl implements KakaoService {
 		//url은 Redirect URL로 결제 완료 후 이동할 URL을 설정합니다.
 		parameters.put("approval_url",
 			// "http://localhost:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
-			"http://3.38.239.2:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
+			// "http://3.38.239.2:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
+			"http://localhost:3000/paid");
 		parameters.put("cancel_url", "http://localhost:8080/cancel");
 		parameters.put("fail_url", "http://localhost:8080/fail");
 		return parameters;

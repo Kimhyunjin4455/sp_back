@@ -91,7 +91,7 @@ public enum BaseResponseStatus {
 	NO_EXIST_TAG(HttpStatus.NOT_FOUND, false, 3010, "태그 정보가 존재하지 않습니다."),
 	NO_EXIST_PROMOTION(HttpStatus.NOT_FOUND, false, 3011, "해당 기획전 정보가 존재하지 않습니다."),
 	NO_EXIST_RECENTLY(HttpStatus.NOT_FOUND, false, 3012, "최근 본 정보가 존재하지 않습니다."),
-
+	ALREADY_EXIST_MAIN_IMAGE(HttpStatus.BAD_REQUEST, false, 3013, "개체에 대한 메인이미지가 이미 존재합니다."),
 
 	/**
 	 * 4000: comment service error

@@ -22,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.auth.entity.AuthUserDetail;
 import starbucks3355.starbucksServer.common.entity.BaseResponse;
-import starbucks3355.starbucksServer.common.entity.CommonResponseEntity;
-import starbucks3355.starbucksServer.common.entity.CommonResponseMessage;
 import starbucks3355.starbucksServer.common.jwt.JwtTokenProvider;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingAddRequestDto;
 import starbucks3355.starbucksServer.shipping.dto.request.ShippingModifyRequestDto;
@@ -76,7 +74,7 @@ public class ShippingController {
 
 	@PostMapping("/add")
 	@Operation(summary = "배송지 추가", description = "배송지를 추가합니다.")
-	public CommonResponseEntity<Void> addDelivery(
+	public BaseResponse<Void> addDelivery(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@RequestBody ShippingAddRequestVo shippingAddRequestVo) {
 
@@ -94,10 +92,13 @@ public class ShippingController {
 
 		shippingService.createShipping(authUserDetail.getUuid(), shippingAddRequestDto);
 
-		return new CommonResponseEntity<>(
+		return new BaseResponse<>(
 			HttpStatus.OK,
-			CommonResponseMessage.SUCCESS.getMessage(),
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
 			null);
+
 	}
 
 	// @GetMapping("/all")
@@ -117,17 +118,30 @@ public class ShippingController {
 	public BaseResponse<ShippingBaseResponseVo> getBaseDelivery(
 		//밑에 @쓰면 AuthUserDetail것을 가져와서 사용 가능
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+		try {
+			//인증된 사용자의 uuid를 가져와서 사용 가능
+			String userUuid = authUserDetail.getUuid();
+			ShippingBaseResponseDto shippingBaseResponseDto = shippingService.getBaseShippingAddress(userUuid);
 
-		//인증된 사용자의 uuid를 가져와서 사용 가능
-		String userUuid = authUserDetail.getUuid();
-		ShippingBaseResponseDto shippingBaseResponseDto = shippingService.getBaseShippingAddress(userUuid);
+			ShippingBaseResponseVo responseVo = null;
+			if (shippingBaseResponseDto != null) {
+				responseVo = shippingBaseResponseDto.toVo();
+			}
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				SUCCESS.isSuccess(),
+				SUCCESS.getMessage(),
+				SUCCESS.getCode(),
+				responseVo);
 
-		return new BaseResponse<>(
-			HttpStatus.OK,
-			SUCCESS.isSuccess(),
-			SUCCESS.getMessage(),
-			SUCCESS.getCode(),
-			shippingBaseResponseDto.toVo());
+		} catch (Exception e) {
+			return new BaseResponse<>(
+				HttpStatus.OK,
+				SUCCESS.isSuccess(),
+				SUCCESS.getMessage(),
+				SUCCESS.getCode(),
+				null);
+		}
 	}
 
 	@PutMapping("/base/{deliveryId}/set-default")
@@ -222,15 +236,28 @@ public class ShippingController {
 	}
 
 	@PutMapping("/agreeCancel")
-	@Operation(summary = "배송지 동의 취소", description = "배송지 동의를 취소합니다.")
-	public BaseResponse<Void> agreeShippingCancel(
+	@Operation(summary = "배송지 동의 약관", description = "배송지 동의 약관")
+	public BaseResponse<Boolean> agreeShippingCancel(
 		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
-		shippingService.agreeShippingCancel(authUserDetail.getUuid());
+		boolean updateAgreeStatus = shippingService.agreeShippingCancel(authUserDetail.getUuid());
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			SUCCESS.isSuccess(),
 			SUCCESS.getMessage(),
 			SUCCESS.getCode(),
-			null);
+			updateAgreeStatus);
+	}
+
+	@GetMapping("/agreeStatus")
+	@Operation(summary = "true-false", description = "true-false")
+	public BaseResponse<Boolean> getAgreeStatus(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+		boolean agreeStatus = shippingService.getAgreeStatus(authUserDetail.getUuid());
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			agreeStatus);
 	}
 }

@@ -10,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionNameResponseDto;
 import starbucks3355.starbucksServer.domainPromotion.dto.out.PromotionResponseDto;
+import starbucks3355.starbucksServer.domainPromotion.entity.Promotion;
 import starbucks3355.starbucksServer.domainPromotion.entity.QPromotion;
 
 @RequiredArgsConstructor
@@ -46,6 +47,20 @@ public class PromotionRepositoryCustomImpl implements PromotionRepositoryCustom 
 			.fetchOne();
 
 		return promotionName == null ? null : new PromotionNameResponseDto(promotionName);
+	}
+
+	@Override
+	public List<PromotionNameResponseDto> getPromotionNameList() {
+		QPromotion promotion = QPromotion.promotion;
+
+		List<Promotion> promotionList = jpaQueryFactory
+			.selectDistinct(promotion)
+			.from(promotion)
+			.fetch();
+
+		return promotionList.stream()
+			.map(PromotionNameResponseDto::from)
+			.toList();
 	}
 
 	// @Override

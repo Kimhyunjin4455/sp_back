@@ -8,11 +8,11 @@ import starbucks3355.starbucksServer.domainReview.vo.out.ReviewScoreResponseVo;
 @Getter
 @NoArgsConstructor
 public class ReviewScoreResponseDto {
-	String reviewscoreAvg;
-	String reviewcount;
+	Double reviewscoreAvg;
+	Long reviewcount;
 
 	@Builder
-	public ReviewScoreResponseDto(String reviewscoreAvg, String reviewcount) {
+	public ReviewScoreResponseDto(Double reviewscoreAvg, Long reviewcount) {
 		this.reviewscoreAvg = reviewscoreAvg;
 		this.reviewcount = reviewcount;
 	}

@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ReviewScoreResponseVo {
-	String reviewscoreAvg;
-	String reviewcount;
+	Double reviewscoreAvg;
+	Long reviewcount;
 
 }

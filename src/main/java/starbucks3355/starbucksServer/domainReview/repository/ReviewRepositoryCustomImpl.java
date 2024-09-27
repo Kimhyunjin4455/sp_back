@@ -49,7 +49,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			.fetchOne();
 
 		return (reviewScore == null || reviewCount == null) ? null :
-			new ReviewScoreResponseDto(reviewScore.toString(), reviewCount.toString());
+			new ReviewScoreResponseDto(reviewScore, reviewCount);
 	}
 
 	@Override

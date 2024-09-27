@@ -88,6 +88,11 @@ public enum BaseResponseStatus {
 	FAILED_TO_ADD_S3(HttpStatus.INTERNAL_SERVER_ERROR, false, 3007, "AWS S3에 이미지 저장을 실패했습니다."),
 	NO_EXIST_S3_IMAGE(HttpStatus.NOT_FOUND, false, 3008, "AWS S3에 해당 이미지가 존재하지 않습니다."),
 	NO_EXIST_IMAGE(HttpStatus.NOT_FOUND, false, 3009, "해당 이미지가 존재하지 않습니다."),
+	NO_EXIST_TAG(HttpStatus.NOT_FOUND, false, 3010, "태그 정보가 존재하지 않습니다."),
+	NO_EXIST_PROMOTION(HttpStatus.NOT_FOUND, false, 3011, "해당 기획전 정보가 존재하지 않습니다."),
+	NO_EXIST_RECENTLY(HttpStatus.NOT_FOUND, false, 3012, "최근 본 정보가 존재하지 않습니다."),
+
+
 	/**
 	 * 4000: comment service error
 	 */

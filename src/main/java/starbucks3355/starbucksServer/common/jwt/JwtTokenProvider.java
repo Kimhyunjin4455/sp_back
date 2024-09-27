@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
 import starbucks3355.starbucksServer.common.exception.BaseException;
+import starbucks3355.starbucksServer.domainMember.repository.MemberRepository;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ import starbucks3355.starbucksServer.common.exception.BaseException;
 public class JwtTokenProvider {
 
 	private final Environment env;
+	private final MemberRepository memberRepository;
 
 	/**
 	 * TokenProvider
@@ -107,11 +109,26 @@ public class JwtTokenProvider {
 	 * @param authentication 사용자 정보
 	 * @return 클레임 정보와 사용자 정보를 기반으로 jwt 토큰 생성
 	 * 클레임 정보, 사용자 ID, 생성 시간, 만료 시간 등을 설정하고, 서명 알고리즘과 서명 키를 사용하여 토큰을 생성합니다.
-	 * Access Token 역활
+	 * Access Token 역할
 	 */
 	public String generateAccessToken(Authentication authentication) {
 		log.info(env.getProperty("jwt.access-expire-time"));
 		Claims claims = Jwts.claims().subject(authentication.getName()).build();
+
+		Date now = new Date();
+		Date expiration = new Date(now.getTime() + env.getProperty("jwt.access-expire-time", Long.class).longValue());
+
+		return Jwts.builder()
+			.signWith(getSignKey())
+			.claim("uuid", claims.getSubject())
+			.issuedAt(expiration)
+			.compact();
+	}
+
+	public String generateAccessTokenByFindPw(String uuid) {
+		// log.info(env.getProperty("jwt.access-expire-time"));
+		Claims claims = Jwts.claims().subject(uuid).build();
+
 		Date now = new Date();
 		Date expiration = new Date(now.getTime() + env.getProperty("jwt.access-expire-time", Long.class).longValue());
 

@@ -32,18 +32,32 @@ public class ProductListByCategoryController {
 		@RequestParam(required = false, defaultValue = "10") Integer pageSize,
 		@RequestParam(required = false, defaultValue = "1") Integer page
 	) {
+
+		CursorPage<String> result = productListByCategoryService.getProductsByCategoryList(
+			majorCategoryName,
+			middleCategoryName,
+			lastId,
+			pageSize,
+			page
+		);
+
+		if (result.getContent().isEmpty()) {
+			return new BaseResponse<>(
+				HttpStatus.NO_CONTENT,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
+
 		return new BaseResponse<>(
 			HttpStatus.OK,
 			BaseResponseStatus.SUCCESS.isSuccess(),
 			BaseResponseStatus.SUCCESS.getMessage(),
 			BaseResponseStatus.SUCCESS.getCode(),
-			productListByCategoryService.getProductsByCategoryList(
-				majorCategoryName,
-				middleCategoryName,
-				lastId,
-				pageSize,
-				page
-			));
+			result
+		);
 	}
 
 }

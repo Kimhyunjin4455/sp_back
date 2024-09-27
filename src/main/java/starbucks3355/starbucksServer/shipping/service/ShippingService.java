@@ -40,8 +40,10 @@ public interface ShippingService {
 	ShippingOneResponseDto getShippingOne(String uuid, Long deliveryId);
 
 	// 배송지 정보 수집 동의
-	void agreeShippingCancel(String uuid);
+	boolean agreeShippingCancel(String uuid);
 
 	void deleteShippingAddressByUuid(String uuid);
+
+	boolean getAgreeStatus(String uuid);
 
 }

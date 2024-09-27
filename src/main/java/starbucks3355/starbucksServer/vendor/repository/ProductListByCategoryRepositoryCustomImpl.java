@@ -12,11 +12,11 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import starbucks3355.starbucksServer.category.entity.CategoryList;
-import starbucks3355.starbucksServer.category.entity.QCategoryList;
 import starbucks3355.starbucksServer.common.utils.CursorPage;
 import starbucks3355.starbucksServer.vendor.dto.out.CategoryAndCountOfSearchedProductListResponseDto;
 import starbucks3355.starbucksServer.vendor.dto.out.QCategoryAndCountOfSearchedProductListResponseDto;
+import starbucks3355.starbucksServer.vendor.entity.ProductByCategoryList;
+import starbucks3355.starbucksServer.vendor.entity.QProductByCategoryList;
 
 @RequiredArgsConstructor
 @Repository
@@ -35,7 +35,7 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		Integer page
 	) {
 
-		//QCategoryList categoryList = QCategoryList.categoryList;
+		QProductByCategoryList categoryList = QProductByCategoryList.productByCategoryList;
 		BooleanBuilder builder = new BooleanBuilder();
 
 		Optional.ofNullable(topCategoryName)
@@ -51,7 +51,7 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
 
 		// 같은 카테고리의 상품 목록 조회
-		List<CategoryList> content = jpaQueryFactory
+		List<ProductByCategoryList> content = jpaQueryFactory
 			.select(categoryList)
 			.from(categoryList)
 			.where(builder)
@@ -69,7 +69,7 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		}
 
 		List<String> productUuid = content.stream()
-			.map(CategoryList::getProductUuid)
+			.map(ProductByCategoryList::getProductUuid)
 			.toList();
 		return new CursorPage<>(productUuid, nextCursor, hasNext, currentPageSize, currentPage);
 	}
@@ -118,7 +118,7 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		Integer pageSize,
 		Integer page
 	) {
-		QCategoryList categoryList = QCategoryList.categoryList;
+		QProductByCategoryList categoryList = QProductByCategoryList.productByCategoryList;
 		BooleanBuilder builder = new BooleanBuilder();
 
 		Optional.ofNullable(topCategoryName)
@@ -131,13 +131,13 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
 
 		// 상품 UUID 리스트로 카테고리 목록 조회
-		List<CategoryList> content = jpaQueryFactory
+		List<ProductByCategoryList> content = jpaQueryFactory
 			.select(categoryList)
 			.from(categoryList)
-			.where(categoryList.productUuid.in(productUuidList))
-			.where(builder)
+			.where(categoryList.productUuid.in(productUuidList)
+				.and(builder))
 			.orderBy(categoryList.id.desc())
-			.limit(currentPageSize + 1) // 다음 페이지 확인을 위해 pageSize + 1로 가져옴
+			.limit(currentPageSize)
 			.fetch();
 
 		Long nextCursor = null;
@@ -150,7 +150,7 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 		}
 
 		List<String> productCodes = content.stream()
-			.map(CategoryList::getProductUuid)
+			.map(ProductByCategoryList::getProductUuid)
 			.toList();
 
 		return new CursorPage<>(productCodes, nextCursor, hasNext, currentPageSize, currentPage);

@@ -23,7 +23,7 @@ public class Product extends BaseEntity {
 	private String productUuid;
 	@Column(nullable = false, length = 100, unique = true) // 100글자 제한
 	private String productName;
-	@Column(length = 300)
+	@Column(length = 1000)
 	private String productDescription;
 	@Column(length = 10000)
 	private String productInfo;

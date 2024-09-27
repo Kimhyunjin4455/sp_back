@@ -21,9 +21,9 @@ public class Image {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 200)
+	@Column(length = 1000)
 	private String s3url;
-	@Column(nullable = false, length = 200)
+	@Column(nullable = false, length = 300)
 	private String imageName; // 삭제될 수도 있는 컬럼
 	@Column(length = 250)
 	private String thumbnailPath;

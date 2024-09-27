@@ -29,11 +29,11 @@ public class ProductListByPromotionController {
 	public BaseResponse<CursorPage<String>> getProductListByPromotion(
 		@RequestParam String promotionUuid,
 		@RequestParam(required = false) Long lastId,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "20") int size
+		@RequestParam(defaultValue = "20") int size,
+		@RequestParam(defaultValue = "0") int page
 	) {
 		CursorPage<String> productListByPromotion = productListByPromotionService.getProductListByPromotion(
-			promotionUuid, lastId, page, size);
+			promotionUuid, lastId, size, page);
 
 		if (productListByPromotion.getContent().isEmpty()) {
 			return new BaseResponse<>(

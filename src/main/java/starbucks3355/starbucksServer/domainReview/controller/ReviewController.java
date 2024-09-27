@@ -279,6 +279,16 @@ public class ReviewController {
 			);
 		}
 
+		if (authUserDetail == null) {
+			return new BaseResponse<>(
+				HttpStatus.UNAUTHORIZED,
+				BaseResponseStatus.TOKEN_NOT_VALID.isSuccess(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getMessage(),
+				BaseResponseStatus.TOKEN_NOT_VALID.getCode(),
+				null
+			);
+		}
+
 		String authorName = authUserDetail.getNickname();
 
 		if (authorName == null) {

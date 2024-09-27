@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductResponseVo {
 	private String productName;
-	private String productDescription;
+	private String productDescription; // 상세 이미지
 	private String productInfo;
 }

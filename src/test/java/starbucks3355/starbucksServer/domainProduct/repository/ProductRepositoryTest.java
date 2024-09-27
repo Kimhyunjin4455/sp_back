@@ -3,15 +3,19 @@ package starbucks3355.starbucksServer.domainProduct.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-public class ProductRepositoryTest {
 
+import lombok.extern.slf4j.Slf4j;
+
+@SpringBootTest
+@Slf4j
+public class ProductRepositoryTest {
+  
 	@Autowired
 	private ProductRepository productRepository;
 
 	// @Test
 	// public void 상품더미데이터삽입() {
-	//
+
 	// 	long startTime = System.currentTimeMillis(); // 시작 시간 기록
 	//
 	// 	IntStream.rangeClosed(1, 100000000).forEach(i -> {
@@ -22,9 +26,13 @@ public class ProductRepositoryTest {
 	// 			.productInfo("상품간단정보" + i)
 	// 			.build();
 	// 		productRepository.save(product);
-	// 		System.out.println("상품 더미 데이터 삽입 완료: " + i + "번째 상품");
+
 	// 	});
-	//
+
+}
+
+
+
 	// 	long endTime = System.currentTimeMillis(); // 종료 시간 기록
 	// 	long duration = endTime - startTime; // 실행 시간 계산
 	//

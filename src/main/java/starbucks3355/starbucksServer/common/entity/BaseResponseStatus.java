@@ -92,6 +92,7 @@ public enum BaseResponseStatus {
 	NO_EXIST_PROMOTION(HttpStatus.NOT_FOUND, false, 3011, "해당 기획전 정보가 존재하지 않습니다."),
 	NO_EXIST_RECENTLY(HttpStatus.NOT_FOUND, false, 3012, "최근 본 정보가 존재하지 않습니다."),
 
+
 	/**
 	 * 4000: comment service error
 	 */

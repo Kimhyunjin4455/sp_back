@@ -45,9 +45,9 @@ public class ImageController {
 		if (imageDtoList.isEmpty()) {
 			return new BaseResponse<>(
 				HttpStatus.NOT_FOUND,
-				BaseResponseStatus.NO_EXIST_OPTION.isSuccess(),
-				BaseResponseStatus.NO_EXIST_OPTION.getMessage(),
-				BaseResponseStatus.NO_EXIST_OPTION.getCode(),
+				BaseResponseStatus.NO_EXIST_IMAGE.isSuccess(),
+				BaseResponseStatus.NO_EXIST_IMAGE.getMessage(),
+				BaseResponseStatus.NO_EXIST_IMAGE.getCode(),
 				null
 			);
 		}
@@ -73,9 +73,9 @@ public class ImageController {
 		if (imageDto == null) {
 			return new BaseResponse<>(
 				HttpStatus.NOT_FOUND,
-				BaseResponseStatus.NO_EXIST_OPTION.isSuccess(),
-				BaseResponseStatus.NO_EXIST_OPTION.getMessage(),
-				BaseResponseStatus.NO_EXIST_OPTION.getCode(),
+				BaseResponseStatus.NO_EXIST_IMAGE.isSuccess(),
+				BaseResponseStatus.NO_EXIST_IMAGE.getMessage(),
+				BaseResponseStatus.NO_EXIST_IMAGE.getCode(),
 				null
 			);
 		}

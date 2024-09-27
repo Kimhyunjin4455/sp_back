@@ -1,7 +1,6 @@
 package starbucks3355.starbucksServer.domainImage.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -29,6 +28,10 @@ public class ImageServiceImpl implements ImageService {
 	public List<ImageResponseDto> getImages(String otherUuid) {
 		List<Image> images = imageRepository.findByOtherUuid(otherUuid);
 
+		if (images.isEmpty()) {
+			return List.of();
+		}
+
 		if (images != null) {
 			return images.stream()
 				.map(image -> ImageResponseDto.builder()
@@ -46,9 +49,8 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public ImageResponseDto getMainImage(String otherUuid, boolean isMainImage) {
-		Optional<Image> result = imageRepository.findByOtherUuidAndIsMainImage(otherUuid, isMainImage);
-
-		Image mainImage = result.get();
+		Image mainImage = imageRepository.findByOtherUuidAndIsMainImage(otherUuid, isMainImage)
+			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_IMAGE));
 
 		if (mainImage != null) {
 			return ImageResponseDto.builder()

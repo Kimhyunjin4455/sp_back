@@ -68,11 +68,6 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	public void addImages(List<MultipartFile> file, String otherUuid) {
 
-		// otherUuid로 저장된 이미지의 isMainImager가 true이면 입력 안되도록 예외처리
-		if (imageRepository.findByOtherUuidAndIsMainImage(otherUuid, true).isPresent()) {
-			throw new BaseException(BaseResponseStatus.ALREADY_EXIST_MAIN_IMAGE);
-		}
-
 		//받은 데이터를 s3 저장하고 imageRepository에 저장(첫번째 요소는 메인이미지로 설정
 		for (int i = 0; i < file.size(); i++) {
 			String fileName = file.get(i).getOriginalFilename();

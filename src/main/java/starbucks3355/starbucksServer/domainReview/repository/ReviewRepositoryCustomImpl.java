@@ -270,12 +270,22 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			nextCursor = ((ReviewAggregate)bestReviews.get(bestReviews.size() - 1)).getId();  // 마지막 항목의 ID를 커서로 설정
 		}
 
+		// List<BestReviewResponseDto> bestReviewList = bestReviews.stream()
+		// 	.map(tuple -> BestReviewResponseDto.builder()
+		// 		.reviewUuid(tuple.get(1, Review.class).getReviewUuid())
+		// 		.productUuid(tuple.get(1, Review.class).getProductUuid())
+		// 		.build())
+		// 	.toList();
+
+		// 리뷰 리스트를 BestReviewResponseDto로 변환
 		List<BestReviewResponseDto> bestReviewList = bestReviews.stream()
 			.map(tuple -> BestReviewResponseDto.builder()
-				.reviewUuid(tuple.get(1, Review.class).getReviewUuid())
-				.productUuid(tuple.get(1, Review.class).getProductUuid())
+				.reviewUuid(tuple.get(review.reviewUuid))  // Tuple에서 review의 reviewUuid 추출
+				.productUuid(tuple.get(review.productUuid))  // Tuple에서 review의 productUuid 추출
 				.build())
 			.toList();
+
+		// 커서 페이지 반환 (리뷰 리스트, 다음 커서, hasNext 여부, 페이지 크기, 현재 페이지)
 
 		return new CursorPage<>(bestReviewList, nextCursor, hasNext, currentPageSize, currentPage);
 	}

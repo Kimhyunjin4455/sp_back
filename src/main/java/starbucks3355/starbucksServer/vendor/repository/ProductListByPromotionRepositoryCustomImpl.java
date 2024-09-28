@@ -51,6 +51,8 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 			.select(qProductByPromotionList)
 			.from(qProductByPromotionList)
 			.where(builder)
+			.orderBy(qProductByPromotionList.id.desc())
+			.limit(currentPageSize + 1) // 다음 페이지가 있는지 확인하기 위해 +1
 			.fetch();
 
 		// if (result.isEmpty()) {
@@ -94,11 +96,16 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 
 		// 나라면 상품1의 uuid로 기획전 리스트를 뽑을거야
 
+		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
+		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
+
 		// 상품 uuid를 통해 기획전 uuid를 조회
 		List<String> promotionUuidList = jpaQueryFactory // 여름기획전, 가을기획전
 			.select(qProductByPromotionList.promotionUuid)
 			.from(qProductByPromotionList)
 			.where(qProductByPromotionList.productUuid.eq(productUuid))
+			.orderBy(qProductByPromotionList.id.desc())
+			.limit(currentPageSize + 1)
 			.fetch();
 
 		List<ProductByPromotionList> result = jpaQueryFactory // 여름기획전에 속한 상품들
@@ -108,9 +115,6 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 			.where(qProductByPromotionList.promotionUuid.in(promotionUuidList)) // 중복 데이터 조회
 			.groupBy(qProductByPromotionList.productUuid)
 			.fetch();
-
-		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
-		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
 
 		Long nextCursor = null;
 		boolean hasNext = false;

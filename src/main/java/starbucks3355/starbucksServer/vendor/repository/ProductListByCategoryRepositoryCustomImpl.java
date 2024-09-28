@@ -84,7 +84,7 @@ public class ProductListByCategoryRepositoryCustomImpl implements ProductListByC
 				)
 			)
 			.from(product)
-			.leftJoin(categoryList).on(product.productUuid.eq(categoryList.productUuid))// 상품과 카테고리 조인
+			.innerJoin(categoryList).on(product.productUuid.eq(categoryList.productUuid)).fetchJoin()// 상품과 카테고리 조인
 			.where(product.productUuid.in(productUuidList)) // 주어진 UUID 리스트로 필터링
 			.groupBy(categoryList.topCategoryName) // 카테고리별로 그룹화
 			.fetch();

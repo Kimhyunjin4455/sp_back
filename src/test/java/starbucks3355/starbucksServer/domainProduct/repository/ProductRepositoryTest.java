@@ -37,7 +37,7 @@ public class ProductRepositoryTest {
 	// 		productRepository.save(product);
 	//
 	// 	});
-  
+
 	// 	long endTime = System.currentTimeMillis(); // 종료 시간 기록
 	// 	long duration = endTime - startTime; // 실행 시간 계산
 	//
@@ -75,7 +75,6 @@ public class ProductRepositoryTest {
 	// 	CursorPage<String> searchedProductList = productListRepositoryCustom.getSearchedProductList("장우산", 20L, 20,
 	// 		1);
 	// 	log.info(searchedProductList.toString());
-
 	//
 	// 	long endTime = System.currentTimeMillis(); // 종료 시간 기록
 	// 	long duration = endTime - startTime; // 실행 시간 계산
@@ -90,9 +89,9 @@ public class ProductRepositoryTest {
 	//
 	// 	// 실행 시간 로그 출력
 	// 	log.info("pageable 통한 상품 리스트 조회 완료. 실행 시간: " + durationPaging + "ms");
-
+	//
 	// 	System.out.println("상품 더미 데이터 삽입 완료. 실행 시간: " + duration + "ms");
-
+	//
 	// }
 
 	// 베스트 리뷰조회에 대해 jpa 와 querydsl로 구현한 것을 비교해보기

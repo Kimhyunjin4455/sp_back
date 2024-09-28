@@ -1,5 +1,8 @@
 package starbucks3355.starbucksServer.domainCart.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +18,7 @@ import starbucks3355.starbucksServer.common.entity.BaseEntity;
 @Getter
 @NoArgsConstructor
 @ToString
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Cart extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

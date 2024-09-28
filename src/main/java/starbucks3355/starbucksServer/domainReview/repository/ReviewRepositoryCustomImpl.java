@@ -166,7 +166,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 		List<Review> mediaReviews = jpaQueryFactory
 			.select(review)
 			.from(review)
-			.join(image)
+			.join(image).fetchJoin()
 			.on(review.reviewUuid.eq(image.otherUuid))
 			.where(review.productUuid.eq(productUuid)
 				.and(builder))
@@ -260,7 +260,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 		List<Tuple> bestReviews = jpaQueryFactory
 			.select(reviewAggregate.id, review.reviewUuid, review.productUuid)
 			.from(reviewAggregate)
-			.join(review)
+			.join(review).fetchJoin()
 			.on(reviewAggregate.reviewUuid.eq(review.reviewUuid))
 			.where(builder)
 			.orderBy(reviewAggregate.viewCount.desc(), reviewAggregate.reviewScore.desc(),

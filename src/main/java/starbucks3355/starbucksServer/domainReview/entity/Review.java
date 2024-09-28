@@ -1,5 +1,8 @@
 package starbucks3355.starbucksServer.domainReview.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +23,7 @@ import starbucks3355.starbucksServer.common.entity.BaseEntity;
 	@jakarta.persistence.Index(name = "idx_product_uuid", columnList = "productUuid"),
 	@jakarta.persistence.Index(name = "idx_author_name", columnList = "authorName")
 })
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Review extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

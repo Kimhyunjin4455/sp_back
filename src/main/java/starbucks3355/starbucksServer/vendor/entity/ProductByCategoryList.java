@@ -1,5 +1,8 @@
 package starbucks3355.starbucksServer.vendor.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,9 +18,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @Table(name = "product_by_category_list", indexes = {
-	@Index(name = "idx_top_category_name", columnList = "topCategoryName"),
-	@Index(name = "idx_middle_category_name", columnList = "middleCategoryName")
+	@Index(name = "idx_product_uuid", columnList = "productUuid")
 })
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ProductByCategoryList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

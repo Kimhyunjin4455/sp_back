@@ -107,7 +107,7 @@ public class ProductListRepositoryCustomImpl implements ProductListRepositoryCus
 		// 데이터 페칭 (pageSize + 1로 가져와서 다음 페이지 확인)
 		List<Product> content = jpaQueryFactory
 			.selectFrom(product)
-			.leftJoin(productTag).on(product.productUuid.eq(productTag.productUuid)) // 태그와 조인
+			.leftJoin(productTag).on(product.productUuid.eq(productTag.productUuid)).fetchJoin() // 태그와 조인
 			.where(builder)
 			.orderBy(product.id.desc()) // ID 기준 내림차순 정렬
 			.limit(currentPageSize + 1) // 다음 페이지 확인을 위해 pageSize + 1로 가져옴

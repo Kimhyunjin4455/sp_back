@@ -32,7 +32,7 @@
 | **Name**     | 김현진          | 오대관  | 서정원  | 권성현   | 정훈석                                           |
 |:------------:|:------------:|:----:|:----:|:-----:|:---------------------------------------------:|
 | **Position** | 팀장 <br/> 백엔드 | 백엔드  | 백엔드  | 프론트엔드 | 프론트엔드                                         |
-| **Git**      | [Kimhyunjin4455](https://github.com/Kimhyunjin4455)         | []() | []() | []()  | [AndreaStudy](https://github.com/AndreaStudy) |
+| **Git**      | [Kimhyunjin4455](https://github.com/Kimhyunjin4455)         | [daegwan00](https://github.com/daegwan00) | []() | []()  | [AndreaStudy](https://github.com/AndreaStudy) |
 
 <br/>
 

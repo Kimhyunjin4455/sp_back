@@ -24,10 +24,10 @@ public class ProductRepositoryTest {
 	private ReviewRepositoryCustom reviewRepositoryCustom;
 	// @Test
 	// public void 상품더미데이터삽입() {
-
+	//
 	// 	long startTime = System.currentTimeMillis(); // 시작 시간 기록
 	//
-	// 	IntStream.rangeClosed(1, 100000000).forEach(i -> {
+	// 	IntStream.rangeClosed(1, 5000000).forEach(i -> {
 	// 		Product product = Product.builder()
 	// 			.productUuid(UUID.randomUUID().toString())
 	// 			.productName("b상품" + i)
@@ -35,9 +35,9 @@ public class ProductRepositoryTest {
 	// 			.productInfo("상품간단정보" + i)
 	// 			.build();
 	// 		productRepository.save(product);
-
+	//
 	// 	});
-
+  
 	// 	long endTime = System.currentTimeMillis(); // 종료 시간 기록
 	// 	long duration = endTime - startTime; // 실행 시간 계산
 	//
@@ -75,6 +75,7 @@ public class ProductRepositoryTest {
 	// 	CursorPage<String> searchedProductList = productListRepositoryCustom.getSearchedProductList("장우산", 20L, 20,
 	// 		1);
 	// 	log.info(searchedProductList.toString());
+
 	//
 	// 	long endTime = System.currentTimeMillis(); // 종료 시간 기록
 	// 	long duration = endTime - startTime; // 실행 시간 계산
@@ -89,6 +90,9 @@ public class ProductRepositoryTest {
 	//
 	// 	// 실행 시간 로그 출력
 	// 	log.info("pageable 통한 상품 리스트 조회 완료. 실행 시간: " + durationPaging + "ms");
+
+	// 	System.out.println("상품 더미 데이터 삽입 완료. 실행 시간: " + duration + "ms");
+
 	// }
 
 	// 베스트 리뷰조회에 대해 jpa 와 querydsl로 구현한 것을 비교해보기

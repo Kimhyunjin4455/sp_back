@@ -201,6 +201,9 @@ public class CartServiceImpl implements CartService {
 				throw new BaseException(BaseResponseStatus.COUNT_OVER);
 			}
 		} else {
+			if (quantity > detail.getQuantityLimit()) {
+				throw new BaseException(BaseResponseStatus.COUNT_OVER);
+			}
 			wishListRequestDto.updateCurrentQuantity(quantity);
 			wishListRepository.save(
 				wishListRequestDto.toEntity(wishListRequestDto.getProductUuid(), wishListRequestDto.getMemberUuid(),

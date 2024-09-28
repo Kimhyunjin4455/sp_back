@@ -1,5 +1,7 @@
 package starbucks3355.starbucksServer.domainReview.repository;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +50,11 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			.where(review.productUuid.eq(productUuid))
 			.fetchOne();
 
+		// reviewScore를 소수점 2자리로 반올림
+		if (reviewScore != null) {
+			reviewScore = new BigDecimal(reviewScore).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		}
+
 		return (reviewScore == null || reviewCount == null) ? null :
 			new ReviewScoreResponseDto(reviewScore, reviewCount);
 	}
@@ -73,7 +80,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			.from(review)
 			.where(review.authorName.eq(authorName)
 				.and(builder))
-			.orderBy(review.reviewUuid.asc())
+			.orderBy(review.modDate.desc())
 			.limit(currentPageSize + 1)
 			.fetch();
 
@@ -115,7 +122,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			.from(review)
 			.where(review.productUuid.eq(productUuid)
 				.and(builder))
-			.orderBy(review.reviewUuid.asc())
+			.orderBy(review.modDate.desc())
 			.limit(currentPageSize + 1)
 			.fetch();
 
@@ -163,7 +170,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			.on(review.reviewUuid.eq(image.otherUuid))
 			.where(review.productUuid.eq(productUuid)
 				.and(builder))
-			.orderBy(review.reviewUuid.asc())
+			.orderBy(review.modDate.desc())
 			.limit(currentPageSize + 1)
 			.fetch();
 

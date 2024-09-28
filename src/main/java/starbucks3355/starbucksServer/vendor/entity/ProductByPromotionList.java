@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "product_by_promotion_list", indexes = {
+	@Index(name = "idx_product_uuid", columnList = "productUuid")
+})
 public class ProductByPromotionList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

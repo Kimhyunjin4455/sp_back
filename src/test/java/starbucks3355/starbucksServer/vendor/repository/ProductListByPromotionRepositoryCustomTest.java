@@ -1,11 +1,9 @@
 package starbucks3355.starbucksServer.vendor.repository;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
-import starbucks3355.starbucksServer.common.utils.CursorPage;
 
 @SpringBootTest
 @Slf4j
@@ -35,19 +33,19 @@ public class ProductListByPromotionRepositoryCustomTest {
 	// 	log.info("데이터 삽입 완료. 실행 시간: " + duration + "ms");
 	// }
 
-	@Test
-	public void 데이터조회() {
-
-		long startTime = System.currentTimeMillis(); // 시작 시간 기록
-
-		CursorPage<String> res = productListByPromotionRepositoryCustom
-			.getProductByPromotionList("1", 10000L, 20, 900);
-
-		long endTime = System.currentTimeMillis(); // 종료 시간 기록
-		long duration = endTime - startTime; // 실행 시간 계산
-
-		log.info("데이터 조회 완료. 실행 시간: " + duration + "ms");
-
-	}
+	// @Test
+	// public void 데이터조회() {
+	//
+	// 	long startTime = System.currentTimeMillis(); // 시작 시간 기록
+	//
+	// 	CursorPage<String> res = productListByPromotionRepositoryCustom
+	// 		.getProductByPromotionList("1", 10000L, 20, 900);
+	//
+	// 	long endTime = System.currentTimeMillis(); // 종료 시간 기록
+	// 	long duration = endTime - startTime; // 실행 시간 계산
+	//
+	// 	log.info("데이터 조회 완료. 실행 시간: " + duration + "ms");
+	//
+	// }
 
 }

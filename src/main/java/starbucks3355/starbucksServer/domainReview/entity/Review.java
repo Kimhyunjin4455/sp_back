@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,10 @@ import starbucks3355.starbucksServer.common.entity.BaseEntity;
 @Getter
 @NoArgsConstructor
 @ToString
+@Table(name = "review", indexes = {
+	@jakarta.persistence.Index(name = "idx_product_uuid", columnList = "productUuid"),
+	@jakarta.persistence.Index(name = "idx_author_name", columnList = "authorName")
+})
 public class Review extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

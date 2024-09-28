@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import starbucks3355.starbucksServer.domainImage.entity.Image;
@@ -19,4 +21,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 	void deleteByOtherUuid(String otherUuid);
 
 	void deleteByImageNameAndOtherUuid(String imageName, String otherUuid);
+
+	@Query("SELECT i FROM Image i WHERE i.otherUuid IN :productUuids")
+	List<Image> findByOtherUuidIn(@Param("productUuids") List<String> productUuids);
 }

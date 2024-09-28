@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,9 @@ import starbucks3355.starbucksServer.common.entity.BaseEntity;
 @Getter
 @NoArgsConstructor
 @ToString
+@Table(name = "product_details", indexes = {
+	@Index(name = "idx_product_uuid", columnList = "productUuid")
+})
 public class Product extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

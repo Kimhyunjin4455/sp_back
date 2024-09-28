@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,6 +14,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
+@Table(name = "product_by_category_list", indexes = {
+	@Index(name = "idx_top_category_name", columnList = "topCategoryName"),
+	@Index(name = "idx_middle_category_name", columnList = "middleCategoryName")
+})
 public class ProductByCategoryList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

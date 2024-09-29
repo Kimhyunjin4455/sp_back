@@ -17,7 +17,7 @@ import starbucks3355.starbucksServer.common.entity.BaseEntity;
 @Getter
 @NoArgsConstructor
 @ToString
-@Table(name = "product_details", indexes = {
+@Table(name = "product", indexes = {
 	@Index(name = "idx_product_uuid", columnList = "productUuid")
 })
 //@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

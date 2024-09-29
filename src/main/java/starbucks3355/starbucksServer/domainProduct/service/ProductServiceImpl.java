@@ -11,6 +11,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import starbucks3355.starbucksServer.common.entity.BaseResponseStatus;
@@ -42,8 +44,10 @@ public class ProductServiceImpl implements ProductService {
 	private final FlagsRepository flagsRepository;
 	private final ProductListRepositoryCustom productListRepositoryCustom;
 	private final RedisTemplate<String, String> redisTemplate;
-
 	private final ProductTagRepositoryCustom productTagRepositoryCustom;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	private static final String RECENTLY_VIEWED_PREFIX = "recently_viewed:";
 	private static final int MAX_SIZE = 40;
@@ -74,12 +78,14 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductResponseDto getProduct(String productUuid) {
+		entityManager.clear();  // 영속성 컨텍스트 초기화
 		log.info("상품 조회 요청: UUID = {}", productUuid); // 요청한 UUID 로그
 
-		Optional<Product> productOptional = productRepository.findByProductUuid(productUuid);
+		Optional<Product> productOptional = productRepository.findProductByUuidNative(productUuid);
 
 		if (productOptional.isPresent()) {
 			log.info("상품 조회 성공: {}", productOptional.get()); // 상품 정보 로그
+			//log.info("ProductResponseDto: {}", productResponseDto);
 			return ProductResponseDto.from(productOptional.get());
 		} else {
 			log.warn("상품 조회 실패: 존재하지 않는 UUID = {}", productUuid); // 존재하지 않는 경우 로그

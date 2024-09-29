@@ -1,8 +1,5 @@
 package starbucks3355.starbucksServer.domainProduct.entity;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +26,7 @@ import lombok.ToString;
 @Table(name = "product_details", indexes = {
 	@Index(name = "idx_product_uuid", columnList = "productUuid")
 })
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ProductDetails { // Options
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

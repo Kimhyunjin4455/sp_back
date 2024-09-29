@@ -1,9 +1,15 @@
 package starbucks3355.starbucksServer.domainProduct.repository;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import lombok.extern.slf4j.Slf4j;
+import starbucks3355.starbucksServer.common.utils.CursorPage;
+import starbucks3355.starbucksServer.domainProduct.entity.Product;
 import starbucks3355.starbucksServer.domainReview.repository.ReviewRepository;
 import starbucks3355.starbucksServer.domainReview.repository.ReviewRepositoryCustom;
 
@@ -46,28 +52,28 @@ public class ProductRepositoryTest {
 	//
 	// }
 
-	// @Test
-	// public void 조회성능테스트() {
-	// 	long startTime = System.currentTimeMillis(); // 시작 시간 기록
-	// 	CursorPage<String> productList = productListRepositoryCustom.getProductList(5300000L, 20, 250000);
-	// 	log.info(productList.toString());
-	//
-	// 	long endTime = System.currentTimeMillis(); // 종료 시간 기록
-	// 	long duration = endTime - startTime; // 실행 시간 계산
-	//
-	// 	// 실행 시간 로그 출력
-	// 	log.info("커서 방식 통한 상품 리스트 조회 완료. 실행 시간: " + duration + "ms");
-	//
-	// 	long startTimePaging = System.currentTimeMillis(); // 시작 시간 기록
-	// 	Pageable pageable = PageRequest.of(250000, 20);
-	// 	Slice<Product> products = productRepository.findAll(pageable);
-	//
-	// 	long endTimePaging = System.currentTimeMillis(); // 종료 시간 기록
-	// 	long durationPaging = endTimePaging - startTimePaging; // 실행 시간 계산
-	//
-	// 	// 실행 시간 로그 출력
-	// 	log.info("pageable 통한 상품 리스트 조회 완료. 실행 시간: " + durationPaging + "ms");
-	// }
+	@Test
+	public void 조회성능테스트() {
+		long startTime = System.currentTimeMillis(); // 시작 시간 기록
+		CursorPage<String> productList = productListRepositoryCustom.getProductList(5300000L, 20, 250000);
+		log.info(productList.toString());
+
+		long endTime = System.currentTimeMillis(); // 종료 시간 기록
+		long duration = endTime - startTime; // 실행 시간 계산
+
+		// 실행 시간 로그 출력
+		log.info("커서 방식 통한 상품 리스트 조회 완료. 실행 시간: " + duration + "ms");
+
+		long startTimePaging = System.currentTimeMillis(); // 시작 시간 기록
+		Pageable pageable = PageRequest.of(250000, 20);
+		Slice<Product> products = productRepository.findAll(pageable);
+
+		long endTimePaging = System.currentTimeMillis(); // 종료 시간 기록
+		long durationPaging = endTimePaging - startTimePaging; // 실행 시간 계산
+
+		// 실행 시간 로그 출력
+		log.info("pageable 통한 상품 리스트 조회 완료. 실행 시간: " + durationPaging + "ms");
+	}
 
 	// @Test
 	// public void 검색성능비교테스트() {

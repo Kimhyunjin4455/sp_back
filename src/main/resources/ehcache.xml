@@ -3,6 +3,8 @@
         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core.xsd">
 
     <cache alias="com.example.Product">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.lang.String</value-type>
         <expiry>
             <ttl unit="seconds">600</ttl>
         </expiry>

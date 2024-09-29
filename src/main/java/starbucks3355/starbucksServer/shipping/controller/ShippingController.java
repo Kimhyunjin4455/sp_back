@@ -30,6 +30,7 @@ import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseD
 import starbucks3355.starbucksServer.shipping.service.ShippingService;
 import starbucks3355.starbucksServer.shipping.vo.request.ShippingAddRequestVo;
 import starbucks3355.starbucksServer.shipping.vo.request.ShippingModifyRequestVo;
+import starbucks3355.starbucksServer.shipping.vo.response.ShippingAgreeResponseVo;
 import starbucks3355.starbucksServer.shipping.vo.response.ShippingBaseResponseVo;
 import starbucks3355.starbucksServer.shipping.vo.response.ShippingListResponseVo;
 import starbucks3355.starbucksServer.shipping.vo.response.ShippingOneResponseVo;
@@ -259,5 +260,30 @@ public class ShippingController {
 			SUCCESS.getMessage(),
 			SUCCESS.getCode(),
 			agreeStatus);
+	}
+
+	@GetMapping("/toggleAgreeStatus")
+	@Operation(summary = "true-false", description = "true-false")
+	public BaseResponse<Boolean> toggleAgreeStatus(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+		boolean updateAgreeStatus = shippingService.toggleAgreeStatus(authUserDetail.getUuid());
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			updateAgreeStatus);
+	}
+
+	@GetMapping("/getOrCreateAgreeStatus")
+	@Operation(summary = "배송 약관 조회", description = "배송 약관 조회")
+	public BaseResponse<ShippingAgreeResponseVo> getOrCreateAgreeStatus(
+		@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			SUCCESS.isSuccess(),
+			SUCCESS.getMessage(),
+			SUCCESS.getCode(),
+			shippingService.getOrCreateAgreeStatus(authUserDetail.getUuid()));
 	}
 }

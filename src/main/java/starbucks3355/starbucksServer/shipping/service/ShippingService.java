@@ -7,6 +7,7 @@ import starbucks3355.starbucksServer.shipping.dto.request.ShippingModifyRequestD
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingBaseResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingListResponseDto;
 import starbucks3355.starbucksServer.shipping.dto.response.ShippingOneResponseDto;
+import starbucks3355.starbucksServer.shipping.vo.response.ShippingAgreeResponseVo;
 
 public interface ShippingService {
 	//void createAddDelivery(DeliveryAddRequestDto deliveryAddRequestDto);
@@ -46,4 +47,9 @@ public interface ShippingService {
 
 	boolean getAgreeStatus(String uuid);
 
+	boolean toggleAgreeStatus(String uuid);
+
+	boolean getAgreeStatus2(String uuid);
+
+	ShippingAgreeResponseVo getOrCreateAgreeStatus(String uuid);
 }

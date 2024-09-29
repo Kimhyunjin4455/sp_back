@@ -56,6 +56,32 @@ public class ProductController {
 	@GetMapping("/{productUuid}")
 	@Operation(summary = "상품 조회")
 	public BaseResponse<ProductResponseVo> getProduct(
+		@PathVariable String productUuid
+	) {
+		ProductResponseDto productResponseDto = productService.getProduct(productUuid);
+
+		if (productResponseDto == null) {
+			return new BaseResponse<>(
+				HttpStatus.NOT_FOUND,
+				BaseResponseStatus.NO_EXIST_PRODUCT.isSuccess(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getMessage(),
+				BaseResponseStatus.NO_EXIST_PRODUCT.getCode(),
+				null
+			);
+		}
+
+		return new BaseResponse<>(
+			HttpStatus.OK,
+			BaseResponseStatus.SUCCESS.isSuccess(),
+			BaseResponseStatus.SUCCESS.getMessage(),
+			BaseResponseStatus.SUCCESS.getCode(),
+			productResponseDto.dtoToResponseVo()
+		);
+	}
+
+	@GetMapping("/{productUuid}/infoPage")
+	@Operation(summary = "상품 조회(상세페이지 접속 용도)")
+	public BaseResponse<ProductResponseVo> getProductForInfoPage(
 		@PathVariable String productUuid,
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		HttpSession session

@@ -17,7 +17,6 @@ import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseAppr
 import starbucks3355.starbucksServer.domainOrders.dto.response.KakaoResponseReadyDto;
 import starbucks3355.starbucksServer.domainOrders.entity.KakaoPay;
 import starbucks3355.starbucksServer.domainOrders.repository.KakaoRepository;
-import starbucks3355.starbucksServer.shipping.repository.ShippingRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,6 @@ public class KakaoServiceImpl implements KakaoService {
 	// KakaoProperties 클래스를 주입받아 사용,
 	private final KakaoProperties kakaoProperties;
 	private final KakaoRepository kakaoRepository;
-	private final ShippingRepository shippingRepository;
 
 	@Override
 	// 카카오페이의 결제 준비
@@ -48,18 +46,6 @@ public class KakaoServiceImpl implements KakaoService {
 				requestEntity, // 두 번째 인자는 실제 요청 데이터(requestEntity)로, 요청 본문과 헤더가 포함되어 있음.
 				KakaoResponseReadyDto.class); // 카카오페이 API 응답 데이터를 해당 DTO 객체로 변환하여 반환함.
 			System.out.println(response);
-
-			// KakaoPay kakaoPay = KakaoPay.builder()
-			// 	.cid(kakaoRequestReadyDto.getCid())
-			// 	.partnerOrderId(kakaoRequestReadyDto.getPartnerOrderId())
-			// 	.partnerUserId(kakaoRequestReadyDto.getPartnerUserId())
-			// 	.itemName(kakaoRequestReadyDto.getItemName())
-			// 	.quantity(kakaoRequestReadyDto.getQuantity())
-			// 	.totalAmount(kakaoRequestReadyDto.getTotalAmount())
-			// 	.taxFreeAmount(kakaoRequestReadyDto.getTaxFreeAmount())
-			// 	.build();
-			//
-			// kakaoRepository.save(kakaoPay);
 
 			return response; // 결제 준비 API의 응답을 반환.
 
@@ -98,8 +84,8 @@ public class KakaoServiceImpl implements KakaoService {
 		parameters.put("approval_url",
 			// "http://localhost:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
 			// "http://3.38.239.2:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
-			"http://localhost:3000/paid");
-		//"https://3355-five.vercel.app/paid?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
+			//"http://localhost:3000/paid");
+			"https://3355-five.vercel.app/paid?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
 		parameters.put("cancel_url", "http://localhost:8080/cancel");
 		parameters.put("fail_url", "http://localhost:8080/fail");
 		return parameters;

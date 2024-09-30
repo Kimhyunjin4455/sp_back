@@ -13,8 +13,6 @@ import starbucks3355.starbucksServer.category.entity.MiddleCategory;
 @AllArgsConstructor
 public class BottomCategoryRequestDto {
 	private String bottomCategoryName;
-	//private String bottomCategoryDescription;
-	//private String middleCategoryCode;
 	private Integer middleCategoryId;
 
 	public BottomCategory toEntity(MiddleCategory middleCategory) {

@@ -24,21 +24,6 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void createOrder(OrderCreateRequestDto orderCreateRequestDto, String userId) {
 
-		// OrderCreateRequestDto를 kakaoRequestApproveDto로 변환
-		// KakaoRequestApproveDto kakaoRequestApproveDto = KakaoRequestApproveDto.builder()
-		// 	.partnerUserId(userId)
-		// 	.build();
-		// // 결제 승인을 통해 필요한 정보 가져오기
-		// KakaoResponseApproveDto kakaoResponseApproveDto = kakaoService.getKakaoPayApprove(kakaoRequestApproveDto);
-		//
-		// Integer totalAmount = kakaoResponseApproveDto.getAmount().getTotal();
-		// String productName = kakaoResponseApproveDto.getProductName();
-		// Integer productQuantity = kakaoResponseApproveDto.getProductQuantity();
-		// String orderId = kakaoResponseApproveDto.getPartnerOrderId();
-		//
-		// // OrderCreateRequestDto에 결제 정보 업데이트
-		// orderCreateRequestDto.updatePaymentInfo(totalAmount, productName, productQuantity, orderId);
-
 		// 주문 생성
 		Orders orderCreateRequestDtos = orderCreateRequestDto.toEntity(orderCreateRequestDto, userId);
 
@@ -65,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
 			.toList();
 	}
 
+	// 단일 주문 조회
 	@Override
 	public OrderResponseDto getOneOrder(String userId, String orderId) {
 		Orders orders = orderRepository.findByUserIdAndOrderId(userId, orderId);

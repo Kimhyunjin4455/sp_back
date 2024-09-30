@@ -38,16 +38,7 @@ public class ShippingServiceImpl implements ShippingService {
 		if (shippingAddressCount >= 6) {
 			throw new BaseException(BaseResponseStatus.COUNT_OVER);  // 배송지 최대 개수 초과 예외
 		}
-
-		// List<ShippingAgree> existingAgreeList = shippingAgreeRepository.findByUuid(memberUuid);
-		// if (existingAgreeList.isEmpty()) {
-		// 	ShippingAgree newAgree = ShippingAgree.builder()
-		// 		.uuid(memberUuid)
-		// 		.shippingAgree(true)
-		// 		.build();
-		// 	shippingAgreeRepository.save(newAgree);
-		// }
-
+		
 		// base값이 true일때 -> false로 변경
 		if (shippingAddRequestDto.isBaseAddress()) {
 			// 원래 있던애 false 새로 등록하는애 true
@@ -112,40 +103,6 @@ public class ShippingServiceImpl implements ShippingService {
 	public void modifyShipping(String memberUuid, Long deliveryId, ShippingModifyRequestDto shippingModifyRequestDto) {
 		ShippingAddress shippingAddress = shippingRepository.findById(deliveryId)
 			.orElseThrow(() -> new BaseException(BaseResponseStatus.SHIPPING_ID_NOT_EXIST));
-
-		// // 기본 배송지 true일때 -> false로 변경
-		// Optional<ShippingAddress> existingAddress = shippingRepository.findBaseAddressByUuid(memberUuid);
-		// existingAddress.ifPresent(shippingAddress2 -> {
-		//
-		// 	ShippingAddress updateAddress = ShippingAddress.builder()
-		// 		.deliveryId(shippingAddress2.getDeliveryId())
-		// 		.address(shippingAddress2.getAddress())
-		// 		.detailAddress(shippingAddress2.getDetailAddress())
-		// 		.phone1(shippingAddress2.getPhone1())
-		// 		.phone2(shippingAddress2.getPhone2())
-		// 		.receiver(shippingAddress2.getReceiver())
-		// 		.message(shippingAddress2.getMessage())
-		// 		.nickname(shippingAddress2.getNickname())
-		// 		.postNumber(shippingAddress2.getPostNumber())
-		// 		.uuid(shippingAddress2.getUuid())
-		// 		.baseAddress(false)
-		// 		.build();
-		// 	shippingRepository.save(updateAddress);
-		// });
-		// // 예외 false로 바꾸고싶은데 안됨 -> 무조건 true로 반환 하기 때문
-		// shippingRepository.save(ShippingAddress.builder()
-		// 	.deliveryId(shippingAddress.getDeliveryId()) // 기존id 값 유지
-		// 	.address(shippingModifyRequestDto.getAddress())
-		// 	.detailAddress(shippingModifyRequestDto.getDetailAddress())
-		// 	.phone1(shippingModifyRequestDto.getPhone1())
-		// 	.phone2(shippingModifyRequestDto.getPhone2())
-		// 	.receiver(shippingModifyRequestDto.getReceiver())
-		// 	.message(shippingModifyRequestDto.getMessage())
-		// 	.nickname(shippingModifyRequestDto.getNickname())
-		// 	.postNumber(shippingModifyRequestDto.getPostNumber())
-		// 	.uuid(memberUuid)
-		// 	.baseAddress(true)
-		// 	.build());
 
 		// base값이 true일때 -> false로 변경
 		if (shippingModifyRequestDto.isBaseAddress()) {
@@ -255,24 +212,6 @@ public class ShippingServiceImpl implements ShippingService {
 		shippingRepository.deleteById(shippingAddress.getDeliveryId());
 
 	}
-
-	// // 모든 배송지 조회
-	// @Override
-	// @Transactional(readOnly = true)
-	// public List<ShippingAllResponseDto> getAllShippingAddress() {
-	// 	return shippingRepository.findAll(
-	// 			Sort.by(Sort.Direction.ASC, "deliveryId"))
-	// 		.stream()
-	// 		.map(
-	// 			shippingAddress -> ShippingAllResponseDto.builder()
-	// 				.deliveryId(shippingAddress.getDeliveryId())
-	// 				.nickname(shippingAddress.getNickname())
-	// 				.address(shippingAddress.getAddress())
-	// 				.detailAddress(shippingAddress.getDetailAddress())
-	// 				.build())
-	// 		.toList();
-	//
-	// }
 
 	@Override
 	@Transactional
@@ -403,32 +342,6 @@ public class ShippingServiceImpl implements ShippingService {
 	@Override
 	@Transactional
 	public boolean toggleAgreeStatus(String uuid) {
-		// Optional<ShippingAgree> shippingAgree = shippingAgreeRepository.findByUuid(uuid);
-		//
-		// if (shippingAgree == null || shippingAgree.isEmpty()) {
-		// 	boolean currentStatus = agreeStatus;
-		// 	agreeStatus = !agreeStatus;
-		// 	return currentStatus;
-		// }
-		//
-		// boolean newAgreeStatus = false;
-		//
-		// for (ShippingAgree shippingAgrees : shippingAgree) {
-		// 	newAgreeStatus = !shippingAgrees.isShippingAgree();
-		//
-		// 	ShippingAgree updatedShippingAgree = ShippingAgree.builder()
-		// 		.id(shippingAgrees.getId())
-		// 		.uuid(shippingAgrees.getUuid())
-		// 		.shippingAgree(newAgreeStatus)
-		// 		.build();
-		// 	shippingAgreeRepository.save(updatedShippingAgree);
-		//
-		// 	// 동의가 false일 경우, 배송지 삭제
-		// 	if (!newAgreeStatus) {
-		// 		deleteShippingAddressByUuid(uuid);
-		// 	}
-		// }
-		// return newAgreeStatus;
 
 		ShippingAgree shippingAgree = shippingAgreeRepository.findByUuid(uuid)
 			.orElseThrow(() -> new BaseException(BaseResponseStatus.SHIPPING_UUID_NOT_EXIST));
@@ -463,22 +376,6 @@ public class ShippingServiceImpl implements ShippingService {
 	@Override
 	@Transactional
 	public ShippingAgreeResponseVo getOrCreateAgreeStatus(String uuid) {
-		// 	Optional<ShippingAgree> existShippingAgree = shippingAgreeRepository.findByUuid(uuid);
-		//
-		// 	ShippingAgree shippingAgree;
-		// 	if (existShippingAgree.isEmpty()) {
-		// 		shippingAgree = ShippingAgree.builder()
-		// 			.uuid(uuid)
-		// 			.shippingAgree(true)
-		// 			.build();
-		// 		shippingAgreeRepository.save(shippingAgree);
-		// 	} else {
-		// 		shippingAgree = existShippingAgree.get(0);
-		// 	}
-		// 	return ShippingAgreeResponseVo.builder()
-		// 		.shippingAgree(shippingAgree.isShippingAgree())
-		// 		.build();
-		// }
 
 		Optional<ShippingAgree> existShippingAgree = shippingAgreeRepository.findByUuid(uuid);
 

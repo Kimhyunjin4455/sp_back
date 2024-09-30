@@ -101,20 +101,6 @@ public class CategoryController {
 			null);
 	}
 
-	// @PostMapping("/bottom-category")
-	// @Operation(summary = "Bottom 카테고리 생성")
-	// public CommonResponseEntity<Void> createBottomCategory(
-	// 	@RequestBody BottomCategoryRequestVo bottomCategoryRequestVo) {
-	// 	BottomCategoryRequestDto bottomCategoryRequestDto = BottomCategoryRequestDto.builder()
-	// 		.bottomCategoryName(bottomCategoryRequestVo.getBottomCategoryName())
-	// 		.build();
-	// 	categoryService.createBottomCategory(bottomCategoryRequestDto);
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		null);
-	// }
-
 	@GetMapping("/top-categories")
 	@Operation(summary = "Top 전체 카테고리 조회")
 	public BaseResponse<List<TopCategoryResponseVo>> getTopCategories() {
@@ -130,18 +116,6 @@ public class CategoryController {
 				.collect(Collectors.toList()));
 
 	}
-
-	// @GetMapping("/middle-categories")
-	// @Operation(summary = "Middle 전체 카테고리 조회")
-	// public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategories() {
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		categoryService.getMiddleCategories()
-	// 			.stream()
-	// 			.map(MiddleCategoryResponseDto::toVo)
-	// 			.collect(Collectors.toList()));
-	// }
 
 	@GetMapping("/bottom-categories")
 	@Operation(summary = "Bottom 전체 카테고리 조회")
@@ -176,65 +150,6 @@ public class CategoryController {
 			response);
 
 	}
-
-	// @GetMapping("/middle-categories/{topCategoryName}")
-	// @Operation(summary = "Middle 카테고리 조회")
-	// public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategories(
-	// 	@PathVariable String topCategoryName) {
-	// 	{
-	// 		return new CommonResponseEntity<>(
-	// 			HttpStatus.OK,
-	// 			CommonResponseMessage.SUCCESS.getMessage(),
-	// 			categoryService.getMiddleCategories(topCategoryName)
-	// 				.stream()
-	// 				.map(MiddleCategoryResponseDto::toVo)
-	// 				.collect(Collectors.toList()));
-	// 	}
-	// }
-
-	// @GetMapping("/bottom-categories/{middleCategoryCode}")
-	// @Operation(summary = "Bottom 카테고리 조회")
-	// public CommonResponseEntity<List<BottomCategoryResponseVo>> getBottomCategories(
-	// 	@PathVariable String middleCategoryCode) {
-	//
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		categoryService.getBottomCategories(middleCategoryCode)
-	// 			.stream()
-	// 			.map(BottomCategoryResponseDto::toVo)
-	// 			.collect(Collectors.toList()));
-	// }
-
-	// @GetMapping("/top-category/{topCategoryCode}")
-	// @Operation(summary = "단일 Top 카테고리 조회")
-	// public CommonResponseEntity<TopCategoryResponseVo> getTopCategory(
-	// 	@PathVariable String topCategoryCode) {
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		categoryService.getTopCategoryByCategoryCode(topCategoryCode).toVo());
-	// }
-
-	// @GetMapping("/middle-category/by-code/{middleCategoryCode}")
-	// @Operation(summary = "단일 Middle 카테고리 조회")
-	// public CommonResponseEntity<MiddleCategoryResponseVo> getMiddleCategory(
-	// 	@PathVariable String middleCategoryCode) {
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		categoryService.getMiddleCategoryByCategoryCode(middleCategoryCode).toVo());
-	// }
-
-	// @GetMapping("/bottom-category/{bottomCategoryCode}")
-	// @Operation(summary = "단일 Bottom 카테고리 조회")
-	// public CommonResponseEntity<BottomCategoryResponseVo> getBottomCategory(
-	// 	@PathVariable String bottomCategoryCode) {
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		categoryService.getBottomCategoryByCategoryCode(bottomCategoryCode).toVo());
-	// }
 
 	@GetMapping("/middle-categories/by-id/{topCategoryId}")
 	@Operation(summary = "Top 카테고리 ID로 Middle 카테고리 조회")

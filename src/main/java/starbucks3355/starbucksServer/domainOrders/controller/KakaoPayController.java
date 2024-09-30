@@ -40,17 +40,6 @@ public class KakaoPayController {
 
 	}
 
-	// @PostMapping("/approve")
-	// @Operation(summary = "카카오페이 결제 승인", description = "카카오페이 결제 승인 API를 호출합니다.")
-	// public CommonResponseEntity<KakaoResponseApproveDto> KakaoPayApprove(
-	// 	@RequestBody KakaoRequestApproveDto kakaoRequestApproveDto) {
-	// 	KakaoResponseApproveDto response = kakaoService.getKakaoPayApprove(kakaoRequestApproveDto);
-	// 	return new CommonResponseEntity<>(
-	// 		HttpStatus.OK,
-	// 		CommonResponseMessage.SUCCESS.getMessage(),
-	// 		response);
-	// }
-
 	//pgToken 얻기
 	@PostMapping("/success")
 	@Operation(summary = "카카오페이 결제 승인", description = "카카오페이 결제 승인 API를 호출합니다.")

@@ -98,8 +98,8 @@ public class KakaoServiceImpl implements KakaoService {
 		parameters.put("approval_url",
 			// "http://localhost:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
 			// "http://3.38.239.2:8080/swagger-ui/index.html?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
-			// "http://localhost:3000/paid");
-			"https://3355-five.vercel.app/paid?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
+			"http://localhost:3000/paid");
+		//"https://3355-five.vercel.app/paid?urls.primaryName=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4#/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4/getPgToken");
 		parameters.put("cancel_url", "http://localhost:8080/cancel");
 		parameters.put("fail_url", "http://localhost:8080/fail");
 		return parameters;

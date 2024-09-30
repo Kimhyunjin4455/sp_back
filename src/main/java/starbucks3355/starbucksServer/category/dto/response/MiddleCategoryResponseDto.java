@@ -18,20 +18,16 @@ import starbucks3355.starbucksServer.category.vo.response.MiddleCategoryResponse
 @AllArgsConstructor
 @JsonPropertyOrder({"id", "middleCategoryName", "bottomCategories"})
 public class MiddleCategoryResponseDto {
-	//private String middleCategoryCode;
+
 	private Integer id;
 	private String middleCategoryName;
 
-	//@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<BottomCategoryResponseDto> bottomCategories;
-
-	//private String middleCategoryDescription;
 
 	public MiddleCategoryResponseVo toVo() {
 		return MiddleCategoryResponseVo.builder()
 			.id(id)
 			.middleCategoryName(middleCategoryName)
-			//.middleCategoryDescription(middleCategoryDescription)
 			.build();
 	}
 }

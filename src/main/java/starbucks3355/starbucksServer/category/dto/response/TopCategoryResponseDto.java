@@ -15,9 +15,7 @@ import starbucks3355.starbucksServer.category.vo.response.TopCategoryResponseVo;
 public class TopCategoryResponseDto {
 
 	private Integer id;
-	//private String topCategoryCode;
 	private String topCategoryName;
-	//private String topCategoryDescription;
 
 	public TopCategoryResponseVo toVo() {
 		return TopCategoryResponseVo.builder()

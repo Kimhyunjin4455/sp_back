@@ -31,18 +31,4 @@ public class ShippingModifyRequestDto {
 		this.receiver = receiver;
 	}
 
-	// public ShippingAddress toEntity(String uuid, ShippingModifyRequestDto shippingModifyRequestDto) {
-	// 	return ShippingAddress.builder()
-	// 		.nickname(shippingModifyRequestDto.getNickname())
-	// 		.address(shippingModifyRequestDto.getAddress())
-	// 		.detailAddress(shippingModifyRequestDto.getDetailAddress())
-	// 		.phone1(shippingModifyRequestDto.getPhone1())
-	// 		.phone2(shippingModifyRequestDto.getPhone2())
-	// 		.message(shippingModifyRequestDto.getMessage())
-	// 		.baseAddress(shippingModifyRequestDto.isBaseAddress())
-	// 		.postNumber(shippingModifyRequestDto.getPostNumber())
-	// 		.receiver(shippingModifyRequestDto.getReceiver())
-	// 		.uuid(uuid)
-	// 		.build();
-	// }
 }

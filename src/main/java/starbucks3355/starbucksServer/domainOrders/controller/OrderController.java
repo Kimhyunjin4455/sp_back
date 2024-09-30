@@ -109,14 +109,6 @@ public class OrderController {
 		@AuthenticationPrincipal AuthUserDetail authUserDetail,
 		@PathVariable("orderId") String orderId) {
 
-		// OrderCancelRequestDto orderCancelRequestDto = OrderCancelRequestDto.builder()
-		// 	.orderId(orderId)
-		// 		.userId(userId)
-		// 			.orderStatus(OrderStatus.CANCEL)
-		// 	.productName(orderCancelRequestVo.getProductName())
-		// 	.
-		// 				.build();
-		//
 		orderService.cancelOrderStatus(authUserDetail.getUserId(), orderId);
 		return new BaseResponse<>(
 			HttpStatus.OK,

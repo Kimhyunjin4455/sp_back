@@ -38,14 +38,6 @@ public class OrderCreateRequestDto {
 		this.userName = userName;
 	}
 
-	// // 결제 완료 후 totalAmount와 productName 값을 받아와서 설정할 수 있는 메서드
-	// public void updatePaymentInfo(Integer totalAmount, String productName, Integer productQuantity, String orderId) {
-	// 	this.totalAmount = totalAmount;
-	// 	this.productName = productName;
-	// 	this.productQuantity = productQuantity;
-	// 	this.orderId = orderId;
-	// }
-
 	public Orders toEntity(OrderCreateRequestDto orderCreateRequestDto, String userId) {
 		return Orders.builder()
 			.orderId(orderCreateRequestDto.getOrderId())

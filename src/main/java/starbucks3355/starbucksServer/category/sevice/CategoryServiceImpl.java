@@ -32,10 +32,6 @@ public class CategoryServiceImpl implements CategoryService {
 	private final MiddleCategoryRepository middleCategoryRepository;
 	private final BottomCategoryRepository bottomCategoryRepository;
 
-	// private static final int MAX_CODE_TRIES = 5; // 최대 재시도 횟수
-	// private final CategoryListRepository categoryListRepository;
-	// private final OrderRepository orderRepository;
-
 	@Transactional
 	@Override
 	public void createTopCategory(TopCategoryRequestDto topCategoryRequestDto) {
@@ -189,154 +185,8 @@ public class CategoryServiceImpl implements CategoryService {
 			}).toList();
 
 		return new MiddleCategoryListResponseDto(middleCategoryResponseDtos);
-		// BottomCategory 목록 조회
-		// List<BottomCategory> bottomCategories = bottomCategoryRepository.findByMiddleCategoryId(
-		// 	middleCategories.getId());
-		//
-		// //BottomCategoryResponseDto로 변환
-		// List<BottomCategoryResponseDto> bottomCategoryResponseDtos = bottomCategories.stream().map(
-		// 	bottomCategory -> BottomCategoryResponseDto.builder()
-		// 		.id(bottomCategory.getId())
-		// 		.bottomCategoryName(bottomCategory.getCategoryName())
-		// 		.build()
-		// ).toList();
-		//
-		// // MiddleCategory와 함께 BottomCategory 목록을 포함한 DTO 반환
-		// return MiddleCategoryResponseDto.builder()
-		// 	.id(middleCategories.getId())
-		// 	.middleCategoryName(middleCategories.getCategoryName())
-		// 	.bottomCategories(bottomCategoryResponseDtos)
-		// 	.build();
-		// } catch (IllegalArgumentException e) {
-		// 	log.error(e.getMessage());
-		// 	throw e;
-		// } catch (Exception e) {
-		// 	log.error("Unexpected error occurred", e);
-		// 	throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
-		// }
+
 	}
-
-	// @Override
-	// @Transactional
-	// // 단일 top 카테고리 조회
-	// public TopCategoryResponseDto getTopCategoryByCategoryCode(String topCategoryCode) {
-	// 	try {
-	// 		TopCategory topCategory = topCategoryRepository.findByCategoryCode(topCategoryCode)
-	// 			.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Top 카테고리 코드입니다."));
-	// 		// 디비에 있는 값 객체화 시키기
-	// 		return TopCategoryResponseDto.builder()
-	// 			.id(topCategory.getId())
-	// 			.topCategoryName(topCategory.getCategoryName())
-	// 			.build();
-	// 	} catch (IllegalArgumentException e) {
-	// 		log.error(e.getMessage());
-	// 		throw e;
-	// 	} catch (Exception e) {
-	// 		log.error("Unexpected error occurred", e);
-	// 		throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
-	// 	}
-	//
-	// }
-
-	// // middle 전체 카테고리 조회
-	// @Override
-	// @Transactional(readOnly = true) // 임시로 name으로 수정 변수값
-	// public List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryName) {
-	// 	// 미들 카테고리는 조회할때 탑 카테고리의 코드가 있는지 확인을 해야함
-	// 	try {
-	// 		TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryName)
-	// 			.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Top 카테고리 이름입니다."));
-	// 		log.info("topCategory : {}", topCategory);
-	//
-	// 		List<MiddleCategoryResponseDto> middleCategoryResponseDtos = middleCategoryRepository
-	// 			.findByTopCategoryCategoryCode(topCategory.getCategoryCode())
-	// 			.stream()
-	// 			.map(
-	// 				middleCategory -> MiddleCategoryResponseDto.builder()
-	// 					.middleCategoryCode(middleCategory.getCategoryCode())
-	// 					.middleCategoryDescription(middleCategory.getCategoryDescription())
-	// 					.middleCategoryName(middleCategory.getCategoryName())
-	// 					.build())
-	// 			.collect(Collectors.toList());
-	// 		return middleCategoryResponseDtos; // db의 저장된 객체를 dto로 변환해서 반환
-	// 	} catch (IllegalArgumentException e) {
-	// 		log.error(e.getMessage());
-	// 		throw e;
-	// 	} catch (Exception e) {
-	// 		log.error("Unexpected error occurred", e);
-	// 		throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
-	// 	}
-	// }
-
-	// 단일 middle 카테고리 조회
-	// @Override
-	// @Transactional
-	// public MiddleCategoryResponseDto getMiddleCategoryByCategoryCode(String middleCategoryCode) {
-	// 	try {
-	// 		MiddleCategory middleCategory = middleCategoryRepository.findByCategoryCode(middleCategoryCode)
-	// 			.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Middle 카테고리 코드입니다."));
-	// 		return MiddleCategoryResponseDto.builder()
-	// 			.middleCategoryCode(middleCategory.getCategoryCode())
-	// 			.middleCategoryDescription(middleCategory.getCategoryDescription())
-	// 			.middleCategoryName(middleCategory.getCategoryName())
-	// 			.build();
-	// 	} catch (IllegalArgumentException e) {
-	// 		log.error(e.getMessage());
-	// 		throw e;
-	// 	} catch (Exception e) {
-	// 		log.error("Unexpected error occurred", e);
-	// 		throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
-	// 	}
-	// }
-
-	// bottom 전체 카테고리 조회
-	// @Override
-	// @Transactional(readOnly = true) //middleCategoryCode -> middleCategoryName으로 수정 (임시 테스트)
-	// public List<BottomCategoryResponseDto> getBottomCategories(String middleCategoryCode) {
-	// 	try {
-	// 		MiddleCategory middleCategory = middleCategoryRepository.findByCategoryCode(middleCategoryCode)
-	// 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Middle 카테고리 코드입니다."));
-	//
-	// 		List<BottomCategoryResponseDto> bottomCategoryResponseDtos = bottomCategoryRepository
-	// 			.findByMiddleCategoryCategoryCode(middleCategory.getCategoryCode())
-	// 			.stream()
-	// 			.map(
-	// 				bottomCategory -> BottomCategoryResponseDto.builder()
-	// 					.bottomCategoryCode(bottomCategory.getCategoryCode())
-	// 					.bottomCategoryDescription(bottomCategory.getCategoryDescription())
-	// 					.bottomCategoryName(bottomCategory.getCategoryName())
-	// 					.build())
-	// 			.collect(Collectors.toList());
-	// 		return bottomCategoryResponseDtos;
-	//
-	// 	} catch (IllegalArgumentException e) {
-	// 		log.error(e.getMessage());
-	// 		throw e;
-	// 	} catch (Exception e) {
-	// 		log.error("Unexpected error occurred", e);
-	// 		throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
-	// 	}
-	// }
-
-	// @Override
-	// @Transactional
-	// public BottomCategoryResponseDto getBottomCategoryByCategoryCode(String bottomCategoryCode) {
-	// 	try {
-	// 		BottomCategory bottomCategory = bottomCategoryRepository.findByCategoryCode(bottomCategoryCode)
-	// 			.orElseThrow(() -> new IllegalArgumentException("해당하지 않는 Bottom 카테고리 코드입니다."));
-	// 		return BottomCategoryResponseDto.builder()
-	// 			.bottomCategoryCode(bottomCategory.getCategoryCode())
-	// 			.bottomCategoryDescription(bottomCategory.getCategoryDescription())
-	// 			.bottomCategoryName(bottomCategory.getCategoryName())
-	// 			.build();
-	// 	} catch (IllegalArgumentException e) {
-	// 		log.error(e.getMessage());
-	// 		throw e;
-	// 	} catch (Exception e) {
-	// 		log.error("Unexpected error occurred", e);
-	// 		throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
-	// 	}
-	// }
 
 	@Override
 	@Transactional(readOnly = true)
@@ -389,43 +239,5 @@ public class CategoryServiceImpl implements CategoryService {
 			throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
 		}
 	}
-
-	// 모든 카테고리 조회
-	// @Override
-	// @Transactional(readOnly = true)
-	// public List<FullTopCategoryResponseDto> getAllCategories() {
-	// 	List<TopCategory> topCategories = topCategoryRepository.findAll();
-	// 	return topCategories.stream().map(
-	// 		topCategory -> {
-	// 			List<MiddleCategory> middleCategories = middleCategoryRepository.findByTopCategoryId(topCategory.getId());
-	// 		}
-	// }
-
-	// private String generateUniqueCategoryCode(String prefix) {
-	// 	for (int i = 0; i < MAX_CODE_TRIES; i++) {
-	// 		String categoryCode = CategoryCodeGenerator.generateCategoryCode(prefix);
-	// 		switch (prefix) {
-	// 			case "TC-":
-	// 				if (!topCategoryRepository.existsByCategoryCode(categoryCode)) {
-	// 					return categoryCode;  // 중복이 없으면 코드 반환
-	// 				}
-	// 				break;
-	// 			case "MC-":
-	// 				if (!middleCategoryRepository.existsByCategoryCode(categoryCode)) {
-	// 					return categoryCode;  // 중복이 없으면 코드 반환
-	// 				}
-	// 				break;
-	// 			case "BC-":
-	// 				if (!bottomCategoryRepository.existsByCategoryCode(categoryCode)) {
-	// 					return categoryCode;  // 중복이 없으면 코드 반환
-	// 				}
-	// 				break;
-	// 			default:
-	// 				throw new IllegalArgumentException("유효하지 않은 카테고리 코드 접두사입니다: " + prefix);
-	// 		}
-	//
-	// 	}
-	// 	throw new IllegalStateException("고유한 카테고리 코드를 생성하는 데 실패했습니다.");
-	// }
 
 }

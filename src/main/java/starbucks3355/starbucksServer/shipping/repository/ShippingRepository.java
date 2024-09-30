@@ -14,20 +14,10 @@ public interface ShippingRepository extends JpaRepository<ShippingAddress, Long>
 	@Query("select d from ShippingAddress d where d.uuid = :uuid and d.baseAddress = true")
 	Optional<ShippingAddress> findBaseAddressByUuid(@Param("uuid") String uuid);
 
-	ShippingAddress findByDeliveryId(Long deliveryId);
-
-	boolean existsByUuid(String uuid);
-
 	int countByUuid(String uuid);
-
-	boolean existsByDetailAddressAndUuid(String detailAddress, String uuid);
 
 	@Query("SELECT sa FROM ShippingAddress sa WHERE sa.uuid = :uuid")
 	List<ShippingAddress> findByUuid(String uuid);
-
-	// ShippingAddress findByUuid(String uuid);
-
-	// ShippingAddress deleteByUuid(String uuid);
 
 	void deleteAllByUuid(String uuid);
 }

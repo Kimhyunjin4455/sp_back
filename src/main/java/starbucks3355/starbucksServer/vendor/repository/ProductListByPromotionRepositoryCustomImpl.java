@@ -108,7 +108,6 @@ public class ProductListByPromotionRepositoryCustomImpl implements ProductListBy
 		QProductByPromotionList qProductByPromotionList = QProductByPromotionList.productByPromotionList;
 		BooleanBuilder builder = new BooleanBuilder();
 
-		// 나라면 상품1의 uuid로 기획전 리스트를 뽑을거야
 
 		int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
 		int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);

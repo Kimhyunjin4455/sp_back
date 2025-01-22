@@ -101,7 +101,7 @@
 | 분류 | 기술 스택 |
 | --- | --- |
 | Common | GitHub, Notion, Figma, Git-Flow |
-| Back-end | JDK(17), gradle(버전 추가), ORM (JPA), Spring Security, swagger(3) |
+| Back-end | JDK(17), gradle, ORM (JPA), Spring Security, swagger(2.2.0) |
 | Front-end | Next.js(v14.2.6), TypeScript(^5), Node.js(22.6.0), npm(10.8.3)                                     |
 | CI/CD | AWS EC2, Nginx, Ubuntu(Ubuntu 20.04 LTS), Docker(27.2.0), Docker-compose(v2.5.0) |
 | Database | MySQL(24.04.2), Redis(7.2.5) |
@@ -110,9 +110,17 @@
 
 ### 🔧 **서버 구성 및 데이터베이스**
 
-- 아키텍처 구조도
 
-- erd
+
+| 아키텍처 구조도 |
+| --- |
+|  |
+| <img width="1528" alt="3355Architecture" src="https://github.com/user-attachments/assets/6b41d9bb-3dea-4c2f-97a9-7583677c0148" /> |
+
+| erd |
+| --- |
+|  |
+| <img width="779" alt="erd" src="https://github.com/user-attachments/assets/7dc65408-b17f-4866-adf8-e8f55fc1fd21" /> |
 
 <br/>
 
